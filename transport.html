@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>이동·주차 방식 | Bike Festa</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body data-page="transport">
+    <header class="site-header">
+      <a class="brand" href="index.html"><span class="brand-mark" aria-hidden="true"></span><span>Bike Festa 5.1-5.2</span></a>
+      <nav aria-label="주요 페이지">
+        <a href="festivals.html">전국 비교</a>
+        <a href="jeonbuk.html">전북 집중</a>
+        <a href="transport.html" aria-current="page">이동·주차</a>
+        <a href="itineraries.html">일정</a>
+        <a href="sources.html">출처</a>
+      </nav>
+    </header>
+
+    <main>
+      <section class="page-hero compact">
+        <p class="eyebrow">Access Builder</p>
+        <h1>자전거를 어디서 내릴지 먼저 정하세요</h1>
+        <p>축제장 바로 앞까지 차로 들어가는 대신, 여유 있는 거점에서 자전거를 내려 마지막 구간을 타는 방식으로 설계했습니다.</p>
+      </section>
+
+      <section>
+        <div class="section-head">
+          <p class="eyebrow">Four Methods</p>
+          <h2>이동 방식 4가지</h2>
+        </div>
+        <div class="method-grid large" id="methodGrid"></div>
+      </section>
+
+      <section class="compare-section">
+        <div class="section-head">
+          <p class="eyebrow">Parking Bases</p>
+          <h2>트럭·숙박·공원 주차 거점 후보</h2>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th scope="col">지역</th>
+                <th scope="col">트럭 적재 후 거점</th>
+                <th scope="col">숙박지 출발</th>
+                <th scope="col">한가한 공원형</th>
+                <th scope="col">주의</th>
+              </tr>
+            </thead>
+            <tbody id="parkingTable"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="map-band">
+        <div class="section-head">
+          <p class="eyebrow">Decision Flow</p>
+          <h2>코스 정하는 순서</h2>
+        </div>
+        <div class="flow-grid">
+          <article><strong>1. 축제장 혼잡 확인</strong><p>행사장 바로 앞 진입이 복잡하면 외곽 주차를 우선합니다.</p></article>
+          <article><strong>2. 자전거 하차 공간 확인</strong><p>트럭 적재 해체는 넓고 평평한 곳, 보행자 동선 밖에서 합니다.</p></article>
+          <article><strong>3. 마지막 5-20km 설계</strong><p>초보는 5-10km 순환, 중급은 20-35km 왕복으로 잡습니다.</p></article>
+          <article><strong>4. 복귀 시간을 고정</strong><p>야간 공연을 볼 경우 라이트, 반사 장비, 대체 복귀 수단을 준비합니다.</p></article>
+        </div>
+      </section>
+    </main>
+    <footer class="site-footer"><p>주차 가능 여부, 높이 제한, 야간 개방, 장기 주차 가능 여부는 현장 공지와 시설 안내를 확인해야 합니다.</p></footer>
+    <script src="script.js" defer></script>
+  </body>
+</html>
