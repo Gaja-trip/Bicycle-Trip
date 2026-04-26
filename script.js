@@ -546,6 +546,272 @@ const routeMaps = {
 
 const KAKAO_MAP_APP_KEY = "565d6dd58f984120d31ffa1e6d24bb2c";
 
+const teamMapRoutes = [
+  {
+    id: "team-seomjin-66",
+    region: "전북 임실·순창·전남 곡성",
+    festival: "5월 1일 출발 · 섬진강 GPX 투어 65km",
+    route: "전북월드컵경기장 집결 - 트럭으로 장군목 이동 - 섬진강 기차마을·압록유원지·대나무숲길 라이딩",
+    distance: 65,
+    difficulty: 3,
+    score: 94,
+    tags: ["team", "truck", "jeonbuk", "photo"]
+  },
+  {
+    id: "team-gimje-62",
+    region: "전북 김제",
+    festival: "월드컵경기장 집결 · 김제 보리밭 62km",
+    route: "전북월드컵경기장 집결 - 트럭으로 심포항 이동 - 새만금 보리밭·망해사·비응항 왕복",
+    distance: 62,
+    difficulty: 3,
+    score: 92,
+    tags: ["team", "truck", "jeonbuk", "photo"]
+  },
+  {
+    id: "team-buan-66",
+    region: "전북 부안",
+    festival: "월드컵경기장 집결 · 부안 변산 66km",
+    route: "전북월드컵경기장 집결 - 트럭으로 부안읍 이동 - 해뜰마루·변산·채석강·모항 순환",
+    distance: 66,
+    difficulty: 3.5,
+    score: 89,
+    tags: ["team", "truck", "jeonbuk", "overnight", "photo"]
+  },
+  {
+    id: "team-gochang-64",
+    region: "전북 고창",
+    festival: "월드컵경기장 집결 · 고창 청보리 64km",
+    route: "전북월드컵경기장 집결 - 트럭으로 고창읍 이동 - 청보리밭·선운사·해안 선택 순환",
+    distance: 64,
+    difficulty: 3,
+    score: 88,
+    tags: ["team", "truck", "jeonbuk", "photo"]
+  },
+  {
+    id: "team-iksan-58",
+    region: "전북 익산",
+    festival: "월드컵경기장 집결 · 익산 만경강 58km",
+    route: "전북월드컵경기장 집결 - 트럭으로 중앙체육공원 이동 - 만경강·금강동산 순환",
+    distance: 58,
+    difficulty: 2.5,
+    score: 90,
+    tags: ["team", "truck", "jeonbuk", "beginner"]
+  },
+  {
+    id: "team-namwon-60",
+    region: "전북 남원",
+    festival: "월드컵경기장 집결 · 남원 요천 60km",
+    route: "전북월드컵경기장 집결 - 트럭으로 남원 요천 이동 - 광한루원·요천·섬진강 방향 순환",
+    distance: 60,
+    difficulty: 3,
+    score: 87,
+    tags: ["team", "truck", "jeonbuk", "culture"]
+  }
+];
+
+Object.assign(routeMaps, {
+  "team-seomjin-66": {
+    level: 10,
+    stops: [
+      { title: "전북월드컵경기장 집결", lat: 35.868, lng: 127.064 },
+      { title: "트럭 하차: 장군목", lat: 35.4691177297715, lng: 127.187368869781 },
+      { title: "곡성 섬진강기차마을", lat: 35.278, lng: 127.309 },
+      { title: "압록유원지", lat: 35.219, lng: 127.302 },
+      { title: "섬진강 대나무숲길", lat: 35.1858155343577, lng: 127.46498554945 }
+    ],
+    truckPath: [
+      { lat: 35.868, lng: 127.064 },
+      { lat: 35.4691177297715, lng: 127.187368869781 }
+    ],
+    bicycleStops: [
+      { title: "장군목", lat: 35.4691177297715, lng: 127.187368869781 },
+      { title: "곡성 섬진강기차마을", lat: 35.278, lng: 127.309 },
+      { title: "압록유원지", lat: 35.219, lng: 127.302 },
+      { title: "섬진강 대나무숲길", lat: 35.1858155343577, lng: 127.46498554945 }
+    ],
+    gpxFile: "gpx/섬진강 장군목_대나무숲.gpx",
+    gpxStartName: "장군목",
+    gpxEndName: "섬진강 대나무숲길",
+    bikePath: [
+      { lat: 35.4691177297715, lng: 127.187368869781 },
+      { lat: 35.43, lng: 127.205 },
+      { lat: 35.36, lng: 127.225 },
+      { lat: 35.2793461101383, lng: 127.310106754303 },
+      { lat: 35.1948882791799, lng: 127.377923727036 },
+      { lat: 35.1858155343577, lng: 127.46498554945 }
+    ]
+  },
+  "team-gimje-62": {
+    level: 10,
+    stops: [
+      { title: "전북월드컵경기장 집결", lat: 35.868, lng: 127.064 },
+      { title: "트럭 하차: 심포항", lat: 35.842, lng: 126.684 },
+      { title: "망해사", lat: 35.841, lng: 126.728 },
+      { title: "새만금 보리밭", lat: 35.833, lng: 126.735 },
+      { title: "비응항 반환", lat: 35.939, lng: 126.528 },
+      { title: "심포항 복귀", lat: 35.842, lng: 126.684 }
+    ],
+    truckPath: [
+      { lat: 35.868, lng: 127.064 },
+      { lat: 35.842, lng: 126.684 }
+    ],
+    bicycleStops: [
+      { title: "심포항", lat: 35.842, lng: 126.684 },
+      { title: "망해사", lat: 35.841, lng: 126.728 },
+      { title: "새만금 보리밭", lat: 35.833, lng: 126.735 },
+      { title: "비응항", lat: 35.939, lng: 126.528 },
+      { title: "심포항 복귀", lat: 35.842, lng: 126.684 }
+    ],
+    bikePath: [
+      { lat: 35.842, lng: 126.684 },
+      { lat: 35.841, lng: 126.728 },
+      { lat: 35.833, lng: 126.735 },
+      { lat: 35.852, lng: 126.704 },
+      { lat: 35.878, lng: 126.666 },
+      { lat: 35.904, lng: 126.596 },
+      { lat: 35.939, lng: 126.528 },
+      { lat: 35.918, lng: 126.574 },
+      { lat: 35.886, lng: 126.637 },
+      { lat: 35.858, lng: 126.683 },
+      { lat: 35.842, lng: 126.684 }
+    ]
+  },
+  "team-buan-66": {
+    level: 10,
+    stops: [
+      { title: "전북월드컵경기장 집결", lat: 35.868, lng: 127.064 },
+      { title: "트럭 하차: 부안읍", lat: 35.7289, lng: 126.7357 },
+      { title: "해뜰마루", lat: 35.7295, lng: 126.7422 },
+      { title: "변산해수욕장", lat: 35.664, lng: 126.532 },
+      { title: "채석강", lat: 35.623, lng: 126.469 },
+      { title: "부안읍 복귀", lat: 35.7289, lng: 126.7357 }
+    ],
+    truckPath: [
+      { lat: 35.868, lng: 127.064 },
+      { lat: 35.7289, lng: 126.7357 }
+    ],
+    bicycleStops: [
+      { title: "부안읍", lat: 35.7289, lng: 126.7357 },
+      { title: "해뜰마루", lat: 35.7295, lng: 126.7422 },
+      { title: "변산해수욕장", lat: 35.664, lng: 126.532 },
+      { title: "채석강", lat: 35.623, lng: 126.469 },
+      { title: "부안읍 복귀", lat: 35.7289, lng: 126.7357 }
+    ],
+    bikePath: [
+      { lat: 35.7289, lng: 126.7357 },
+      { lat: 35.7295, lng: 126.7422 },
+      { lat: 35.704, lng: 126.684 },
+      { lat: 35.681, lng: 126.604 },
+      { lat: 35.664, lng: 126.532 },
+      { lat: 35.623, lng: 126.469 },
+      { lat: 35.646, lng: 126.528 },
+      { lat: 35.676, lng: 126.603 },
+      { lat: 35.706, lng: 126.681 },
+      { lat: 35.7289, lng: 126.7357 }
+    ]
+  },
+  "team-gochang-64": {
+    level: 10,
+    stops: [
+      { title: "전북월드컵경기장 집결", lat: 35.868, lng: 127.064 },
+      { title: "트럭 하차: 고창터미널", lat: 35.4351, lng: 126.7015 },
+      { title: "학원관광농장", lat: 35.4529, lng: 126.5455 },
+      { title: "선운사", lat: 35.4972, lng: 126.5781 },
+      { title: "동호해변 선택", lat: 35.507, lng: 126.482 },
+      { title: "고창터미널 복귀", lat: 35.4351, lng: 126.7015 }
+    ],
+    truckPath: [
+      { lat: 35.868, lng: 127.064 },
+      { lat: 35.4351, lng: 126.7015 }
+    ],
+    bicycleStops: [
+      { title: "고창터미널", lat: 35.4351, lng: 126.7015 },
+      { title: "학원관광농장", lat: 35.4529, lng: 126.5455 },
+      { title: "선운사", lat: 35.4972, lng: 126.5781 },
+      { title: "동호해변", lat: 35.507, lng: 126.482 },
+      { title: "고창터미널 복귀", lat: 35.4351, lng: 126.7015 }
+    ],
+    bikePath: [
+      { lat: 35.4351, lng: 126.7015 },
+      { lat: 35.4438, lng: 126.664 },
+      { lat: 35.4535, lng: 126.608 },
+      { lat: 35.4529, lng: 126.5455 },
+      { lat: 35.469, lng: 126.556 },
+      { lat: 35.4972, lng: 126.5781 },
+      { lat: 35.507, lng: 126.482 },
+      { lat: 35.486, lng: 126.552 },
+      { lat: 35.462, lng: 126.628 },
+      { lat: 35.4351, lng: 126.7015 }
+    ]
+  },
+  "team-iksan-58": {
+    level: 9,
+    stops: [
+      { title: "전북월드컵경기장 집결", lat: 35.868, lng: 127.064 },
+      { title: "트럭 하차: 중앙체육공원", lat: 35.9531, lng: 126.974 },
+      { title: "신흥근린공원", lat: 35.947, lng: 126.984 },
+      { title: "만경강 자전거축", lat: 35.998, lng: 126.957 },
+      { title: "금강동산 선택", lat: 35.9588, lng: 126.987 },
+      { title: "중앙체육공원 복귀", lat: 35.9531, lng: 126.974 }
+    ],
+    truckPath: [
+      { lat: 35.868, lng: 127.064 },
+      { lat: 35.9531, lng: 126.974 }
+    ],
+    bicycleStops: [
+      { title: "중앙체육공원", lat: 35.9531, lng: 126.974 },
+      { title: "신흥근린공원", lat: 35.947, lng: 126.984 },
+      { title: "만경강 자전거축", lat: 35.998, lng: 126.957 },
+      { title: "금강동산", lat: 35.9588, lng: 126.987 },
+      { title: "중앙체육공원 복귀", lat: 35.9531, lng: 126.974 }
+    ],
+    bikePath: [
+      { lat: 35.9531, lng: 126.974 },
+      { lat: 35.947, lng: 126.984 },
+      { lat: 35.967, lng: 126.98 },
+      { lat: 35.998, lng: 126.957 },
+      { lat: 36.016, lng: 126.926 },
+      { lat: 36.004, lng: 126.898 },
+      { lat: 35.979, lng: 126.916 },
+      { lat: 35.9588, lng: 126.987 },
+      { lat: 35.9531, lng: 126.974 }
+    ]
+  },
+  "team-namwon-60": {
+    level: 10,
+    stops: [
+      { title: "전북월드컵경기장 집결", lat: 35.868, lng: 127.064 },
+      { title: "트럭 하차: 요천 둔치", lat: 35.4075, lng: 127.3846 },
+      { title: "광한루원", lat: 35.4055, lng: 127.3808 },
+      { title: "요천 자전거길", lat: 35.392, lng: 127.407 },
+      { title: "섬진강 방향 반환", lat: 35.318, lng: 127.378 },
+      { title: "요천 둔치 복귀", lat: 35.4075, lng: 127.3846 }
+    ],
+    truckPath: [
+      { lat: 35.868, lng: 127.064 },
+      { lat: 35.4075, lng: 127.3846 }
+    ],
+    bicycleStops: [
+      { title: "요천 둔치", lat: 35.4075, lng: 127.3846 },
+      { title: "광한루원", lat: 35.4055, lng: 127.3808 },
+      { title: "요천 자전거길", lat: 35.392, lng: 127.407 },
+      { title: "섬진강 방향 반환", lat: 35.318, lng: 127.378 },
+      { title: "요천 둔치 복귀", lat: 35.4075, lng: 127.3846 }
+    ],
+    bikePath: [
+      { lat: 35.4075, lng: 127.3846 },
+      { lat: 35.4055, lng: 127.3808 },
+      { lat: 35.392, lng: 127.407 },
+      { lat: 35.365, lng: 127.406 },
+      { lat: 35.338, lng: 127.394 },
+      { lat: 35.318, lng: 127.378 },
+      { lat: 35.343, lng: 127.388 },
+      { lat: 35.372, lng: 127.398 },
+      { lat: 35.4075, lng: 127.3846 }
+    ]
+  }
+});
+
 const filters = [
   { id: "all", label: "전체" },
   { id: "jeonbuk", label: "전북" },
@@ -596,6 +862,15 @@ const clusters = [
 ];
 
 const plans = [
+  {
+    title: "5월 1일 섬진강 GPX 투어 65km",
+    items: [
+      ["07:30", "전북월드컵경기장 집결, 4-5명 팀 장비와 적재 상태 점검"],
+      ["08:00", "트럭으로 장군목 거점까지 이동"],
+      ["09:30", "GPX 트랙을 따라 장군목, 섬진강 기차마을, 압록유원지 방향 라이딩"],
+      ["15:30", "섬진강 대나무숲길 도착 후 트럭 회수와 식사 일정 선택"]
+    ]
+  },
   {
     title: "전북 도심 대중교통 1박2일",
     items: [
@@ -849,7 +1124,7 @@ function renderSources() {
 }
 
 function getMapRoutes() {
-  return routes.filter((route) => routeMaps[route.id]);
+  return [...teamMapRoutes, ...routes.filter((route) => routeMaps[route.id])];
 }
 
 function routeMapLabel(route) {
@@ -861,8 +1136,71 @@ function kakaoPointSegment(stop) {
 }
 
 function kakaoBikeRouteUrl(mapData) {
-  const points = mapData.stops.slice(0, 7);
+  const points = (mapData.bicycleStops || mapData.stops).slice(0, 7);
   return `https://map.kakao.com/link/by/bicycle/${points.map(kakaoPointSegment).join("/")}`;
+}
+
+function pointDistanceKm(a, b) {
+  const radius = 6371;
+  const lat1 = (a.lat * Math.PI) / 180;
+  const lat2 = (b.lat * Math.PI) / 180;
+  const dLat = ((b.lat - a.lat) * Math.PI) / 180;
+  const dLng = ((b.lng - a.lng) * Math.PI) / 180;
+  const value = Math.sin(dLat / 2) ** 2 + Math.cos(lat1) * Math.cos(lat2) * Math.sin(dLng / 2) ** 2;
+  return 2 * radius * Math.asin(Math.sqrt(value));
+}
+
+function nearestPointIndex(points, target) {
+  return points.reduce(
+    (best, point, index) => {
+      const distance = pointDistanceKm(point, target);
+      return distance < best.distance ? { index, distance } : best;
+    },
+    { index: 0, distance: Infinity }
+  ).index;
+}
+
+async function loadGpxBikePath(mapData) {
+  if (!mapData.gpxFile) return null;
+  try {
+    const response = await fetch(encodeURI(mapData.gpxFile));
+    if (!response.ok) throw new Error("GPX 파일을 불러오지 못했습니다.");
+    const gpxText = await response.text();
+    const documentXml = new DOMParser().parseFromString(gpxText, "application/xml");
+    if (documentXml.querySelector("parsererror")) throw new Error("GPX 파싱 오류");
+
+    const points = [...documentXml.getElementsByTagName("trkpt")].map((point) => ({
+      lat: Number(point.getAttribute("lat")),
+      lng: Number(point.getAttribute("lon"))
+    }));
+    if (points.length < 2) throw new Error("GPX 트랙 포인트가 부족합니다.");
+
+    const waypoints = [...documentXml.getElementsByTagName("wpt")].map((point) => ({
+      title: point.getElementsByTagName("name")[0]?.textContent?.trim() || "",
+      lat: Number(point.getAttribute("lat")),
+      lng: Number(point.getAttribute("lon"))
+    }));
+
+    const findWaypoint = (name) => waypoints.find((point) => point.title.includes(name));
+    let startIndex = 0;
+    let endIndex = points.length - 1;
+    const startWaypoint = mapData.gpxStartName ? findWaypoint(mapData.gpxStartName) : null;
+    const endWaypoint = mapData.gpxEndName ? findWaypoint(mapData.gpxEndName) : null;
+    if (startWaypoint) startIndex = nearestPointIndex(points, startWaypoint);
+    if (endWaypoint) endIndex = nearestPointIndex(points, endWaypoint);
+    if (endIndex < startIndex) [startIndex, endIndex] = [endIndex, startIndex];
+
+    const slicedPoints = points.slice(startIndex, endIndex + 1);
+    const distance = slicedPoints.slice(1).reduce((sum, point, index) => sum + pointDistanceKm(slicedPoints[index], point), 0);
+    return {
+      points: slicedPoints,
+      distance,
+      pointCount: slicedPoints.length,
+      source: mapData.gpxFile
+    };
+  } catch {
+    return null;
+  }
 }
 
 function guidedBikePath(mapData) {
@@ -892,7 +1230,7 @@ function renderMapStops(route, mapData) {
   stopBox.innerHTML = `
     <article>
       <strong>${routeMapLabel(route)}</strong>
-      <p>${route.route}<br />카카오맵 버튼은 자전거 길찾기 모드로 열립니다.</p>
+      <p>${route.route}<br />카카오맵 버튼은 자전거 길찾기 모드로 열립니다.${mapData.gpxFile ? `<br />GPX 트랙: ${mapData.gpxFile}` : ""}</p>
     </article>
     ${mapData.stops
       .map(
@@ -906,6 +1244,10 @@ function renderMapStops(route, mapData) {
       )
       .join("")}
   `;
+}
+
+function mapPathToLatLng(path) {
+  return path.map((stop) => new kakao.maps.LatLng(stop.lat, stop.lng));
 }
 
 function showMapPlaceholder(message) {
@@ -970,9 +1312,13 @@ async function drawKakaoRouteMap(route, mapData, appKey) {
       level: mapData.level || 8
     });
 
-    const path = guidedBikePath(mapData).map((stop) => new kakao.maps.LatLng(stop.lat, stop.lng));
+    const gpxTrack = await loadGpxBikePath(mapData);
+    const bikePath = gpxTrack?.points || guidedBikePath(mapData);
+    const path = mapPathToLatLng(bikePath);
     const bounds = new kakao.maps.LatLngBounds();
     path.forEach((point) => bounds.extend(point));
+    const truckPath = mapData.truckPath ? mapPathToLatLng(mapData.truckPath) : [];
+    truckPath.forEach((point) => bounds.extend(point));
 
     const polyline = new kakao.maps.Polyline({
       path,
@@ -982,6 +1328,17 @@ async function drawKakaoRouteMap(route, mapData, appKey) {
       strokeStyle: "shortdash"
     });
     polyline.setMap(map);
+
+    if (truckPath.length > 1) {
+      const truckLine = new kakao.maps.Polyline({
+        path: truckPath,
+        strokeWeight: 5,
+        strokeColor: "#1d6f96",
+        strokeOpacity: 0.82,
+        strokeStyle: "dash"
+      });
+      truckLine.setMap(map);
+    }
 
     mapData.stops.forEach((stop, index) => {
       const position = new kakao.maps.LatLng(stop.lat, stop.lng);
@@ -995,14 +1352,22 @@ async function drawKakaoRouteMap(route, mapData, appKey) {
     });
 
     map.setBounds(bounds);
-    if (status) status.textContent = `${routeMapLabel(route)} 자전거 경유 코스를 표시했습니다.`;
+    if (status) {
+      if (gpxTrack) {
+        status.textContent = `${routeMapLabel(route)}: GPX 트랙 ${gpxTrack.pointCount}개 지점, 약 ${gpxTrack.distance.toFixed(1)}km 구간을 표시했습니다.`;
+      } else if (mapData.truckPath) {
+        status.textContent = `${routeMapLabel(route)}: 전북월드컵경기장 집결, 트럭 이동, ${route.distance}km 자전거 코스를 표시했습니다.`;
+      } else {
+        status.textContent = `${routeMapLabel(route)} 자전거 경유 코스를 표시했습니다.`;
+      }
+    }
   } catch (error) {
     showMapPlaceholder("지도 로드에 실패했습니다. GitHub Pages 도메인이 Kakao Developers 플랫폼에 등록되어 있는지 확인해 주세요.");
   }
 }
 
 function drawSelectedMapRoute(routeId) {
-  const route = routes.find((item) => item.id === routeId) || getMapRoutes()[0];
+  const route = getMapRoutes().find((item) => item.id === routeId) || getMapRoutes()[0];
   if (!route) return;
   const mapData = routeMaps[route.id];
   renderMapStops(route, mapData);
