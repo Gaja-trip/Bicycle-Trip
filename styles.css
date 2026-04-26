@@ -690,6 +690,185 @@ tbody tr:last-child td {
   grid-template-columns: repeat(3, minmax(0, 1fr));
 }
 
+.map-layout {
+  display: grid;
+  grid-template-columns: minmax(260px, 360px) minmax(0, 1fr);
+  gap: 24px;
+  align-items: start;
+}
+
+.map-sidebar,
+.map-stage {
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--surface);
+  box-shadow: var(--shadow);
+}
+
+.map-sidebar {
+  display: grid;
+  gap: 18px;
+  padding: 22px;
+}
+
+.sort-control.full {
+  width: 100%;
+}
+
+.sort-control.full select {
+  width: 100%;
+}
+
+.map-note p,
+.map-status {
+  margin: 0;
+  color: var(--muted);
+  line-height: 1.65;
+}
+
+.map-note {
+  display: grid;
+  gap: 8px;
+  padding: 16px;
+  border-radius: 8px;
+  background: #edf1e9;
+}
+
+.map-note strong {
+  color: var(--coral);
+  font-weight: 900;
+}
+
+.map-stage {
+  overflow: hidden;
+}
+
+.kakao-map-canvas {
+  position: relative;
+  min-height: 520px;
+  background:
+    linear-gradient(135deg, rgba(18, 46, 37, 0.78), rgba(29, 111, 150, 0.56)),
+    radial-gradient(circle at 20% 20%, #d6a329 0 8px, transparent 9px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.18) 1px, transparent 1px),
+    linear-gradient(rgba(255, 255, 255, 0.18) 1px, transparent 1px),
+    #183b31;
+  background-size: auto, auto, 64px 64px, 64px 64px, auto;
+}
+
+.map-placeholder {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-content: center;
+  gap: 10px;
+  padding: 28px;
+  color: #fff;
+  text-align: center;
+}
+
+.map-placeholder strong {
+  font-size: clamp(1.35rem, 3vw, 2rem);
+}
+
+.map-placeholder span {
+  color: rgba(255, 255, 255, 0.78);
+}
+
+.map-status {
+  padding: 16px 20px 0;
+}
+
+.map-stops {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 12px;
+  padding: 18px 20px 20px;
+}
+
+.map-stops article {
+  display: grid;
+  gap: 6px;
+  min-height: 116px;
+  padding: 16px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #fbfcf7;
+}
+
+.map-stops article:first-child {
+  grid-column: span 2;
+  background: var(--ink);
+  color: #fff;
+}
+
+.map-stops span {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: var(--coral);
+  color: #fff;
+  font-weight: 900;
+}
+
+.map-stops strong {
+  line-height: 1.25;
+}
+
+.map-stops p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.92rem;
+}
+
+.map-stops article:first-child p {
+  color: rgba(255, 255, 255, 0.75);
+}
+
+.map-route-list {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.map-route-list button {
+  display: grid;
+  gap: 8px;
+  min-height: 120px;
+  padding: 18px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--surface);
+  box-shadow: var(--shadow);
+  color: var(--ink);
+  text-align: left;
+  cursor: pointer;
+}
+
+.map-route-list button.active,
+.map-route-list button:hover {
+  border-color: var(--green);
+  background: #edf7ef;
+}
+
+.map-route-list strong {
+  font-size: 1.05rem;
+}
+
+.map-route-list span {
+  color: var(--muted);
+  line-height: 1.5;
+}
+
+.map-info {
+  padding: 6px 9px;
+  color: #122e25;
+  font-weight: 900;
+  white-space: nowrap;
+}
+
 .site-footer {
   padding: 28px clamp(18px, 5vw, 72px) 42px;
   color: var(--muted);
@@ -706,12 +885,18 @@ tbody tr:last-child td {
   .method-grid.large,
   .flow-grid,
   .plan-grid,
-  .source-list {
+  .source-list,
+  .map-stops,
+  .map-route-list {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
   .route-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .map-layout {
+    grid-template-columns: 1fr;
   }
 }
 
@@ -744,8 +929,18 @@ tbody tr:last-child td {
   .method-grid.large,
   .flow-grid,
   .plan-grid,
-  .source-list {
+  .source-list,
+  .map-stops,
+  .map-route-list {
     grid-template-columns: 1fr;
+  }
+
+  .map-stops article:first-child {
+    grid-column: auto;
+  }
+
+  .kakao-map-canvas {
+    min-height: 420px;
   }
 
   .controls {
@@ -784,4 +979,5 @@ tbody tr:last-child td {
   .timeline li {
     grid-template-columns: 54px minmax(0, 1fr);
   }
+
 }

@@ -407,6 +407,145 @@ const routes = [
   }
 ];
 
+const routeMaps = {
+  "jeonju-film": {
+    level: 7,
+    stops: [
+      { title: "전주역", lat: 35.8497, lng: 127.1606 },
+      { title: "전주천 자전거길", lat: 35.825, lng: 127.1458 },
+      { title: "한옥마을", lat: 35.8144, lng: 127.1536 },
+      { title: "영화의거리", lat: 35.8218, lng: 127.1432 }
+    ]
+  },
+  namwon: {
+    level: 7,
+    stops: [
+      { title: "남원역", lat: 35.4114, lng: 127.3779 },
+      { title: "요천 자전거길", lat: 35.4075, lng: 127.3846 },
+      { title: "광한루원", lat: 35.4055, lng: 127.3808 },
+      { title: "금암공원", lat: 35.3975, lng: 127.384 }
+    ]
+  },
+  iksan: {
+    level: 7,
+    stops: [
+      { title: "익산역", lat: 35.9404, lng: 126.9458 },
+      { title: "중앙체육공원", lat: 35.9531, lng: 126.974 },
+      { title: "신흥근린공원", lat: 35.947, lng: 126.984 },
+      { title: "금강동산 선택", lat: 35.9588, lng: 126.987 }
+    ]
+  },
+  "gimje-barley": {
+    level: 9,
+    stops: [
+      { title: "심포항 주차 후보", lat: 35.842, lng: 126.684 },
+      { title: "갓민가사섬", lat: 35.836, lng: 126.725 },
+      { title: "망해사", lat: 35.841, lng: 126.728 },
+      { title: "새만금 보리밭", lat: 35.833, lng: 126.735 }
+    ]
+  },
+  "imsil-pet": {
+    level: 7,
+    stops: [
+      { title: "오수역", lat: 35.5377, lng: 127.3273 },
+      { title: "오수의견관광지", lat: 35.5319, lng: 127.3299 },
+      { title: "오수천 둔치", lat: 35.5355, lng: 127.3225 }
+    ]
+  },
+  gochang: {
+    level: 10,
+    stops: [
+      { title: "고창터미널", lat: 35.4351, lng: 126.7015 },
+      { title: "학원관광농장", lat: 35.4529, lng: 126.5455 },
+      { title: "청보리밭 산책 구간", lat: 35.4565, lng: 126.5482 },
+      { title: "선운사 선택", lat: 35.4972, lng: 126.5781 }
+    ],
+    bikePath: [
+      { lat: 35.4351, lng: 126.7015 },
+      { lat: 35.4382, lng: 126.684 },
+      { lat: 35.4438, lng: 126.664 },
+      { lat: 35.4494, lng: 126.638 },
+      { lat: 35.4535, lng: 126.608 },
+      { lat: 35.456, lng: 126.577 },
+      { lat: 35.4529, lng: 126.5455 },
+      { lat: 35.4565, lng: 126.5482 },
+      { lat: 35.469, lng: 126.556 },
+      { lat: 35.486, lng: 126.568 },
+      { lat: 35.4972, lng: 126.5781 }
+    ]
+  },
+  buan: {
+    level: 8,
+    stops: [
+      { title: "부안터미널", lat: 35.7289, lng: 126.7357 },
+      { title: "해뜰마루", lat: 35.7295, lng: 126.7422 },
+      { title: "매창공원", lat: 35.7284, lng: 126.7294 },
+      { title: "변산 방향 선택", lat: 35.6742, lng: 126.532 }
+    ]
+  },
+  goyang: {
+    level: 8,
+    stops: [
+      { title: "정발산역", lat: 37.6595, lng: 126.7734 },
+      { title: "일산호수공원", lat: 37.6538, lng: 126.7683 },
+      { title: "행주산성 선택", lat: 37.6006, lng: 126.8255 }
+    ]
+  },
+  icheon: {
+    level: 8,
+    stops: [
+      { title: "신둔도예촌역", lat: 37.3177, lng: 127.405 },
+      { title: "도자예술마을", lat: 37.293, lng: 127.382 },
+      { title: "사기막골 도예촌", lat: 37.2915, lng: 127.381 },
+      { title: "설봉공원 선택", lat: 37.2795, lng: 127.4302 }
+    ]
+  },
+  hampyeong: {
+    level: 8,
+    stops: [
+      { title: "함평역", lat: 35.0636, lng: 126.5166 },
+      { title: "함평엑스포공원", lat: 35.0618, lng: 126.521 },
+      { title: "함평천 순환", lat: 35.0685, lng: 126.5202 }
+    ]
+  },
+  boseong: {
+    level: 9,
+    stops: [
+      { title: "보성역", lat: 34.7715, lng: 127.0805 },
+      { title: "한국차문화공원", lat: 34.715, lng: 127.0805 },
+      { title: "대한다원 선택", lat: 34.7165, lng: 127.0817 }
+    ]
+  },
+  hadong: {
+    level: 10,
+    stops: [
+      { title: "하동역", lat: 35.0674, lng: 127.752 },
+      { title: "화개장터", lat: 35.188, lng: 127.6232 },
+      { title: "쌍계사 방향 선택", lat: 35.2306, lng: 127.6393 }
+    ]
+  },
+  hwangmae: {
+    level: 10,
+    stops: [
+      { title: "합천터미널", lat: 35.5653, lng: 128.1654 },
+      { title: "황매산군립공원 주차 후보", lat: 35.4963, lng: 127.9743 },
+      { title: "철쭉 군락지 접근", lat: 35.498, lng: 127.973 }
+    ]
+  },
+  "seoul-palace": {
+    level: 8,
+    stops: [
+      { title: "여의나루 한강공원", lat: 37.5271, lng: 126.9327 },
+      { title: "광화문", lat: 37.5759, lng: 126.9768 },
+      { title: "경복궁", lat: 37.5796, lng: 126.977 },
+      { title: "창덕궁", lat: 37.5794, lng: 126.991 },
+      { title: "종묘", lat: 37.5746, lng: 126.9941 }
+    ]
+  }
+};
+
+const KAKAO_MAP_APP_KEY = "565d6dd58f984120d31ffa1e6d24bb2c";
+
 const filters = [
   { id: "all", label: "전체" },
   { id: "jeonbuk", label: "전북" },
@@ -709,6 +848,210 @@ function renderSources() {
     .join("");
 }
 
+function getMapRoutes() {
+  return routes.filter((route) => routeMaps[route.id]);
+}
+
+function routeMapLabel(route) {
+  return `${route.region} · ${route.festival}`;
+}
+
+function kakaoPointSegment(stop) {
+  return `${encodeURIComponent(stop.title)},${stop.lat},${stop.lng}`;
+}
+
+function kakaoBikeRouteUrl(mapData) {
+  const points = mapData.stops.slice(0, 7);
+  return `https://map.kakao.com/link/by/bicycle/${points.map(kakaoPointSegment).join("/")}`;
+}
+
+function guidedBikePath(mapData) {
+  if (mapData.bikePath) return mapData.bikePath;
+  const path = [];
+  mapData.stops.forEach((stop, index) => {
+    if (index === 0) {
+      path.push({ lat: stop.lat, lng: stop.lng });
+      return;
+    }
+    const previous = mapData.stops[index - 1];
+    const midLat = (previous.lat + stop.lat) / 2;
+    const midLng = (previous.lng + stop.lng) / 2;
+    const offset = Math.min(0.012, Math.max(0.003, Math.abs(previous.lat - stop.lat) + Math.abs(previous.lng - stop.lng)) / 8);
+    path.push({ lat: midLat, lng: previous.lng + offset });
+    path.push({ lat: midLat, lng: stop.lng - offset });
+    path.push({ lat: stop.lat, lng: stop.lng });
+  });
+  return path;
+}
+
+function renderMapStops(route, mapData) {
+  const stopBox = byId("mapStops");
+  const openLink = byId("mapOpenLink");
+  if (openLink) openLink.href = kakaoBikeRouteUrl(mapData);
+  if (!stopBox) return;
+  stopBox.innerHTML = `
+    <article>
+      <strong>${routeMapLabel(route)}</strong>
+      <p>${route.route}<br />카카오맵 버튼은 자전거 길찾기 모드로 열립니다.</p>
+    </article>
+    ${mapData.stops
+      .map(
+        (stop, index) => `
+          <article>
+            <span>${index + 1}</span>
+            <strong>${stop.title}</strong>
+            <p>${stop.lat.toFixed(4)}, ${stop.lng.toFixed(4)}</p>
+          </article>
+        `
+      )
+      .join("")}
+  `;
+}
+
+function showMapPlaceholder(message) {
+  const mapCanvas = byId("mapCanvas");
+  const status = byId("mapStatus");
+  if (status) status.textContent = message;
+  if (!mapCanvas) return;
+  mapCanvas.innerHTML = `
+    <div class="map-placeholder">
+      <strong>카카오맵을 표시하지 못했습니다</strong>
+      <span>${message}</span>
+    </div>
+  `;
+}
+
+function loadKakaoMapSdk(appKey) {
+  if (window.kakao?.maps?.Map) return Promise.resolve();
+  if (window.__kakaoMapPromise) return window.__kakaoMapPromise;
+
+  window.__kakaoMapPromise = new Promise((resolve, reject) => {
+    const existingScript = document.querySelector("script[data-kakao-map-sdk]");
+    const finish = () => {
+      if (window.kakao?.maps?.load) {
+        window.kakao.maps.load(resolve);
+      } else if (window.kakao?.maps?.Map) {
+        resolve();
+      } else {
+        reject(new Error("Kakao Maps SDK를 불러오지 못했습니다."));
+      }
+    };
+
+    if (existingScript) {
+      existingScript.addEventListener("load", finish, { once: true });
+      existingScript.addEventListener("error", () => reject(new Error("Kakao Maps SDK 로드 오류")), { once: true });
+      return;
+    }
+
+    const script = document.createElement("script");
+    script.dataset.kakaoMapSdk = "true";
+    script.src = `https://dapi.kakao.com/v2/maps/sdk.js?appkey=${encodeURIComponent(appKey)}&autoload=false`;
+    script.onload = finish;
+    script.onerror = () => reject(new Error("Kakao Maps SDK 로드 오류"));
+    document.head.appendChild(script);
+  });
+
+  return window.__kakaoMapPromise;
+}
+
+async function drawKakaoRouteMap(route, mapData, appKey) {
+  const mapCanvas = byId("mapCanvas");
+  const status = byId("mapStatus");
+  if (!mapCanvas) return;
+
+  try {
+    if (status) status.textContent = "카카오맵을 불러오는 중입니다.";
+    await loadKakaoMapSdk(appKey);
+    mapCanvas.innerHTML = "";
+
+    const centerStop = mapData.stops[Math.floor(mapData.stops.length / 2)];
+    const map = new kakao.maps.Map(mapCanvas, {
+      center: new kakao.maps.LatLng(centerStop.lat, centerStop.lng),
+      level: mapData.level || 8
+    });
+
+    const path = guidedBikePath(mapData).map((stop) => new kakao.maps.LatLng(stop.lat, stop.lng));
+    const bounds = new kakao.maps.LatLngBounds();
+    path.forEach((point) => bounds.extend(point));
+
+    const polyline = new kakao.maps.Polyline({
+      path,
+      strokeWeight: 7,
+      strokeColor: "#d95f4a",
+      strokeOpacity: 0.9,
+      strokeStyle: "shortdash"
+    });
+    polyline.setMap(map);
+
+    mapData.stops.forEach((stop, index) => {
+      const position = new kakao.maps.LatLng(stop.lat, stop.lng);
+      const marker = new kakao.maps.Marker({ position, title: stop.title });
+      marker.setMap(map);
+
+      const info = new kakao.maps.InfoWindow({
+        content: `<div class="map-info">${index + 1}. ${stop.title}</div>`
+      });
+      if (index === 0 || index === mapData.stops.length - 1) info.open(map, marker);
+    });
+
+    map.setBounds(bounds);
+    if (status) status.textContent = `${routeMapLabel(route)} 자전거 경유 코스를 표시했습니다.`;
+  } catch (error) {
+    showMapPlaceholder("지도 로드에 실패했습니다. GitHub Pages 도메인이 Kakao Developers 플랫폼에 등록되어 있는지 확인해 주세요.");
+  }
+}
+
+function drawSelectedMapRoute(routeId) {
+  const route = routes.find((item) => item.id === routeId) || getMapRoutes()[0];
+  if (!route) return;
+  const mapData = routeMaps[route.id];
+  renderMapStops(route, mapData);
+  drawKakaoRouteMap(route, mapData, KAKAO_MAP_APP_KEY);
+}
+
+function renderMapRouteList(selectedId) {
+  const list = byId("mapRouteList");
+  if (!list) return;
+  list.innerHTML = getMapRoutes()
+    .map(
+      (route) => `
+        <button class="${route.id === selectedId ? "active" : ""}" type="button" data-route-id="${route.id}">
+          <strong>${route.festival}</strong>
+          <span>${route.region} · ${route.distance}km · ${difficultyLabel(route.difficulty)}</span>
+        </button>
+      `
+    )
+    .join("");
+
+  list.querySelectorAll("button").forEach((button) => {
+    button.addEventListener("click", () => {
+      const select = byId("routeMapSelect");
+      const routeId = button.dataset.routeId;
+      if (select) select.value = routeId;
+      renderMapRouteList(routeId);
+      drawSelectedMapRoute(routeId);
+    });
+  });
+}
+
+function renderMapsPage() {
+  const select = byId("routeMapSelect");
+  if (!select) return;
+  const mapRoutes = getMapRoutes();
+  const params = new URLSearchParams(window.location.search);
+  const initialId = params.get("route") && routeMaps[params.get("route")] ? params.get("route") : mapRoutes[0]?.id;
+
+  select.innerHTML = mapRoutes.map((route) => `<option value="${route.id}">${routeMapLabel(route)}</option>`).join("");
+  select.value = initialId;
+  renderMapRouteList(initialId);
+  drawSelectedMapRoute(initialId);
+
+  select.addEventListener("change", () => {
+    renderMapRouteList(select.value);
+    drawSelectedMapRoute(select.value);
+  });
+}
+
 function init() {
   const sortSelect = byId("sortSelect");
   if (sortSelect) sortSelect.addEventListener("change", renderFestivalPage);
@@ -717,6 +1060,7 @@ function init() {
   renderTransportPage();
   renderPlans();
   renderSources();
+  renderMapsPage();
 }
 
 init();

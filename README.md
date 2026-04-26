@@ -8,6 +8,7 @@
 - `festivals.html`: 전국 후보 비교와 필터
 - `jeonbuk.html`: 전북권 축제 집중 분석
 - `transport.html`: 대중교통, 트럭 적재, 숙박 거점, 공원 주차 방식
+- `maps.html`: 카카오맵 기반 코스 지도
 - `itineraries.html`: 5월 1-2일 추천 일정
 - `sources.html`: 수집 자료 출처
 

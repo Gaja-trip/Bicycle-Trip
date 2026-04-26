@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>코스 지도 | Bike Festa</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body data-page="maps">
+    <header class="site-header">
+      <a class="brand" href="index.html"><span class="brand-mark" aria-hidden="true"></span><span>Bike Festa 5.1-5.2</span></a>
+      <nav aria-label="주요 페이지">
+        <a href="festivals.html">전국 비교</a>
+        <a href="jeonbuk.html">전북 집중</a>
+        <a href="transport.html">이동·주차</a>
+        <a href="maps.html" aria-current="page">코스 지도</a>
+        <a href="itineraries.html">일정</a>
+        <a href="sources.html">출처</a>
+      </nav>
+    </header>
+
+    <main>
+      <section class="page-hero compact">
+        <p class="eyebrow">Kakao Map</p>
+        <h1>코스 지도에서 출발점과 축제장을 확인하세요</h1>
+        <p>축제별 출발점, 주차 거점, 선택 연장점을 카카오맵 마커와 코스선으로 확인합니다.</p>
+      </section>
+
+      <section class="map-layout">
+        <aside class="map-sidebar" aria-label="지도 설정">
+          <div class="section-head">
+            <p class="eyebrow">Route</p>
+            <h2>코스 선택</h2>
+          </div>
+          <label class="sort-control full">
+            <span>축제 코스</span>
+            <select id="routeMapSelect"></select>
+          </label>
+          <a class="button" id="mapOpenLink" href="https://map.kakao.com/" target="_blank" rel="noreferrer">카카오맵 자전거 길찾기</a>
+          <div class="map-note">
+            <strong>지도 읽는 법</strong>
+            <p>지도 안 선은 라이딩 경유점을 따라가는 안내선입니다. 정확한 턴바이턴 안내는 카카오맵 자전거 길찾기 버튼으로 확인하세요.</p>
+          </div>
+        </aside>
+
+        <section class="map-stage" aria-label="카카오맵 코스 표시">
+          <div id="mapCanvas" class="kakao-map-canvas">
+            <div class="map-placeholder">
+              <strong>카카오맵을 불러오는 중입니다</strong>
+              <span>코스 정류점은 아래에서 함께 확인할 수 있습니다.</span>
+            </div>
+          </div>
+          <p id="mapStatus" class="map-status">코스를 선택하세요.</p>
+          <div class="map-stops" id="mapStops"></div>
+        </section>
+      </section>
+
+      <section>
+        <div class="section-head">
+          <p class="eyebrow">All Routes</p>
+          <h2>지도 코스 목록</h2>
+        </div>
+        <div class="map-route-list" id="mapRouteList"></div>
+      </section>
+    </main>
+
+    <footer class="site-footer"><p>지도 안 코스선은 자전거 이동을 고려한 경유점 기반 안내선입니다. 최종 진입은 카카오맵 자전거 길찾기와 현장 교통 통제를 함께 확인하세요.</p></footer>
+    <script src="script.js" defer></script>
+  </body>
+</html>
