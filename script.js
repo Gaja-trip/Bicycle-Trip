@@ -615,8 +615,8 @@ Object.assign(routeMaps, {
     stops: [
       { title: "전북월드컵경기장 집결", lat: 35.868, lng: 127.064 },
       { title: "트럭 하차: 장군목", lat: 35.4691177297715, lng: 127.187368869781 },
-      { title: "곡성 섬진강기차마을", lat: 35.278, lng: 127.309 },
-      { title: "압록유원지", lat: 35.219, lng: 127.302 },
+      { title: "곡성 섬진강기차마을", lat: 35.2793461101383, lng: 127.310106754303 },
+      { title: "압록유원지", lat: 35.1948882791799, lng: 127.377923727036 },
       { title: "섬진강 대나무숲길", lat: 35.1858155343577, lng: 127.46498554945 }
     ],
     truckPath: [
@@ -625,13 +625,87 @@ Object.assign(routeMaps, {
     ],
     bicycleStops: [
       { title: "장군목", lat: 35.4691177297715, lng: 127.187368869781 },
-      { title: "곡성 섬진강기차마을", lat: 35.278, lng: 127.309 },
-      { title: "압록유원지", lat: 35.219, lng: 127.302 },
+      { title: "곡성 섬진강기차마을", lat: 35.2793461101383, lng: 127.310106754303 },
+      { title: "압록유원지", lat: 35.1948882791799, lng: 127.377923727036 },
       { title: "섬진강 대나무숲길", lat: 35.1858155343577, lng: 127.46498554945 }
     ],
     gpxFile: "gpx/섬진강 장군목_대나무숲.gpx",
     gpxStartName: "장군목",
     gpxEndName: "섬진강 대나무숲길",
+    pois: [
+      {
+        type: "view",
+        title: "장군목·요강바위",
+        lat: 35.4691177297715,
+        lng: 127.187368869781,
+        time: "09:00 출발",
+        note: "출발 전 단체 사진과 안전 브리핑을 하기 좋은 섬진강 상류 대표 경관 지점입니다.",
+        kakaoQuery: "장군목유원지"
+      },
+      {
+        type: "view",
+        title: "섬진강변 철쭉길·레일바이크",
+        lat: 35.295,
+        lng: 127.303,
+        time: "10:30 풍경 휴식",
+        note: "강, 자전거길, 드라이브길, 기찻길이 나란히 보이는 구간으로 5월 초 풍경 휴식 후보입니다.",
+        kakaoQuery: "곡성 섬진강변 철쭉길"
+      },
+      {
+        type: "food",
+        title: "라이첸",
+        lat: 35.2789,
+        lng: 127.3098,
+        time: "11:20 점심 후보 A",
+        note: "곡성 기차마을 인근 중식 점심 후보입니다. 점심 영업 시간이 짧아 출발 전 전화 확인이 좋습니다.",
+        kakaoQuery: "곡성 라이첸"
+      },
+      {
+        type: "view",
+        title: "압록유원지",
+        lat: 35.1948882791799,
+        lng: 127.377923727036,
+        time: "12:50 물가 휴식",
+        note: "섬진강과 보성강이 만나는 지점으로, 물가 휴식과 보급을 잡기 좋은 반환 전후 거점입니다.",
+        kakaoQuery: "압록유원지"
+      },
+      {
+        type: "food",
+        title: "별천지가든",
+        lat: 35.1955,
+        lng: 127.3783,
+        time: "12:20 점심 후보 B",
+        note: "압록유원지 인근 참게탕·민물매운탕 식사 후보입니다. 공개 리뷰 신호가 좋아 점심 메인 후보로 표시했습니다.",
+        kakaoQuery: "곡성 별천지가든"
+      },
+      {
+        type: "cafe",
+        title: "카페 피오르",
+        lat: 35.1962,
+        lng: 127.3764,
+        time: "13:10 커피 휴식",
+        note: "압록리 섬진강변 베이커리 카페 후보입니다. 후반부 다리 쉬는 지점으로 잡기 좋습니다.",
+        kakaoQuery: "곡성 카페 피오르"
+      },
+      {
+        type: "view",
+        title: "섬진강 대나무숲길",
+        lat: 35.1858155343577,
+        lng: 127.46498554945,
+        time: "14:30 종점 산책",
+        note: "GPX 목적지입니다. 라이딩 종료 후 짧은 산책과 회복 시간을 잡기 좋습니다.",
+        kakaoQuery: "섬진강 대나무숲길"
+      },
+      {
+        type: "cafe",
+        title: "라플라타",
+        lat: 35.1853,
+        lng: 127.4662,
+        time: "15:00 마무리 커피",
+        note: "대나무숲길 인근 섬진강 뷰 대형 베이커리 카페입니다. 넓은 주차장과 강 조망이 장점입니다.",
+        kakaoQuery: "구례 라플라타 카페"
+      }
+    ],
     bikePath: [
       { lat: 35.4691177297715, lng: 127.187368869781 },
       { lat: 35.43, lng: 127.205 },
@@ -1140,6 +1214,26 @@ function kakaoBikeRouteUrl(mapData) {
   return `https://map.kakao.com/link/by/bicycle/${points.map(kakaoPointSegment).join("/")}`;
 }
 
+function kakaoPlaceUrl(item) {
+  return `https://map.kakao.com/?q=${encodeURIComponent(item.kakaoQuery || item.title)}`;
+}
+
+function poiTypeLabel(type) {
+  return {
+    view: "경치 쉼터",
+    cafe: "커피",
+    food: "점심"
+  }[type] || "장소";
+}
+
+function poiTypeMark(type) {
+  return {
+    view: "쉼",
+    cafe: "커",
+    food: "밥"
+  }[type] || "점";
+}
+
 function pointDistanceKm(a, b) {
   const radius = 6371;
   const lat1 = (a.lat * Math.PI) / 180;
@@ -1243,7 +1337,42 @@ function renderMapStops(route, mapData) {
         `
       )
       .join("")}
+    ${
+      mapData.pois
+        ? mapData.pois
+            .map(
+              (poi) => `
+                <article class="poi-card ${poi.type}">
+                  <span>${poiTypeLabel(poi.type)}</span>
+                  <strong>${poi.title}</strong>
+                  <p>${poi.time} · ${poi.note}</p>
+                  <a href="${kakaoPlaceUrl(poi)}" target="_blank" rel="noreferrer">카카오맵 별점 확인</a>
+                </article>
+              `
+            )
+            .join("")
+        : ""
+    }
   `;
+}
+
+function renderPoiMarker(map, poi, bounds) {
+  const position = new kakao.maps.LatLng(poi.lat, poi.lng);
+  bounds.extend(position);
+  const marker = new kakao.maps.CustomOverlay({
+    position,
+    yAnchor: 1,
+    content: `<a class="poi-marker ${poi.type}" href="${kakaoPlaceUrl(poi)}" target="_blank" rel="noreferrer" title="${poi.title}">${poiTypeMark(poi.type)}</a>`
+  });
+  marker.setMap(map);
+
+  if (poi.type === "food" || poi.type === "cafe") {
+    new kakao.maps.CustomOverlay({
+      position,
+      yAnchor: 2.15,
+      content: `<div class="map-info map-poi-info"><strong>${poi.title}</strong><span>${poiTypeLabel(poi.type)} · ${poi.time}</span></div>`
+    }).setMap(map);
+  }
 }
 
 function mapPathToLatLng(path) {
@@ -1350,6 +1479,10 @@ async function drawKakaoRouteMap(route, mapData, appKey) {
       });
       if (index === 0 || index === mapData.stops.length - 1) info.open(map, marker);
     });
+
+    if (mapData.pois) {
+      mapData.pois.forEach((poi) => renderPoiMarker(map, poi, bounds));
+    }
 
     map.setBounds(bounds);
     if (status) {

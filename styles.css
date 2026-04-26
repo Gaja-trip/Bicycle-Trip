@@ -827,6 +827,28 @@ tbody tr:last-child td {
   color: rgba(255, 255, 255, 0.75);
 }
 
+.map-stops .poi-card {
+  border-width: 2px;
+}
+
+.map-stops .poi-card.view {
+  border-color: #1d6f96;
+}
+
+.map-stops .poi-card.cafe {
+  border-color: #d6a329;
+}
+
+.map-stops .poi-card.food {
+  border-color: #d95f4a;
+}
+
+.poi-card a {
+  color: var(--green);
+  font-weight: 900;
+  text-decoration: none;
+}
+
 .map-route-list {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
@@ -867,6 +889,47 @@ tbody tr:last-child td {
   color: #122e25;
   font-weight: 900;
   white-space: nowrap;
+}
+
+.map-poi-info {
+  display: grid;
+  gap: 2px;
+  border: 1px solid rgba(18, 46, 37, 0.18);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.95);
+  box-shadow: 0 10px 22px rgba(18, 46, 37, 0.18);
+}
+
+.map-poi-info span {
+  color: #53665d;
+  font-size: 0.78rem;
+}
+
+.poi-marker {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  border: 2px solid #fff;
+  border-radius: 50%;
+  box-shadow: 0 8px 18px rgba(18, 46, 37, 0.28);
+  color: #fff;
+  font-size: 0.78rem;
+  font-weight: 900;
+  text-decoration: none;
+}
+
+.poi-marker.view {
+  background: #1d6f96;
+}
+
+.poi-marker.cafe {
+  background: #d6a329;
+}
+
+.poi-marker.food {
+  background: #d95f4a;
 }
 
 .site-footer {
