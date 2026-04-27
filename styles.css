@@ -33,7 +33,9 @@ a {
 }
 
 button,
-select {
+select,
+input,
+textarea {
   font: inherit;
 }
 
@@ -280,6 +282,10 @@ body[data-page="itineraries"] {
 
 body[data-page="community"] {
   --page-hero-image: url("https://kfescdn.visitkorea.or.kr/kfes/upload/contents/db/4056068_image2_1.jpg");
+}
+
+body[data-page="bike-roads"] {
+  --page-hero-image: url("https://commons.wikimedia.org/wiki/Special:FilePath/Han%20river%20bike%20path%20-%20panoramio.jpg");
 }
 
 .page-hero .eyebrow {
@@ -1126,6 +1132,233 @@ tbody tr:last-child td {
   background: #d95f4a;
 }
 
+.bike-road-layout {
+  display: grid;
+  grid-template-columns: minmax(320px, 0.82fr) minmax(0, 1.18fr);
+  gap: 22px;
+  align-items: start;
+}
+
+.official-map-panel,
+.bike-road-detail article {
+  padding: 22px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--surface);
+  box-shadow: 0 10px 24px rgba(16, 35, 28, 0.06);
+}
+
+.official-map-panel {
+  position: sticky;
+  top: 86px;
+  display: grid;
+  gap: 16px;
+}
+
+.official-map-frame {
+  min-height: 440px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  overflow: hidden;
+  background: #edf1e9;
+}
+
+.official-map-frame iframe {
+  width: 100%;
+  height: 100%;
+  min-height: 440px;
+  border: 0;
+}
+
+.road-source-note,
+.road-caution {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.92rem;
+}
+
+.bike-road-tools {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(220px, 0.35fr);
+  gap: 18px;
+  align-items: end;
+  margin-bottom: 16px;
+}
+
+.bike-road-detail {
+  margin-bottom: 16px;
+}
+
+.bike-road-detail article {
+  display: grid;
+  gap: 18px;
+  border-color: rgba(22, 115, 85, 0.28);
+  background: #fbfcf8;
+}
+
+.bike-road-detail h3,
+.bike-road-card h3 {
+  margin: 0;
+  font-size: clamp(1.3rem, 2vw, 2rem);
+  line-height: 1.15;
+}
+
+.bike-road-detail p,
+.bike-road-card p {
+  margin: 10px 0 0;
+  color: var(--muted);
+}
+
+.road-stat-list {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 10px;
+  margin: 0;
+}
+
+.road-stat-list div {
+  padding: 14px;
+  border-radius: 8px;
+  background: #edf7ef;
+}
+
+.road-stat-list dt {
+  color: var(--muted);
+  font-size: 0.82rem;
+  font-weight: 900;
+}
+
+.road-stat-list dd {
+  margin: 5px 0 0;
+  color: var(--ink);
+  font-weight: 900;
+}
+
+.center-list {
+  padding: 16px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--surface);
+}
+
+.center-list strong {
+  display: block;
+}
+
+.center-list p {
+  margin: 8px 0 0;
+}
+
+.bike-road-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.bike-road-card {
+  display: grid;
+  gap: 12px;
+  padding: 20px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--surface);
+  box-shadow: 0 10px 24px rgba(16, 35, 28, 0.06);
+}
+
+.road-card-head,
+.road-card-actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.road-card-head span,
+.road-chip-row span {
+  color: var(--green);
+  font-size: 0.82rem;
+  font-weight: 900;
+}
+
+.road-card-head b {
+  color: var(--coral);
+  font-size: 1.1rem;
+}
+
+.road-chip-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.road-chip-row span {
+  padding: 6px 9px;
+  border-radius: 999px;
+  background: #edf7ef;
+}
+
+.road-card-actions {
+  padding-top: 6px;
+  border-top: 1px solid var(--line);
+}
+
+.road-card-actions a {
+  color: var(--green);
+  font-weight: 900;
+  text-decoration: none;
+}
+
+.road-list-layout,
+.legend-grid {
+  display: grid;
+  gap: 16px;
+}
+
+.road-list-layout {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.compact-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 16px;
+}
+
+.compact-list span {
+  padding: 8px 11px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: #fbfcf8;
+  color: var(--muted);
+  font-weight: 800;
+}
+
+.legend-grid {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.legend-grid article {
+  padding: 20px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--surface);
+}
+
+.legend-grid strong {
+  display: block;
+  font-size: 1.08rem;
+}
+
+.legend-grid p {
+  margin: 10px 0 0;
+  color: var(--muted);
+}
+
+.compact-road-link {
+  min-height: 0;
+}
+
 .detail-layout {
   display: grid;
   grid-template-columns: minmax(0, 1.4fr) minmax(280px, 0.6fr);
@@ -1256,6 +1489,183 @@ tbody tr:last-child td {
   font-weight: 900;
 }
 
+.community-alerts {
+  display: grid;
+  gap: 18px;
+}
+
+.alert-layout,
+.alert-dashboard {
+  display: grid;
+  gap: 16px;
+}
+
+.alert-layout {
+  grid-template-columns: minmax(280px, 0.85fr) minmax(0, 1.15fr);
+}
+
+.alert-dashboard {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.alert-card {
+  padding: 22px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--surface);
+  box-shadow: 0 10px 24px rgba(16, 35, 28, 0.06);
+}
+
+.alert-card-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 14px;
+}
+
+.alert-card h3 {
+  margin: 0;
+  font-size: clamp(1.25rem, 2vw, 1.8rem);
+  line-height: 1.15;
+}
+
+.alert-note {
+  margin: 16px 0 0;
+  color: var(--muted);
+}
+
+.alert-form {
+  display: grid;
+  gap: 14px;
+  margin-top: 18px;
+}
+
+.alert-form label {
+  display: grid;
+  gap: 7px;
+  color: var(--muted);
+  font-size: 0.9rem;
+  font-weight: 900;
+}
+
+.alert-form input,
+.alert-form select,
+.alert-form textarea {
+  width: 100%;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #fbfcf8;
+  color: var(--ink);
+}
+
+.alert-form input,
+.alert-form select {
+  min-height: 46px;
+  padding: 0 12px;
+}
+
+.alert-form textarea {
+  min-height: 132px;
+  padding: 12px;
+  resize: vertical;
+}
+
+.alert-form input:focus,
+.alert-form select:focus,
+.alert-form textarea:focus {
+  border-color: var(--green);
+  outline: 3px solid rgba(22, 115, 85, 0.14);
+}
+
+.alert-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.alert-actions .button,
+.alert-form > .button {
+  justify-content: center;
+}
+
+.button:disabled {
+  cursor: not-allowed;
+  opacity: 0.55;
+}
+
+.alert-count {
+  display: inline-flex;
+  align-items: center;
+  min-height: 32px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: #edf7ef;
+  color: var(--green);
+  font-size: 0.86rem;
+  font-weight: 900;
+}
+
+.mini-list {
+  display: grid;
+  gap: 10px;
+  margin-top: 16px;
+}
+
+.mini-item {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 14px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #fbfcf8;
+}
+
+.mini-item.is-sent {
+  opacity: 0.72;
+}
+
+.mini-item strong,
+.mini-item span,
+.mini-item small {
+  display: block;
+}
+
+.mini-item strong {
+  line-height: 1.25;
+}
+
+.mini-item span {
+  margin-top: 4px;
+  color: var(--green);
+  font-size: 0.86rem;
+  font-weight: 900;
+}
+
+.mini-item small {
+  margin-top: 6px;
+  color: var(--muted);
+  line-height: 1.45;
+}
+
+.text-button {
+  border: 0;
+  background: transparent;
+  color: var(--coral);
+  font-weight: 900;
+  cursor: pointer;
+}
+
+.empty-state {
+  margin: 0;
+  padding: 16px;
+  border: 1px dashed var(--line);
+  border-radius: 8px;
+  color: var(--muted);
+  background: #fbfcf8;
+}
+
 .site-footer {
   padding: 28px clamp(18px, 5vw, 72px) 42px;
   color: var(--muted);
@@ -1274,11 +1684,28 @@ tbody tr:last-child td {
   .flow-grid,
   .plan-grid,
   .source-list,
+  .bike-road-layout,
   .map-stops,
   .map-route-list,
+  .bike-road-grid,
+  .legend-grid,
   .community-grid,
-  .post-list {
+  .post-list,
+  .alert-dashboard {
     grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .bike-road-layout,
+  .bike-road-tools {
+    grid-template-columns: 1fr;
+  }
+
+  .official-map-panel {
+    position: static;
+  }
+
+  .alert-layout {
+    grid-template-columns: 1fr;
   }
 
   .route-grid {
@@ -1326,11 +1753,19 @@ tbody tr:last-child td {
   .flow-grid,
   .plan-grid,
   .source-list,
+  .bike-road-layout,
+  .bike-road-tools,
+  .bike-road-grid,
+  .road-stat-list,
+  .road-list-layout,
+  .legend-grid,
   .map-stops,
   .map-route-list,
   .tip-grid,
   .community-grid,
-  .post-list {
+  .post-list,
+  .alert-dashboard,
+  .alert-layout {
     grid-template-columns: 1fr;
   }
 

@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>자전거길 정보 | 자전거여행 함께 가요</title>
+    <meta
+      name="description"
+      content="자전거길 지도정보 서비스를 참고해 국토종주 자전거길, 지자체 명품 자전거길, 섬 자전거길, 편의시설 정보를 한 곳에서 비교합니다."
+    />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body data-page="bike-roads">
+    <header class="site-header">
+      <a class="brand" href="index.html" aria-label="홈으로 이동"><span class="brand-mark" aria-hidden="true"></span><span>자전거여행 함께 가요</span></a>
+      <nav aria-label="주요 페이지">
+        <a href="festivals.html">전국 행사 일정</a>
+        <a href="itineraries.html">여행 일정</a>
+        <a href="maps.html">코스 지도</a>
+        <a href="bike-roads.html" aria-current="page">자전거길 정보</a>
+        <a href="community.html">커뮤니티</a>
+      </nav>
+    </header>
+
+    <main>
+      <section class="page-hero compact">
+        <p class="eyebrow">Bike Road Guide</p>
+        <h1>자전거길 정보 서비스</h1>
+        <p>공식 자전거길 지도정보 서비스를 참고해 국토종주 코스, 인증센터, 거리, 예상시간, 편의시설 확인 동선을 정리했습니다.</p>
+      </section>
+
+      <section class="bike-road-layout">
+        <aside class="official-map-panel" aria-label="공식 자전거길 지도">
+          <div class="section-head">
+            <p class="eyebrow">Official Map</p>
+            <h2>공식 지도 바로 보기</h2>
+            <p>선택한 코스의 공식 지도 화면을 함께 띄웁니다. iframe이 차단되면 새 창 버튼으로 확인하세요.</p>
+          </div>
+          <label class="sort-control full">
+            <span>국토종주 코스</span>
+            <select id="officialRoadSelect"></select>
+          </label>
+          <a class="button dark" id="officialBikeMapLink" href="https://www.bike.go.kr/map/roadMap.do" target="_blank" rel="noreferrer">공식 지도 새 창</a>
+          <div class="official-map-frame">
+            <iframe
+              id="officialBikeMapFrame"
+              title="자전거길 지도정보 서비스"
+              loading="lazy"
+              src="https://www.bike.go.kr/map/roadMap.do?roadSn=1&roadType=1&xp=37.570595&yp=126.699981&key=2008148358544&zm=12"
+            ></iframe>
+          </div>
+          <p class="road-source-note">
+            자료 기준: 행정안전부 자전거길 지도정보 서비스의 공개 화면에 표시된 거리, 예상시간, 인증센터 정보를 요약했습니다.
+          </p>
+        </aside>
+
+        <section aria-label="자전거길 상세 정보">
+          <div class="bike-road-tools">
+            <div class="section-head">
+              <p class="eyebrow">Course Index</p>
+              <h2>국토종주 자전거길 비교</h2>
+              <p id="bikeRoadMeta">공식 자전거길 정보를 불러오는 중입니다.</p>
+            </div>
+            <label class="sort-control">
+              <span>분류</span>
+              <select id="bikeRoadFilter">
+                <option value="all">전체</option>
+                <option value="river">강변·하천</option>
+                <option value="coast">해안</option>
+                <option value="mountain">고개·장거리</option>
+                <option value="island">섬·해안 순환</option>
+              </select>
+            </label>
+          </div>
+
+          <div class="bike-road-detail" id="bikeRoadDetail"></div>
+          <div class="bike-road-grid" id="bikeRoadGrid"></div>
+        </section>
+      </section>
+
+      <section class="home-band">
+        <div class="section-head">
+          <p class="eyebrow">Local Picks</p>
+          <h2>축제 여행에 바로 연결하기</h2>
+          <p>공식 자전거길 중 이번 사이트의 5월 축제·트럭 이동 코스와 함께 보기 좋은 노선을 골랐습니다.</p>
+        </div>
+        <div class="route-grid simple" id="localRoadLinks"></div>
+      </section>
+
+      <section>
+        <div class="section-head">
+          <p class="eyebrow">More Roads</p>
+          <h2>지자체 명품길과 섬 자전거길</h2>
+          <p>공식 서비스에는 국토종주 외에도 지자체 명품 자전거길과 바다를 품은 섬 자전거길이 함께 제공됩니다.</p>
+        </div>
+        <div class="road-list-layout">
+          <article class="detail-card">
+            <p class="eyebrow">Premium</p>
+            <h2>지자체 명품 자전거길</h2>
+            <div class="compact-list" id="premiumRoadList"></div>
+          </article>
+          <article class="detail-card">
+            <p class="eyebrow">Island</p>
+            <h2>바다를 품은 섬 자전거길</h2>
+            <div class="compact-list" id="islandRoadList"></div>
+          </article>
+        </div>
+      </section>
+
+      <section class="map-band">
+        <div class="section-head">
+          <p class="eyebrow">Map Legend</p>
+          <h2>지도에서 함께 확인할 정보</h2>
+        </div>
+        <div class="legend-grid" id="bikeRoadLegend"></div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <p>공식 지도와 현장 표지판이 우선입니다. 공사, 통제, 우회 구간은 출발 직전 공식 지도와 지자체 공지를 다시 확인하세요.</p>
+    </footer>
+    <script src="script.js" defer></script>
+  </body>
+</html>

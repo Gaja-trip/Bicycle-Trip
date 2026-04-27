@@ -1308,6 +1308,230 @@ const plans = [
   }
 ];
 
+const officialBikeRoads = [
+  {
+    id: "ara",
+    roadSn: 1,
+    category: "river",
+    title: "아라자전거길",
+    region: "인천·김포",
+    distance: 21,
+    time: "약 1시간 30분",
+    description: "아라서해갑문에서 아라한강갑문까지 경인아라뱃길을 따라 활주로처럼 일직선으로 달릴 수 있는 자전거길입니다.",
+    centers: ["아라서해갑문인증센터", "아라한강갑문인증센터"],
+    fit: "초보 팀의 워밍업, 수도권 당일 라이딩",
+    caution: "직선 구간이 길어 맞바람을 확인하세요."
+  },
+  {
+    id: "hangang-seoul",
+    roadSn: 2,
+    category: "river",
+    title: "한강종주자전거길(서울구간)",
+    region: "서울·경기",
+    distance: 56,
+    time: "약 3시간 40분",
+    description: "아라한강갑문에서 팔당대교까지 한강을 따라 도시 속 휴식처를 산책하듯 달리는 편안한 자전거길입니다.",
+    centers: ["아라한강갑문인증센터", "여의도 인증센터", "뚝섬전망콤플렉스인증센터", "광나루자전거공원인증센터", "팔당대교"],
+    fit: "대중교통 접근형, 초보·중급 혼합 팀",
+    caution: "주말 한강공원 혼잡 시간에는 저속 주행이 필요합니다."
+  },
+  {
+    id: "namhangang",
+    roadSn: 3,
+    category: "river",
+    title: "남한강자전거길",
+    region: "경기·충북",
+    distance: 132,
+    time: "약 8시간 50분",
+    description: "팔당대교부터 충주탄금대까지 옛 중앙선 폐철도 구간을 달리는 경관형 장거리 자전거길입니다.",
+    centers: ["팔당대교", "능내역인증센터", "양평군립미술관인증센터", "이포보인증센터", "여주보인증센터", "강천보인증센터", "비내섬인증센터", "충주탄금대인증센터"],
+    fit: "1박2일 장거리, 인증 라이딩",
+    caution: "전 구간 완주는 보급과 복귀 교통을 나눠 계획하세요."
+  },
+  {
+    id: "bukhangang",
+    roadSn: 4,
+    category: "river",
+    title: "북한강자전거길",
+    region: "경기·강원",
+    distance: 99,
+    time: "약 8시간 50분",
+    description: "청평호반, 의암호반, 운길산, 출령산 주변 절경을 느낄 수 있는 호반형 자전거길입니다.",
+    centers: ["밝은광장", "샛터삼거리", "경강교", "신매대교"],
+    fit: "호수 풍경, 사진형 라이딩",
+    caution: "호반 구간은 날씨와 노면 상태에 따라 체감 난이도가 달라집니다."
+  },
+  {
+    id: "saejae",
+    roadSn: 5,
+    category: "mountain",
+    title: "새재자전거길",
+    region: "충북·경북",
+    distance: 100,
+    time: "약 6시간 40분",
+    description: "충주탄금대에서 상주 상풍교까지 한강과 낙동강을 잇기 위해 이화령 고개를 넘는 자전거길입니다.",
+    centers: ["충주탄금대인증센터", "수안보온천인증센터", "이화령휴게소인증센터", "문경불정역인증센터", "상주상풍교인증센터"],
+    fit: "업힐 도전, 중상급 팀",
+    caution: "이화령 업힐과 다운힐 안전 장비를 반드시 확인하세요."
+  },
+  {
+    id: "nakdonggang",
+    roadSn: 6,
+    category: "mountain",
+    title: "낙동강자전거길",
+    region: "경북·경남·부산",
+    distance: 324,
+    time: "약 21시간 30분",
+    description: "상주 상풍교에서 낙동강 하구둑까지 이어지는 국내 최장급 자전거길로 다양한 풍경과 보급 거점이 있습니다.",
+    centers: ["안동댐인증센터", "상주상풍교인증센터", "상주보인증센터", "낙단보인증센터", "구미보인증센터", "칠곡보인증센터", "강정고령보인증센터", "달성보인증센터", "합천창녕보인증센터", "창녕함안보인증센터", "양산물문화관인증센터", "낙동강하구둑인증센터"],
+    fit: "다일 종주, 팀 단위 릴레이",
+    caution: "구간을 나누고 숙박·정비 포인트를 먼저 확정하세요."
+  },
+  {
+    id: "geumgang",
+    roadSn: 7,
+    category: "river",
+    title: "금강자전거길",
+    region: "대전·세종·충남·전북",
+    distance: 146,
+    time: "약 9시간 40분",
+    description: "대청댐에서 금강 하구둑까지 백제의 숨결과 강변 풍경을 따라 달리는 여유로운 자전거길입니다.",
+    centers: ["대청댐인증센터", "세종보인증센터", "공주보인증센터", "백제보인증센터", "익산성당포구인증센터", "금강하구둑인증센터"],
+    fit: "전북·충청 연계, 문화 여행",
+    caution: "하구둑 방향은 바람과 보급 간격을 함께 봐야 합니다."
+  },
+  {
+    id: "yeongsangang",
+    roadSn: 8,
+    category: "river",
+    title: "영산강자전거길",
+    region: "전남",
+    distance: 133,
+    time: "약 8시간 50분",
+    description: "담양댐부터 영산강 하구둑까지 남도 풍경을 따라 유유자적하게 달리는 자전거길입니다.",
+    centers: ["담양댐인증센터", "메타세쿼이아길인증센터", "담양대나무숲인증센터", "승촌보인증센터", "죽산보인증센터", "느러지전망관람대인증센터", "영산하구둑인증센터"],
+    fit: "대나무숲, 남도 여행, 1박2일",
+    caution: "담양·광주권 관광지 혼잡 시간을 피하면 좋습니다."
+  },
+  {
+    id: "seomjingang",
+    roadSn: 9,
+    category: "river",
+    title: "섬진강자전거길",
+    region: "전북·전남",
+    distance: 149,
+    time: "약 9시간 40분",
+    description: "전북 임실 섬진강 생활체육공원에서 전남 광양 배알도 해수욕장까지 자연미를 살린 강변 자전거길입니다.",
+    centers: ["섬진강댐인증센터", "장군목인증센터", "향가유원지인증센터", "횡탄정인증센터", "사성암인증센터", "남도대교인증센터", "매화마을인증센터", "배알도수변공원인증센터"],
+    fit: "이번 5월 1일 장군목-대나무숲 GPX 투어",
+    caution: "장군목 이후 보급 지점과 회수 차량 위치를 미리 정하세요."
+  },
+  {
+    id: "ocheon",
+    roadSn: 10,
+    category: "river",
+    title: "오천자전거길",
+    region: "충북·세종",
+    distance: 105,
+    time: "약 6시간 30분",
+    description: "충북 괴산군에서 증평, 청원, 세종까지 다섯 개 하천을 따라 조성된 자전거길입니다.",
+    centers: ["합강공원인증센터", "무심천교인증센터", "행촌교차로인증센터", "백로공원인증센터", "괴강교인증센터"],
+    fit: "하천 연계, 중거리 종주",
+    caution: "지류가 많아 분기점 표지와 GPX 확인이 중요합니다."
+  },
+  {
+    id: "east-coast-gangwon",
+    roadSn: 11,
+    category: "coast",
+    title: "동해안자전거길(강원)",
+    region: "강원",
+    distance: 242,
+    time: "약 16시간 10분",
+    description: "통일전망대부터 고포마을까지 항구와 해안 도시의 정취를 즐길 수 있는 동해안 자전거길입니다.",
+    centers: ["통일전망대", "북천철교", "봉포해변인증센터", "영금정인증센터", "동호해변", "경포해변", "정동진", "망상해변", "추암촛대바위", "한재공원", "임원"],
+    fit: "해안 장거리, 다일 여행",
+    caution: "민통선·해안 통제, 강풍, 숙박 간격을 확인하세요."
+  },
+  {
+    id: "east-coast-gyeongbuk",
+    roadSn: 12,
+    category: "coast",
+    title: "동해안자전거길(경북)",
+    region: "경북",
+    distance: 76,
+    time: "약 5시간 15분",
+    description: "울진과 영덕 해안 풍경을 따라 푸른 동해바다의 내음을 느낄 수 있는 자전거길입니다.",
+    centers: ["울진은어다리인증센터", "망양휴게소인증센터", "월송정인증센터", "고래불해변인증센터", "해맞이공원인증센터"],
+    fit: "해안 당일·1박2일",
+    caution: "해안도로 차량 통행 구간은 팀 간격을 좁히지 마세요."
+  },
+  {
+    id: "jeju",
+    roadSn: 13,
+    category: "island",
+    title: "제주환상자전거길",
+    region: "제주",
+    distance: 234,
+    time: "약 16시간 10분",
+    description: "제주 해안도로를 따라 해변, 송악산, 쇠소깍, 성산일출봉 등 자연경관을 감상하는 순환형 자전거길입니다.",
+    centers: ["용두암", "다락쉼터", "해거름마을공원", "송악산", "법환바당", "쇠소깍", "표선해변", "성산일출봉", "김녕성세기해변", "함덕서우봉해변"],
+    fit: "섬 일주, 장기 여행",
+    caution: "바람 방향과 렌터카 회수 동선을 먼저 정하세요."
+  }
+];
+
+const premiumBikeRoads = [
+  "강릉 경포호 산소길",
+  "화천 파로호 100리 산소길",
+  "옥천 향수 100리길",
+  "정읍 정읍천 자전거길",
+  "경주 역사탐방 자전거길",
+  "강화군 지붕 없는 박물관 자전거길",
+  "군산 고군산도 자전거길",
+  "고흥 거금도-소록도 자전거길"
+];
+
+const islandBikeRoads = [
+  "옹진 덕적도 자전거길",
+  "옹진 시시모도 자전거 여행길",
+  "신안 증도 자전거섬",
+  "신안 임자도 자전거길",
+  "신안 흑산도 자전거길",
+  "완도 청산도 자전거길",
+  "울릉도 꿈이 있는 자전거길",
+  "제주 해맞이 해안로"
+];
+
+const bikeRoadLegend = [
+  { title: "자전거길", body: "공식 지도에서 실제 자전거길 선형과 우회 구간을 확인합니다." },
+  { title: "주요거점", body: "출발·도착, 보급, 차량 회수, 팀 재집결 위치로 활용합니다." },
+  { title: "인증센터", body: "국토종주 인증 수첩을 찍는 지점이며 휴식 기준점으로도 좋습니다." },
+  { title: "편의시설", body: "화장실, 음수대, 공기주입기 위치를 출발 전 확인합니다." },
+  { title: "주변상세정보", body: "맛집, 카페, 관광지, 주차 후보와 함께 코스를 보정합니다." },
+  { title: "지도 유형", body: "일반지도와 항공사진을 번갈아 보며 진입로와 노면을 확인합니다." }
+];
+
+const localBikeRoadLinks = [
+  {
+    title: "섬진강자전거길",
+    body: "장군목-대나무숲 GPX 투어가 포함되는 공식 국토종주 노선입니다.",
+    href: "maps.html?route=team-seomjin-66",
+    cta: "섬진강 GPX 코스 보기"
+  },
+  {
+    title: "금강자전거길",
+    body: "익산·군산권 행사와 연결하기 좋은 전북 북부 강변축입니다.",
+    href: "event.html?id=iksan",
+    cta: "익산 행사 보기"
+  },
+  {
+    title: "정읍천 자전거길",
+    body: "지자체 명품길 후보로 전북권 짧은 공원형 라이딩에 참고하기 좋습니다.",
+    href: "jeonbuk.html",
+    cta: "전북 후보 보기"
+  }
+];
+
 let activeFilter = "all";
 
 function byId(id) {
@@ -1725,6 +1949,570 @@ function renderSources() {
     .join("");
 }
 
+function officialBikeRoadMapUrl(roadSn = 1) {
+  return `https://www.bike.go.kr/map/roadMap.do?roadSn=${roadSn}&roadType=1&xp=37.570595&yp=126.699981&key=2008148358544&zm=12`;
+}
+
+function bikeRoadCategoryLabel(category) {
+  return {
+    river: "강변·하천",
+    coast: "해안",
+    mountain: "고개·장거리",
+    island: "섬·해안 순환"
+  }[category] || "자전거길";
+}
+
+function renderBikeRoadDetail(road) {
+  const detail = byId("bikeRoadDetail");
+  const frame = byId("officialBikeMapFrame");
+  const link = byId("officialBikeMapLink");
+  const select = byId("officialRoadSelect");
+  if (!road) return;
+
+  const officialUrl = officialBikeRoadMapUrl(road.roadSn);
+  if (frame) frame.src = officialUrl;
+  if (link) link.href = officialUrl;
+  if (select) select.value = road.id;
+
+  if (!detail) return;
+  detail.innerHTML = `
+    <article>
+      <div>
+        <p class="eyebrow">${bikeRoadCategoryLabel(road.category)}</p>
+        <h3>${escapeHtml(road.title)}</h3>
+        <p>${escapeHtml(road.description)}</p>
+      </div>
+      <dl class="road-stat-list">
+        <div><dt>지역</dt><dd>${escapeHtml(road.region)}</dd></div>
+        <div><dt>거리</dt><dd>${road.distance}km</dd></div>
+        <div><dt>예상시간</dt><dd>${escapeHtml(road.time)}</dd></div>
+        <div><dt>추천 활용</dt><dd>${escapeHtml(road.fit)}</dd></div>
+      </dl>
+      <div class="center-list">
+        <strong>인증센터·주요 지점</strong>
+        <p>${road.centers.map(escapeHtml).join(" · ")}</p>
+      </div>
+      <p class="road-caution">${escapeHtml(road.caution)}</p>
+      ${road.id === "seomjingang" ? `<a class="button primary" href="maps.html?route=team-seomjin-66">장군목-대나무숲 GPX 보기</a>` : ""}
+    </article>
+  `;
+}
+
+function renderBikeRoadCards(filter = "all") {
+  const grid = byId("bikeRoadGrid");
+  const meta = byId("bikeRoadMeta");
+  if (!grid) return;
+  const roads = filter === "all" ? officialBikeRoads : officialBikeRoads.filter((road) => road.category === filter);
+  const totalKm = roads.reduce((sum, road) => sum + road.distance, 0);
+  if (meta) meta.textContent = `${roads.length}개 노선 · 총 ${totalKm.toLocaleString("ko-KR")}km · 공식 지도 기준 요약`;
+
+  grid.innerHTML = roads
+    .map(
+      (road) => `
+        <article class="bike-road-card" data-road-id="${road.id}">
+          <div class="road-card-head">
+            <span>${bikeRoadCategoryLabel(road.category)}</span>
+            <b>${road.distance}km</b>
+          </div>
+          <h3>${escapeHtml(road.title)}</h3>
+          <p>${escapeHtml(road.description)}</p>
+          <div class="road-chip-row">
+            <span>${escapeHtml(road.region)}</span>
+            <span>${escapeHtml(road.time)}</span>
+            <span>인증 ${road.centers.length}곳</span>
+          </div>
+          <div class="road-card-actions">
+            <button class="text-button" type="button" data-show-road="${road.id}">상세 보기</button>
+            <a href="${officialBikeRoadMapUrl(road.roadSn)}" target="_blank" rel="noreferrer">공식 지도</a>
+          </div>
+        </article>
+      `
+    )
+    .join("");
+
+  grid.querySelectorAll("[data-show-road]").forEach((button) => {
+    button.addEventListener("click", () => {
+      const road = officialBikeRoads.find((item) => item.id === button.dataset.showRoad);
+      renderBikeRoadDetail(road);
+    });
+  });
+
+  renderBikeRoadDetail(roads.find((road) => road.id === "seomjingang") || roads[0]);
+}
+
+function renderCompactRoadList(id, items) {
+  const box = byId(id);
+  if (!box) return;
+  box.innerHTML = items.map((item) => `<span>${escapeHtml(item)}</span>`).join("");
+}
+
+function renderBikeRoadsPage() {
+  const grid = byId("bikeRoadGrid");
+  if (!grid) return;
+
+  const filter = byId("bikeRoadFilter");
+  const officialSelect = byId("officialRoadSelect");
+  if (officialSelect) {
+    officialSelect.innerHTML = officialBikeRoads.map((road) => `<option value="${road.id}">${escapeHtml(road.title)}</option>`).join("");
+    officialSelect.value = "seomjingang";
+    officialSelect.addEventListener("change", () => {
+      const road = officialBikeRoads.find((item) => item.id === officialSelect.value);
+      renderBikeRoadDetail(road);
+    });
+  }
+
+  filter?.addEventListener("change", () => renderBikeRoadCards(filter.value));
+
+  const localLinks = byId("localRoadLinks");
+  if (localLinks) {
+    localLinks.innerHTML = localBikeRoadLinks
+      .map(
+        (item) => `
+          <a class="route-card compact-road-link" href="${item.href}">
+            <div class="route-body">
+              <span class="pill score">연계 코스</span>
+              <h3>${escapeHtml(item.title)}</h3>
+              <p>${escapeHtml(item.body)}</p>
+              <span class="card-cta">${escapeHtml(item.cta)}</span>
+            </div>
+          </a>
+        `
+      )
+      .join("");
+  }
+
+  const legend = byId("bikeRoadLegend");
+  if (legend) {
+    legend.innerHTML = bikeRoadLegend
+      .map(
+        (item) => `
+          <article>
+            <strong>${escapeHtml(item.title)}</strong>
+            <p>${escapeHtml(item.body)}</p>
+          </article>
+        `
+      )
+      .join("");
+  }
+
+  renderCompactRoadList("premiumRoadList", premiumBikeRoads);
+  renderCompactRoadList("islandRoadList", islandBikeRoads);
+  renderBikeRoadCards("all");
+  renderBikeRoadDetail(officialBikeRoads.find((road) => road.id === "seomjingang"));
+}
+
+const communityStateKey = "bikeFestaCommunityAlerts:v1";
+
+function escapeHtml(value = "") {
+  return String(value)
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&#039;");
+}
+
+function communityId() {
+  return window.crypto?.randomUUID ? window.crypto.randomUUID() : `${Date.now()}-${Math.random().toString(16).slice(2)}`;
+}
+
+function loadCommunityState() {
+  try {
+    const saved = JSON.parse(localStorage.getItem(communityStateKey) || "{}");
+    return {
+      members: Array.isArray(saved.members) ? saved.members : [],
+      schedules: Array.isArray(saved.schedules) ? saved.schedules : [],
+      inbox: Array.isArray(saved.inbox) ? saved.inbox : []
+    };
+  } catch {
+    return { members: [], schedules: [], inbox: [] };
+  }
+}
+
+function saveCommunityState(state) {
+  localStorage.setItem(
+    communityStateKey,
+    JSON.stringify({
+      members: state.members || [],
+      schedules: state.schedules || [],
+      inbox: (state.inbox || []).slice(0, 80)
+    })
+  );
+}
+
+function communityEvents() {
+  const items = [...teamMapRoutes, ...routes, ...calendarEvents];
+  const unique = new Map();
+  items.forEach((item) => {
+    if (!unique.has(item.id)) {
+      unique.set(item.id, {
+        id: item.id,
+        label: `${item.region || item.location} · ${item.festival}`,
+        summary: item.route || item.place || item.description || ""
+      });
+    }
+  });
+  return [...unique.values()];
+}
+
+function communityEventLabel(eventId) {
+  return communityEvents().find((event) => event.id === eventId)?.label || "선택 이벤트";
+}
+
+function communityMessageTemplate(eventId) {
+  const event = communityEvents().find((item) => item.id === eventId);
+  if (!event) return "이벤트 알림입니다. 집결 시간과 준비물을 확인해 주세요.";
+  if (event.id === "team-seomjin-66") {
+    return "섬진강 투어 알림입니다. 09:00 장군목 출발 기준으로 물, 보급식, 헬멧, 라이트를 확인하고 GPX 코스를 따라 이동해 주세요.";
+  }
+  return `${event.label} 알림입니다. 집결 시간, 이동 방식, 주차 위치, 코스 변경 여부를 확인해 주세요.`;
+}
+
+function toDatetimeLocalValue(date) {
+  const local = new Date(date.getTime() - date.getTimezoneOffset() * 60000);
+  return local.toISOString().slice(0, 16);
+}
+
+function formatCommunityTime(value) {
+  if (!value) return "시간 미정";
+  return new Intl.DateTimeFormat("ko-KR", {
+    month: "2-digit",
+    day: "2-digit",
+    hour: "2-digit",
+    minute: "2-digit"
+  }).format(new Date(value));
+}
+
+function setCommunityFeedback(message) {
+  const status = byId("notificationStatus");
+  if (status) status.textContent = message;
+}
+
+function updateNotificationStatus() {
+  const button = byId("notificationPermissionButton");
+  if (!button) return;
+  button.disabled = false;
+  if (!("Notification" in window)) {
+    button.disabled = true;
+    setCommunityFeedback("이 브라우저는 알림 기능을 지원하지 않습니다. 웹 수신함으로 메시지를 확인하세요.");
+    return;
+  }
+  if (Notification.permission === "granted") {
+    button.textContent = "알림 허용됨";
+    button.disabled = true;
+    setCommunityFeedback("브라우저 알림이 켜져 있습니다. 예약 시간이 되면 이 기기에서 알림을 받을 수 있습니다.");
+    return;
+  }
+  if (Notification.permission === "denied") {
+    button.textContent = "알림 차단됨";
+    button.disabled = true;
+    setCommunityFeedback("브라우저 알림이 차단되어 있습니다. 브라우저 사이트 설정에서 알림을 다시 허용해야 합니다.");
+    return;
+  }
+  button.textContent = "알림 허용";
+}
+
+function notifyCommunity(title, body) {
+  if ("Notification" in window && Notification.permission === "granted") {
+    new Notification(title, { body });
+  }
+}
+
+function communityRecipients(state, audience, eventId) {
+  if (audience === "route") {
+    return state.members.filter((member) => member.routeId === eventId);
+  }
+  return state.members;
+}
+
+function deliverCommunityMessage(payload) {
+  const state = loadCommunityState();
+  const recipients = communityRecipients(state, payload.audience, payload.eventId);
+  if (!recipients.length) {
+    setCommunityFeedback("받을 회원이 없습니다. 먼저 회원을 등록하거나 대상을 전체 회원으로 바꿔 주세요.");
+    return false;
+  }
+
+  const sentAt = new Date().toISOString();
+  recipients.forEach((member) => {
+    state.inbox.unshift({
+      id: communityId(),
+      memberId: member.id,
+      memberName: member.name,
+      eventId: payload.eventId,
+      eventLabel: payload.eventLabel,
+      body: payload.body,
+      sentAt,
+      channel: member.channel
+    });
+  });
+
+  saveCommunityState(state);
+  const browserTargets = recipients.filter((member) => member.channel === "browser").length;
+  if (browserTargets) {
+    notifyCommunity(payload.eventLabel, `${browserTargets}명에게 알림을 보냈습니다. ${payload.body}`);
+  }
+  setCommunityFeedback(`${recipients.length}명에게 메시지를 보냈습니다. 웹 수신함에서 발송 내역을 확인하세요.`);
+  renderCommunityLists();
+  return true;
+}
+
+function runDueCommunitySchedules() {
+  if (!byId("scheduleList")) return;
+  const state = loadCommunityState();
+  const now = Date.now();
+  let delivered = 0;
+
+  state.schedules.forEach((schedule) => {
+    if (schedule.status === "scheduled" && new Date(schedule.scheduledAt).getTime() <= now) {
+      const recipients = communityRecipients(state, schedule.audience, schedule.eventId);
+      const sentAt = new Date().toISOString();
+      recipients.forEach((member) => {
+        state.inbox.unshift({
+          id: communityId(),
+          memberId: member.id,
+          memberName: member.name,
+          eventId: schedule.eventId,
+          eventLabel: schedule.eventLabel,
+          body: schedule.body,
+          sentAt,
+          channel: member.channel
+        });
+      });
+      schedule.status = "sent";
+      schedule.sentAt = sentAt;
+      delivered += recipients.length;
+      if (recipients.some((member) => member.channel === "browser")) {
+        notifyCommunity(schedule.eventLabel, `${recipients.length}명 대상 예약 메시지가 발송되었습니다. ${schedule.body}`);
+      }
+    }
+  });
+
+  if (delivered) {
+    saveCommunityState(state);
+    setCommunityFeedback(`예약 메시지 ${delivered}건이 수신함으로 전달되었습니다.`);
+    renderCommunityLists();
+  }
+}
+
+function renderCommunityLists() {
+  const state = loadCommunityState();
+  const memberList = byId("memberList");
+  const scheduleList = byId("scheduleList");
+  const inbox = byId("messageInbox");
+  const memberCount = byId("memberCount");
+  const scheduleCount = byId("scheduleCount");
+  if (!memberList || !scheduleList || !inbox) return;
+
+  if (memberCount) memberCount.textContent = `${state.members.length}명`;
+  if (scheduleCount) {
+    scheduleCount.textContent = `${state.schedules.filter((schedule) => schedule.status === "scheduled").length}건`;
+  }
+
+  memberList.innerHTML = state.members.length
+    ? state.members
+        .map(
+          (member) => `
+            <article class="mini-item">
+              <div>
+                <strong>${escapeHtml(member.name)}</strong>
+                <span>${escapeHtml(communityEventLabel(member.routeId))}</span>
+                <small>${member.channel === "browser" ? "브라우저 알림 + 웹 수신함" : "웹 수신함만"}</small>
+              </div>
+              <button class="text-button" type="button" data-remove-member="${member.id}">삭제</button>
+            </article>
+          `
+        )
+        .join("")
+    : `<p class="empty-state">아직 등록된 회원이 없습니다.</p>`;
+
+  scheduleList.innerHTML = state.schedules.length
+    ? state.schedules
+        .slice(0, 8)
+        .map(
+          (schedule) => `
+            <article class="mini-item ${schedule.status === "sent" ? "is-sent" : ""}">
+              <div>
+                <strong>${escapeHtml(schedule.eventLabel)}</strong>
+                <span>${schedule.status === "sent" ? "발송됨" : "예약됨"} · ${formatCommunityTime(schedule.scheduledAt)}</span>
+                <small>${escapeHtml(schedule.body)}</small>
+              </div>
+              ${
+                schedule.status === "scheduled"
+                  ? `<button class="text-button" type="button" data-cancel-schedule="${schedule.id}">취소</button>`
+                  : ""
+              }
+            </article>
+          `
+        )
+        .join("")
+    : `<p class="empty-state">예약된 메시지가 없습니다.</p>`;
+
+  inbox.innerHTML = state.inbox.length
+    ? state.inbox
+        .slice(0, 10)
+        .map(
+          (message) => `
+            <article class="mini-item">
+              <div>
+                <strong>${escapeHtml(message.memberName)}님에게 발송</strong>
+                <span>${escapeHtml(message.eventLabel)} · ${formatCommunityTime(message.sentAt)}</span>
+                <small>${escapeHtml(message.body)}</small>
+              </div>
+            </article>
+          `
+        )
+        .join("")
+    : `<p class="empty-state">아직 받은 메시지가 없습니다.</p>`;
+
+  memberList.querySelectorAll("[data-remove-member]").forEach((button) => {
+    button.addEventListener("click", () => {
+      if (!confirm("이 회원 등록 정보를 삭제할까요?")) return;
+      const current = loadCommunityState();
+      current.members = current.members.filter((member) => member.id !== button.dataset.removeMember);
+      saveCommunityState(current);
+      renderCommunityLists();
+    });
+  });
+
+  scheduleList.querySelectorAll("[data-cancel-schedule]").forEach((button) => {
+    button.addEventListener("click", () => {
+      if (!confirm("이 예약 메시지를 취소할까요?")) return;
+      const current = loadCommunityState();
+      current.schedules = current.schedules.map((schedule) =>
+        schedule.id === button.dataset.cancelSchedule ? { ...schedule, status: "canceled" } : schedule
+      );
+      saveCommunityState(current);
+      renderCommunityLists();
+    });
+  });
+}
+
+function renderCommunityPage() {
+  const memberForm = byId("memberForm");
+  const messageForm = byId("messageForm");
+  if (!memberForm || !messageForm) return;
+
+  const events = communityEvents();
+  const routeSelect = byId("memberRoute");
+  const eventSelect = byId("messageEvent");
+  const bodyInput = byId("messageBody");
+  const timeInput = byId("messageTime");
+
+  const optionHtml = events.map((event) => `<option value="${event.id}">${escapeHtml(event.label)}</option>`).join("");
+  if (routeSelect) {
+    routeSelect.innerHTML = optionHtml;
+    routeSelect.value = events.find((event) => event.id === "team-seomjin-66")?.id || events[0]?.id || "";
+  }
+  if (eventSelect) {
+    eventSelect.innerHTML = optionHtml;
+    eventSelect.value = events.find((event) => event.id === "team-seomjin-66")?.id || events[0]?.id || "";
+  }
+  if (bodyInput && eventSelect) bodyInput.value = communityMessageTemplate(eventSelect.value);
+
+  if (timeInput) {
+    const defaultDate = new Date("2026-05-01T08:30:00");
+    const fallbackDate = new Date(Date.now() + 30 * 60000);
+    timeInput.value = toDatetimeLocalValue(defaultDate > new Date() ? defaultDate : fallbackDate);
+  }
+
+  updateNotificationStatus();
+  renderCommunityLists();
+  runDueCommunitySchedules();
+
+  byId("notificationPermissionButton")?.addEventListener("click", async () => {
+    if (!("Notification" in window)) return;
+    await Notification.requestPermission();
+    updateNotificationStatus();
+  });
+
+  eventSelect?.addEventListener("change", () => {
+    if (bodyInput) bodyInput.value = communityMessageTemplate(eventSelect.value);
+  });
+
+  memberForm.addEventListener("submit", (event) => {
+    event.preventDefault();
+    const name = byId("memberName")?.value.trim();
+    const routeId = byId("memberRoute")?.value;
+    const channel = byId("memberChannel")?.value || "inbox";
+    if (!name || !routeId) return;
+
+    const state = loadCommunityState();
+    state.members.unshift({
+      id: communityId(),
+      name,
+      routeId,
+      channel,
+      joinedAt: new Date().toISOString()
+    });
+    saveCommunityState(state);
+    memberForm.reset();
+    if (routeSelect) routeSelect.value = routeId;
+    setCommunityFeedback(`${name} 회원을 등록했습니다. 이제 이벤트 메시지 대상에 포함됩니다.`);
+    renderCommunityLists();
+  });
+
+  byId("sendNowButton")?.addEventListener("click", () => {
+    const eventId = byId("messageEvent")?.value;
+    const body = byId("messageBody")?.value.trim();
+    const audience = byId("messageAudience")?.value || "all";
+    if (!eventId || !body) {
+      setCommunityFeedback("이벤트와 메시지를 먼저 입력해 주세요.");
+      return;
+    }
+    deliverCommunityMessage({
+      eventId,
+      eventLabel: communityEventLabel(eventId),
+      audience,
+      body
+    });
+  });
+
+  messageForm.addEventListener("submit", (event) => {
+    event.preventDefault();
+    const eventId = byId("messageEvent")?.value;
+    const body = byId("messageBody")?.value.trim();
+    const audience = byId("messageAudience")?.value || "all";
+    const scheduledAt = byId("messageTime")?.value;
+    if (!eventId || !body || !scheduledAt) {
+      setCommunityFeedback("예약할 이벤트, 시간, 메시지를 모두 입력해 주세요.");
+      return;
+    }
+    const scheduledDate = new Date(scheduledAt);
+    if (Number.isNaN(scheduledDate.getTime()) || scheduledDate.getTime() <= Date.now()) {
+      setCommunityFeedback("예약 시간은 현재 시각보다 뒤로 설정해 주세요.");
+      return;
+    }
+
+    const state = loadCommunityState();
+    state.schedules.unshift({
+      id: communityId(),
+      eventId,
+      eventLabel: communityEventLabel(eventId),
+      audience,
+      body,
+      scheduledAt: scheduledDate.toISOString(),
+      createdAt: new Date().toISOString(),
+      status: "scheduled"
+    });
+    saveCommunityState(state);
+    setCommunityFeedback(`${formatCommunityTime(scheduledDate)}에 발송될 예약 메시지를 저장했습니다.`);
+    renderCommunityLists();
+  });
+
+  byId("clearInboxButton")?.addEventListener("click", () => {
+    if (!confirm("최근 수신함 메시지를 모두 비울까요?")) return;
+    const state = loadCommunityState();
+    state.inbox = [];
+    saveCommunityState(state);
+    renderCommunityLists();
+  });
+
+  if (!window.__communityScheduleTimer) {
+    window.__communityScheduleTimer = window.setInterval(runDueCommunitySchedules, 15000);
+  }
+}
+
 function renderEventDetail() {
   const detail = byId("eventDetail");
   if (!detail) return;
@@ -2132,9 +2920,9 @@ async function drawKakaoRouteMap(route, mapData, appKey) {
     const polyline = new kakao.maps.Polyline({
       path,
       strokeWeight: 7,
-      strokeColor: "#d95f4a",
+      strokeColor: "#167355",
       strokeOpacity: 0.9,
-      strokeStyle: "shortdash"
+      strokeStyle: "solid"
     });
     polyline.setMap(map);
 
@@ -2240,6 +3028,8 @@ function init() {
   renderTransportPage();
   renderPlans();
   renderSources();
+  renderBikeRoadsPage();
+  renderCommunityPage();
   renderMapsPage();
 }
 

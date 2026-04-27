@@ -13,6 +13,7 @@
         <a href="festivals.html">전국 행사 일정</a>
         <a href="itineraries.html">여행 일정</a>
         <a href="maps.html">코스 지도</a>
+        <a href="bike-roads.html">자전거길 정보</a>
         <a href="community.html" aria-current="page">커뮤니티</a>
       </nav>
     </header>
@@ -49,6 +50,112 @@
         </div>
       </section>
 
+      <section class="home-band community-alerts">
+        <div class="section-head">
+          <p class="eyebrow">Event Alerts</p>
+          <h2>회원 알림과 예약 메시지</h2>
+          <p>회원으로 등록한 팀원에게 이벤트 발생 알림을 남기고, 정해둔 시간에 브라우저 알림과 수신함 메시지를 받을 수 있게 운영합니다.</p>
+        </div>
+
+        <div class="alert-layout">
+          <article class="alert-card">
+            <div class="alert-card-head">
+              <div>
+                <p class="eyebrow">Member</p>
+                <h3>회원 등록</h3>
+              </div>
+              <button class="button dark" type="button" id="notificationPermissionButton">알림 허용</button>
+            </div>
+            <p class="alert-note" id="notificationStatus">브라우저 알림 권한을 허용하면 예약 시간이 되었을 때 화면 밖에서도 알림을 받을 수 있습니다.</p>
+            <form class="alert-form" id="memberForm">
+              <label>
+                닉네임
+                <input id="memberName" name="memberName" type="text" maxlength="24" placeholder="예: 섬진강 팀장" required />
+              </label>
+              <label>
+                관심 코스
+                <select id="memberRoute" name="memberRoute"></select>
+              </label>
+              <label>
+                수신 방식
+                <select id="memberChannel" name="memberChannel">
+                  <option value="browser">브라우저 알림 + 웹 수신함</option>
+                  <option value="inbox">웹 수신함만</option>
+                </select>
+              </label>
+              <button class="button primary" type="submit">회원 등록하기</button>
+            </form>
+          </article>
+
+          <article class="alert-card">
+            <div>
+              <p class="eyebrow">Message</p>
+              <h3>이벤트 메시지 만들기</h3>
+            </div>
+            <form class="alert-form" id="messageForm">
+              <label>
+                이벤트
+                <select id="messageEvent" name="messageEvent"></select>
+              </label>
+              <label>
+                받을 대상
+                <select id="messageAudience" name="messageAudience">
+                  <option value="all">전체 회원</option>
+                  <option value="route">선택한 코스 관심 회원</option>
+                </select>
+              </label>
+              <label>
+                예약 시간
+                <input id="messageTime" name="messageTime" type="datetime-local" />
+              </label>
+              <label>
+                메시지
+                <textarea id="messageBody" name="messageBody" rows="5" maxlength="180" required></textarea>
+              </label>
+              <div class="alert-actions">
+                <button class="button dark" type="button" id="sendNowButton">지금 이벤트 발생</button>
+                <button class="button primary" type="submit">예약 메시지 저장</button>
+              </div>
+            </form>
+          </article>
+        </div>
+
+        <div class="alert-dashboard" aria-live="polite">
+          <article class="alert-card">
+            <div class="alert-card-head">
+              <div>
+                <p class="eyebrow">Members</p>
+                <h3>등록 회원</h3>
+              </div>
+              <span class="alert-count" id="memberCount">0명</span>
+            </div>
+            <div class="mini-list" id="memberList"></div>
+          </article>
+
+          <article class="alert-card">
+            <div class="alert-card-head">
+              <div>
+                <p class="eyebrow">Scheduled</p>
+                <h3>예약 메시지</h3>
+              </div>
+              <span class="alert-count" id="scheduleCount">0건</span>
+            </div>
+            <div class="mini-list" id="scheduleList"></div>
+          </article>
+
+          <article class="alert-card">
+            <div class="alert-card-head">
+              <div>
+                <p class="eyebrow">Inbox</p>
+                <h3>최근 수신함</h3>
+              </div>
+              <button class="text-button" type="button" id="clearInboxButton">비우기</button>
+            </div>
+            <div class="mini-list" id="messageInbox"></div>
+          </article>
+        </div>
+      </section>
+
       <section class="home-band">
         <div class="section-head">
           <p class="eyebrow">Sample Posts</p>
@@ -74,7 +181,7 @@
       </section>
     </main>
 
-    <footer class="site-footer"><p>현재 커뮤니티는 정적 안내 형태입니다. 게시판 연동 전까지는 운영 메뉴와 예시 글을 기준으로 사용하세요.</p></footer>
+    <footer class="site-footer"><p>커뮤니티 알림은 현재 브라우저 저장소 기반입니다. 실제 문자·메일·카카오 알림 발송은 서버와 발송 API 연동 후 운영하세요.</p></footer>
     <script src="script.js" defer></script>
   </body>
 </html>
