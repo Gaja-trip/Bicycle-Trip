@@ -11,8 +11,8 @@
       <a class="brand" href="index.html"><span class="brand-mark" aria-hidden="true"></span><span>자전거여행 함께 가요</span></a>
       <nav aria-label="주요 페이지">
         <a href="festivals.html" aria-current="page">전국 행사 일정</a>
-        <a href="maps.html">코스 지도</a>
         <a href="itineraries.html">여행 일정</a>
+        <a href="maps.html">코스 지도</a>
         <a href="community.html">커뮤니티</a>
       </nav>
     </header>
@@ -24,16 +24,30 @@
         <p>월별, 지역별로 전국 행사를 정리했습니다. 행사를 선택하면 기본 정보와 자전거 여행 메모를 확인할 수 있습니다.</p>
       </section>
 
-      <section class="calendar-toolbar" aria-label="전국 행사 일정 필터">
+      <section class="festival-calendar-panel" aria-label="축제 달력">
         <div class="section-head">
-          <p class="eyebrow">Filter</p>
-          <h2>월별·지역별 보기</h2>
+          <p class="eyebrow">Festival Calendar</p>
+          <h2>축제 달력</h2>
+          <p>대한민국 구석구석 축제 달력처럼 월을 고르면 해당 월의 축제 날짜를 달력에서 확인할 수 있습니다.</p>
         </div>
-        <div class="controls">
+        <div class="calendar-controls">
+          <button class="calendar-nav" id="monthPrev" type="button" aria-label="이전 달">‹</button>
           <label class="sort-control">
             <span>월</span>
             <select id="monthFilter"></select>
           </label>
+          <button class="calendar-nav" id="monthNext" type="button" aria-label="다음 달">›</button>
+        </div>
+        <div class="festival-calendar" id="festivalCalendar" aria-live="polite"></div>
+      </section>
+
+      <section class="calendar-toolbar" aria-label="지역별 행사 일정 필터">
+        <div class="section-head">
+          <p class="eyebrow">Region Filter</p>
+          <h2>지역별 축제 찾기</h2>
+          <p>아래 목록은 선택한 지역 기준으로 월별 정리됩니다.</p>
+        </div>
+        <div class="controls">
           <label class="sort-control">
             <span>지역</span>
             <select id="regionFilter"></select>
@@ -44,7 +58,7 @@
       <section>
         <div class="section-head">
           <p class="eyebrow">Events</p>
-          <h2>행사 캘린더</h2>
+          <h2>지역별 축제 목록</h2>
           <p id="calendarMeta">전체 일정을 불러오는 중입니다.</p>
         </div>
         <div class="calendar-list" id="calendarGrid"></div>

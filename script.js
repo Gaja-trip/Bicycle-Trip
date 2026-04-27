@@ -1358,6 +1358,26 @@ function parseDateParts(text = "") {
   return { month: Number(match[1]), day: Number(match[2]) };
 }
 
+function parseFullDate(text = "", fallbackYear = 2026) {
+  const match = text.match(/(?:(20\d{2})\.)?(\d{2})\.(\d{2})/);
+  if (!match) return null;
+  return new Date(Number(match[1] || fallbackYear), Number(match[2]) - 1, Number(match[3]));
+}
+
+function eventDateRange(event) {
+  const parts = event.period.split("~").map((part) => part.trim());
+  const start = parseFullDate(parts[0]);
+  const end = parseFullDate(parts[1] || parts[0], start?.getFullYear() || 2026);
+  if (start && end && end < start) end.setFullYear(end.getFullYear() + 1);
+  return { start, end };
+}
+
+function dateInRange(date, event) {
+  const { start, end } = eventDateRange(event);
+  if (!start || !end) return false;
+  return date >= start && date <= end;
+}
+
 function periodStartValue(period = "") {
   const start = parseDateParts(period);
   if (!start) return 9999;
@@ -1503,7 +1523,10 @@ function renderCalendarFilters() {
   const monthFilter = byId("monthFilter");
   const regionFilter = byId("regionFilter");
   if (monthFilter && !monthFilter.dataset.ready) {
-    monthFilter.innerHTML = [`<option value="all">전체 월</option>`, ...Array.from({ length: 12 }, (_, index) => `<option value="${index + 1}">${index + 1}월</option>`)].join("");
+    const current = new Date();
+    const defaultMonth = current.getFullYear() === 2026 ? current.getMonth() + 1 : 1;
+    monthFilter.innerHTML = Array.from({ length: 12 }, (_, index) => `<option value="${index + 1}">${index + 1}월</option>`).join("");
+    monthFilter.value = String(defaultMonth);
     monthFilter.dataset.ready = "true";
     monthFilter.addEventListener("change", renderFestivalPage);
   }
@@ -1514,33 +1537,87 @@ function renderCalendarFilters() {
     regionFilter.dataset.ready = "true";
     regionFilter.addEventListener("change", renderFestivalPage);
   }
+
+  const prev = byId("monthPrev");
+  const next = byId("monthNext");
+  if (prev && !prev.dataset.ready) {
+    prev.dataset.ready = "true";
+    prev.addEventListener("click", () => {
+      const current = Number(monthFilter.value || 1);
+      monthFilter.value = String(current === 1 ? 12 : current - 1);
+      renderFestivalPage();
+    });
+  }
+  if (next && !next.dataset.ready) {
+    next.dataset.ready = "true";
+    next.addEventListener("click", () => {
+      const current = Number(monthFilter.value || 1);
+      monthFilter.value = String(current === 12 ? 1 : current + 1);
+      renderFestivalPage();
+    });
+  }
 }
 
 function getVisibleCalendarEvents() {
-  const monthValue = byId("monthFilter")?.value || "all";
   const regionValue = byId("regionFilter")?.value || "all";
   return getScheduleEvents().filter((event) => {
-    const monthMatch = monthValue === "all" || eventMonths(event).includes(Number(monthValue));
     const regionMatch = regionValue === "all" || event.region === regionValue;
-    return monthMatch && regionMatch;
+    return regionMatch;
   });
+}
+
+function renderFestivalCalendar() {
+  const calendar = byId("festivalCalendar");
+  const month = Number(byId("monthFilter")?.value || 1);
+  if (!calendar || !month) return;
+
+  const year = 2026;
+  const firstDay = new Date(year, month - 1, 1);
+  const lastDay = new Date(year, month, 0);
+  const blanks = Array.from({ length: firstDay.getDay() }, () => `<div class="calendar-day empty" aria-hidden="true"></div>`);
+  const days = Array.from({ length: lastDay.getDate() }, (_, index) => {
+    const day = index + 1;
+    const date = new Date(year, month - 1, day);
+    const events = calendarEvents.filter((event) => dateInRange(date, event));
+    const topEvents = events.slice(0, 2);
+    return `
+      <article class="calendar-day ${events.length ? "has-event" : ""}">
+        <strong>${day}</strong>
+        ${
+          events.length
+            ? `<div class="calendar-day-events">
+                ${topEvents.map((event) => `<a href="${eventDetailUrl(event)}">${event.festival}</a>`).join("")}
+                ${events.length > 2 ? `<span>+${events.length - 2}개 더</span>` : ""}
+              </div>`
+            : `<span class="calendar-empty-note">-</span>`
+        }
+      </article>
+    `;
+  });
+
+  calendar.innerHTML = `
+    <div class="calendar-weekdays">
+      ${["일", "월", "화", "수", "목", "금", "토"].map((day) => `<span>${day}</span>`).join("")}
+    </div>
+    <div class="calendar-days">${[...blanks, ...days].join("")}</div>
+  `;
 }
 
 function renderFestivalPage() {
   renderFilters();
   renderCalendarFilters();
+  renderFestivalCalendar();
 
   const calendarGrid = byId("calendarGrid");
   if (calendarGrid) {
     const events = getVisibleCalendarEvents();
-    const selectedMonth = byId("monthFilter")?.value || "all";
     const meta = byId("calendarMeta");
     if (meta) meta.textContent = `총 ${events.length}개 행사 · 월별·지역별로 정리했습니다.`;
 
-    const months = selectedMonth === "all" ? Array.from({ length: 12 }, (_, index) => index + 1) : [Number(selectedMonth)];
+    const months = Array.from({ length: 12 }, (_, index) => index + 1);
     calendarGrid.innerHTML = months
       .map((month) => {
-        const monthEvents = events.filter((event) => (selectedMonth === "all" ? eventDisplayMonth(event) === month : eventMonths(event).includes(month)));
+        const monthEvents = events.filter((event) => eventDisplayMonth(event) === month);
         return `
           <section class="calendar-month">
             <div class="calendar-month-head">
