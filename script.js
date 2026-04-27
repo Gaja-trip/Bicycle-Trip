@@ -1778,7 +1778,7 @@ const fallbackBikeMapPaths = {
 };
 
 let activeBikeRoadGroup = "national";
-let activeBikeRoadId = "seomjingang";
+let activeBikeRoadId = "ara";
 let activeBikeMapTab = "legend";
 let activeBikeMapMode = "standard";
 
@@ -2378,7 +2378,7 @@ function renderBikeRoadMenu() {
 function setActiveBikeRoad(groupId, roadId) {
   activeBikeRoadGroup = groupId || "national";
   const road = findBikeRoad(activeBikeRoadGroup, roadId);
-  activeBikeRoadId = road?.id || "seomjingang";
+  activeBikeRoadId = road?.id || "ara";
   renderBikeRoadMenu();
   renderBikeRoadDetail(road);
   renderBikeRoadMap(road);
@@ -3464,28 +3464,28 @@ const bikeLayerGroups = [
   {
     id: "legend",
     label: "지도범례",
-    icon: "□",
+    icon: "legend",
     layers: [
-      { id: "major", label: "주요거점", icon: "거" },
-      { id: "cert", label: "인증센터", icon: "인" }
+      { id: "major", label: "주요거점", icon: "pin" },
+      { id: "cert", label: "인증센터", icon: "stamp" }
     ]
   },
   {
     id: "facility",
     label: "편의시설",
-    icon: "+",
+    icon: "facility",
     layers: [
-      { id: "toilet", label: "화장실", icon: "WC" },
-      { id: "air", label: "공기주입기", icon: "AIR" }
+      { id: "toilet", label: "화장실", icon: "toilet" },
+      { id: "air", label: "공기주입기", icon: "pump" }
     ]
   },
   {
     id: "nearby",
     label: "주변정보",
-    icon: "i",
+    icon: "nearby",
     layers: [
-      { id: "food", label: "음식점", icon: "밥" },
-      { id: "cafe", label: "커피숍", icon: "커" }
+      { id: "food", label: "음식점", icon: "utensils" },
+      { id: "cafe", label: "커피숍", icon: "coffee" }
     ]
   }
 ];
@@ -3652,6 +3652,21 @@ function bikeLayerLabels() {
   return [...activeBikeLayers].map((layerId) => bikeLayerConfig(layerId)?.label).filter(Boolean);
 }
 
+function bikeIconSvg(name) {
+  const icons = {
+    legend: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6.5h16M4 12h16M4 17.5h16"/><path d="M7 4v5M12 9.5v5M17 15v5"/></svg>',
+    facility: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>',
+    nearby: '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8"/><path d="M12 10.5v6M12 7.5h.01"/></svg>',
+    pin: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s6-5.2 6-11a6 6 0 0 0-12 0c0 5.8 6 11 6 11Z"/><circle cx="12" cy="10" r="2.2"/></svg>',
+    stamp: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 4h6l1 5 3 2v3H5v-3l3-2 1-5Z"/><path d="M6 18h12M8 14v4M16 14v4"/></svg>',
+    toilet: '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="8" cy="5" r="2"/><circle cx="16" cy="5" r="2"/><path d="M6 21v-6H4l2-7h4l2 7h-2v6M15 21v-6h-2l1-7h4l2 7h-2v6"/></svg>',
+    pump: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 21V8h7v13M6 8h9M9 5h3M15 12h3a3 3 0 0 1 3 3v3a2 2 0 0 1-4 0v-1"/><path d="M8.5 13h4"/></svg>',
+    utensils: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3v7M9 3v7M6 10h3M7.5 10v11M15 3v18M15 3c3 2 4 5 3.5 8H15"/></svg>',
+    coffee: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 8h11v5a5 5 0 0 1-5 5H10a5 5 0 0 1-5-5V8Z"/><path d="M16 10h2a2 2 0 0 1 0 4h-2M7 4v2M11 4v2M15 4v2"/></svg>'
+  };
+  return icons[name] || icons.pin;
+}
+
 function bikeRoadRegionCenter(road) {
   const region = `${road?.region || ""} ${road?.title || ""}`;
   const matches = [
@@ -3765,13 +3780,13 @@ function renderBikeRoadLayerControls() {
     .map(
       (group) => `
         <section class="bike-layer-group" aria-label="${escapeHtml(group.label)}">
-          <strong><span>${escapeHtml(group.icon)}</span>${escapeHtml(group.label)}</strong>
+          <strong><span>${bikeIconSvg(group.icon)}</span>${escapeHtml(group.label)}</strong>
           <div>
             ${group.layers
               .map(
                 (layer) => `
                   <button class="${activeBikeLayers.has(layer.id) ? "active" : ""}" type="button" data-bike-layer="${layer.id}" aria-pressed="${activeBikeLayers.has(layer.id)}">
-                    <b>${escapeHtml(layer.icon)}</b>
+                    <b>${bikeIconSvg(layer.icon)}</b>
                     <span>${escapeHtml(layer.label)}</span>
                   </button>
                 `
@@ -3801,29 +3816,65 @@ function renderBikeRoadMenu() {
 
   categoryMenu.innerHTML = bikeRoadMenuGroups
     .map(
-      (group) => `
-        <button class="${group.id === activeBikeRoadGroup ? "active" : ""}" type="button" data-bike-road-group="${group.id}">
-          <strong>${escapeHtml(group.label)}</strong>
-          <span>${escapeHtml(group.caption)}</span>
-        </button>
-      `
+      (group) => {
+        const isActive = group.id === activeBikeRoadGroup;
+        return `
+          <div class="bike-road-category ${isActive ? "active" : ""}">
+            <button class="${isActive ? "active" : ""}" type="button" data-bike-road-group="${group.id}">
+              <strong>${escapeHtml(group.label)}</strong>
+              <span>${escapeHtml(group.caption)}</span>
+            </button>
+            ${
+              isActive
+                ? `<div class="bike-road-sublist" aria-label="${escapeHtml(group.label)} 노선">
+                    ${group.items
+                      .map(
+                        (road) => `
+                          <button class="${road.id === activeBikeRoadId ? "active" : ""}" type="button" data-bike-road-id="${road.id}">
+                            <span>${escapeHtml(road.region)}</span>
+                            <strong>${escapeHtml(road.title)}</strong>
+                            <small>${bikeRoadDistanceText(road)} · ${escapeHtml(road.time || "시간 확인")}</small>
+                          </button>
+                        `
+                      )
+                      .join("")}
+                  </div>`
+                : ""
+            }
+          </div>
+        `;
+      }
     )
     .join("");
 
-  list.innerHTML = activeBikeRoadItems()
-    .map(
-      (road) => `
-        <button class="${road.id === activeBikeRoadId ? "active" : ""}" type="button" data-bike-road-id="${road.id}">
-          <span>${escapeHtml(road.region)}</span>
-          <strong>${escapeHtml(road.title)}</strong>
-          <small>${bikeRoadDistanceText(road)} · ${escapeHtml(road.time || "시간 확인")}</small>
-        </button>
-      `
-    )
-    .join("");
+  list.innerHTML = "";
 }
 
-function renderBikeRoadMarker(map, layerId, point, bounds) {
+function bikeMarkerOffset(index, total) {
+  if (total <= 1) return { x: 0, y: 0 };
+  const radius = total === 2 ? 15 : 19;
+  const angle = -Math.PI / 2 + (Math.PI * 2 * index) / total;
+  return {
+    x: Math.round(Math.cos(angle) * radius),
+    y: Math.round(Math.sin(angle) * radius)
+  };
+}
+
+function bikeMarkerClusterKey(point) {
+  return `${Number(point.lat).toFixed(4)}:${Number(point.lng).toFixed(4)}`;
+}
+
+function collectBikeRoadMarkers(geo) {
+  const markers = [];
+  activeBikeLayers.forEach((layerId) => {
+    (geo.layers[layerId] || []).forEach((point) => {
+      markers.push({ layerId, point });
+    });
+  });
+  return markers;
+}
+
+function renderBikeRoadMarker(map, layerId, point, bounds, offset = { x: 0, y: 0 }) {
   const layer = bikeLayerConfig(layerId);
   if (!layer || !point) return;
   const position = new kakao.maps.LatLng(point.lat, point.lng);
@@ -3832,8 +3883,8 @@ function renderBikeRoadMarker(map, layerId, point, bounds) {
     position,
     yAnchor: 1.18,
     content: `
-      <span class="bike-layer-marker ${layerId}" title="${escapeHtml(point.title)}">
-        <b>${escapeHtml(layer.icon)}</b>
+      <span class="bike-layer-marker ${layerId}" style="--marker-x:${offset.x}px;--marker-y:${offset.y}px" title="${escapeHtml(point.title)}" aria-label="${escapeHtml(layer.label)} ${escapeHtml(point.title)}">
+        <b>${bikeIconSvg(layer.icon)}</b>
         <small>${escapeHtml(point.title)}</small>
       </span>
     `
@@ -3921,11 +3972,15 @@ async function drawBikeRoadKakaoMap(road) {
     });
     bikeRoadMapRuntime.polyline.setMap(map);
 
-    let markerCount = 0;
-    activeBikeLayers.forEach((layerId) => {
-      (geo.layers[layerId] || []).forEach((point) => {
-        markerCount += 1;
-        renderBikeRoadMarker(map, layerId, point, bounds);
+    const markerItems = collectBikeRoadMarkers(geo);
+    const markerGroups = new Map();
+    markerItems.forEach((item) => {
+      const key = bikeMarkerClusterKey(item.point);
+      markerGroups.set(key, [...(markerGroups.get(key) || []), item]);
+    });
+    markerGroups.forEach((items) => {
+      items.forEach((item, index) => {
+        renderBikeRoadMarker(map, item.layerId, item.point, bounds, bikeMarkerOffset(index, items.length));
       });
     });
 
@@ -3933,17 +3988,24 @@ async function drawBikeRoadKakaoMap(road) {
       map.setBounds(bounds);
       window.setTimeout(() => map.relayout(), 80);
     }
-    renderBikeRoadMapInfo(road, geo, markerCount);
+    renderBikeRoadMapInfo(road, geo, markerItems.length);
   } catch (error) {
     renderBikeRoadMapError("Kakao Developers에 현재 도메인이 등록되어 있는지와 네트워크 연결을 확인해 주세요.");
   }
 }
 
 function setActiveBikeRoad(groupId, roadId) {
-  activeBikeRoadGroup = groupId || "national";
+  const nextGroup = groupId || "national";
+  const shouldResetMenuScroll = nextGroup !== activeBikeRoadGroup || !document.body.dataset.bikeRoadMenuReady;
+  activeBikeRoadGroup = nextGroup;
   const road = findBikeRoad(activeBikeRoadGroup, roadId);
   activeBikeRoadId = road?.id || "seomjingang";
   renderBikeRoadMenu();
+  if (shouldResetMenuScroll) {
+    const categoryMenu = byId("bikeRoadCategoryMenu");
+    if (categoryMenu) categoryMenu.scrollTop = 0;
+    document.body.dataset.bikeRoadMenuReady = "true";
+  }
   renderBikeRoadLayerControls();
   drawBikeRoadKakaoMap(road);
 }
@@ -3976,6 +4038,10 @@ function renderBikeRoadsPage() {
   }
 
   renderBikeRoadLayerControls();
+  if (!document.body.dataset.bikeRoadWindowReady) {
+    window.scrollTo(0, 0);
+    document.body.dataset.bikeRoadWindowReady = "true";
+  }
   setActiveBikeRoad(activeBikeRoadGroup, activeBikeRoadId);
 }
 
