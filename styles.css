@@ -166,6 +166,12 @@ h1 {
   letter-spacing: 0;
 }
 
+.hero h1 {
+  max-width: none;
+  white-space: nowrap;
+  font-size: clamp(1.55rem, 5.8vw, 5.4rem);
+}
+
 .hero-copy p:last-of-type,
 .page-hero p {
   max-width: 760px;
@@ -293,7 +299,6 @@ body[data-page="community"] {
 
 .intro-grid,
 .scenario-grid,
-.service-grid,
 .route-grid,
 .cluster-grid,
 .method-grid,
@@ -374,36 +379,19 @@ body[data-page="community"] {
   grid-template-columns: repeat(3, minmax(0, 1fr));
 }
 
-.service-grid {
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  margin-bottom: 24px;
-}
-
-.service-grid article {
-  min-height: 142px;
-  padding: 22px;
-  border: 1px solid var(--line);
-  border-radius: 8px;
-  background: var(--surface);
-  box-shadow: 0 10px 24px rgba(16, 35, 28, 0.06);
-}
-
-.service-grid strong {
-  display: block;
-  font-size: 1.12rem;
-}
-
-.service-grid p {
-  margin: 10px 0 0;
-  color: var(--muted);
-  font-size: 0.94rem;
-}
-
 .control-band {
   display: grid;
   grid-template-columns: minmax(240px, 0.8fr) minmax(0, 1.2fr);
   gap: 28px;
   align-items: end;
+}
+
+.calendar-toolbar {
+  display: grid;
+  grid-template-columns: minmax(240px, 0.8fr) minmax(0, 1.2fr);
+  gap: 28px;
+  align-items: end;
+  padding-bottom: 28px;
 }
 
 .controls {
@@ -569,6 +557,38 @@ body[data-page="community"] {
 .card-cta {
   color: var(--green);
   font-weight: 900;
+}
+
+.calendar-list {
+  display: grid;
+  gap: 28px;
+}
+
+.calendar-month {
+  display: grid;
+  gap: 14px;
+}
+
+.calendar-month-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 16px;
+  border-bottom: 2px solid rgba(16, 35, 28, 0.12);
+  padding-bottom: 10px;
+}
+
+.calendar-month-head strong {
+  font-size: clamp(1.35rem, 3vw, 2.1rem);
+}
+
+.calendar-month-head span {
+  color: var(--muted);
+  font-weight: 800;
+}
+
+.calendar-card .route-body {
+  align-content: start;
 }
 
 .meta-row,
@@ -1150,7 +1170,6 @@ tbody tr:last-child td {
 @media (max-width: 1160px) {
   .intro-grid,
   .intro-grid.simple,
-  .service-grid,
   .method-grid,
   .method-grid.large,
   .flow-grid,
@@ -1198,8 +1217,8 @@ tbody tr:last-child td {
   .intro-grid,
   .intro-grid.simple,
   .scenario-grid,
-  .service-grid,
   .control-band,
+  .calendar-toolbar,
   .insight-strip,
   .route-grid,
   .cluster-grid,

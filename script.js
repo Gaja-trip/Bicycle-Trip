@@ -407,6 +407,313 @@ const routes = [
   }
 ];
 
+const calendarOnlyEvents = [
+  {
+    id: "busan-winter-tree",
+    region: "부산",
+    location: "부산 중구",
+    festival: "광복로 겨울빛 트리축제",
+    period: "2025.12.05 ~ 2026.02.22",
+    place: "광복로 일원",
+    theme: "겨울빛",
+    image: "https://kfescdn.visitkorea.or.kr/kfes/upload/contents/db/4055393_image2_1.jpg",
+    description: "부산 도심의 겨울 야간 산책과 원도심 카페 코스를 함께 엮기 좋습니다.",
+    sourceTitle: "광복로 겨울빛 트리축제 - 대한민국 구석구석",
+    sourceUrl: "https://app.visitkorea.or.kr/kfes/detail/fstvlDetail.do?fstvlCntntsId=cd3921dc-baf4-4033-a3f3-acc739585872"
+  },
+  {
+    id: "yeongyang-winter",
+    region: "경북",
+    location: "경북 영양",
+    festival: "영양꽁꽁겨울축제",
+    period: "2026.01.09 ~ 2026.02.01",
+    place: "영양읍 현리 빙상장 일원",
+    theme: "겨울 체험",
+    image: "https://kfescdn.visitkorea.or.kr/kfes/upload/contents/db/3588404_image2_1.png",
+    description: "빙상장과 얼음낚시 중심의 겨울 체험 행사라 차량 이동형 가족 여행에 맞습니다.",
+    sourceTitle: "영양꽁꽁겨울축제 - 대한민국 구석구석",
+    sourceUrl: "https://korean.visitkorea.or.kr/kfes/detail/fstvlDetail.do?fstvlCntntsId=bec7a8b5-db92-4da8-be98-38036f5b6991"
+  },
+  {
+    id: "andong-ice",
+    region: "경북",
+    location: "경북 안동",
+    festival: "안동 암산얼음축제",
+    period: "2026.01.17 ~ 2026.01.25",
+    place: "암산유원지 일대",
+    theme: "겨울 체험",
+    image: "https://kfescdn.visitkorea.or.kr/kfes/upload/contents/db/3588404_image2_1.png",
+    description: "안동권 겨울 체험 행사로 낙동강변 드라이브와 짧은 자전거 산책을 붙이기 좋습니다.",
+    sourceTitle: "안동 암산얼음축제 - 대한민국 구석구석",
+    sourceUrl: "https://award.visitkorea.or.kr/kfes/detail/fstvlDetail.do?cntntsNm=%EC%95%88%EB%8F%99%EC%95%94%EC%82%B0%EC%96%BC%EC%9D%8C%EC%B6%95%EC%A0%9C&fstvlCntntsId=aa15dc9d-7421-493b-a909-50c3da205701"
+  },
+  {
+    id: "gurye-sansuyu",
+    region: "전남",
+    location: "전남 구례",
+    festival: "구례산수유꽃축제",
+    period: "2026.03.14 ~ 2026.03.22",
+    place: "산수유문화관 일원",
+    theme: "봄꽃",
+    image: "https://kfescdn.visitkorea.or.kr/kfes/upload/contents/db/4020641_image2_1.jpg",
+    description: "지리산 자락 산수유 꽃길을 따라 걷기와 저속 라이딩을 함께 계획하기 좋습니다.",
+    sourceTitle: "구례산수유꽃축제 - 대한민국 구석구석",
+    sourceUrl: "https://award.visitkorea.or.kr/kfes/detail/fstvlDetail.do?fstvlCntntsId=05b53e45-cc6e-4309-ae29-2cb2ad710910"
+  },
+  {
+    id: "gurye-cherry",
+    region: "전남",
+    location: "전남 구례",
+    festival: "구례300리 벚꽃축제",
+    period: "2026.03.28 ~ 2026.03.30",
+    place: "서시천체육공원",
+    theme: "봄꽃",
+    image: "https://kfescdn.visitkorea.or.kr/kfes/upload/contents/db/4053521_image2_1.png",
+    description: "섬진강 벚꽃길과 구례 도심을 연결하는 봄철 라이딩 후보입니다.",
+    sourceTitle: "구례300리 벚꽃축제 - 대한민국 구석구석",
+    sourceUrl: "https://tour.etourkorea.com/kfes/detail/fstvlDetail.do?fstvlCntntsId=bd8cea9e-55dc-4f05-91f1-4bfeb2dee432"
+  },
+  {
+    id: "icheon-sansuyu",
+    region: "경기",
+    location: "경기 이천",
+    festival: "이천백사 산수유꽃축제",
+    period: "2026.04.03 ~ 2026.04.05",
+    place: "이천산수유마을",
+    theme: "봄꽃",
+    image: "https://kfescdn.visitkorea.or.kr/kfes/upload/contents/db/4020641_image2_1.jpg",
+    description: "수도권에서 접근하기 쉬운 봄꽃 행사로 초보자 당일 코스에 어울립니다.",
+    sourceTitle: "이천백사 산수유꽃축제 - 대한민국 구석구석",
+    sourceUrl: "https://tour.etourkorea.com/kfes/detail/fstvlDetail.do?fstvlCntntsId=57f40d56-52e8-446b-8ac3-7cac4ed176f3"
+  },
+  {
+    id: "boeun-cherry",
+    region: "충북",
+    location: "충북 보은",
+    festival: "보은 벚꽃길 축제",
+    period: "2026.04.03 ~ 2026.04.12",
+    place: "보청천 벚꽃길 일원",
+    theme: "봄꽃",
+    image: "https://kfescdn.visitkorea.or.kr/kfes/upload/contents/db/4053521_image2_1.png",
+    description: "하천 벚꽃길을 따라 가족형 산책과 짧은 자전거 이동을 붙이기 쉽습니다.",
+    sourceTitle: "보은 벚꽃길 축제 - 대한민국 구석구석",
+    sourceUrl: "https://tour.etourkorea.com/kfes/detail/fstvlDetail.do?fstvlCntntsId=ea923017-d402-431d-a9bd-ef38c6de9abd"
+  },
+  {
+    id: "jeongeup-cherry",
+    region: "전북",
+    location: "전북 정읍",
+    festival: "정읍 벚꽃축제",
+    period: "2026.04.03 ~ 2026.04.05",
+    place: "정읍천 어린이축구장 일원",
+    theme: "봄꽃",
+    image: "https://kfescdn.visitkorea.or.kr/kfes/upload/contents/db/4053521_image2_1.png",
+    description: "정읍천 벚꽃길을 중심으로 봄꽃 사진 코스와 도심 접근을 함께 잡을 수 있습니다.",
+    sourceTitle: "정읍 벚꽃축제 - 대한민국 구석구석",
+    sourceUrl: "https://korean.visitkorea.or.kr/kfes/detail/fstvlDetail.do?cntntsNm=%EC%A0%95%EC%9D%8D%EB%B2%9A%EA%BD%83%EC%B6%95%EC%A0%9C&fstvlCntntsId=03b6ab23-d30c-43db-ac98-1496ae251bda"
+  },
+  {
+    id: "yangpyeong-sansuyu",
+    region: "경기",
+    location: "경기 양평",
+    festival: "양평산수유한우축제",
+    period: "2026.04.04 ~ 2026.04.05",
+    place: "개군면 산수유마을",
+    theme: "봄꽃·먹거리",
+    image: "https://kfescdn.visitkorea.or.kr/kfes/upload/contents/db/4020641_image2_1.jpg",
+    description: "남한강 자전거길 접근과 산수유마을 먹거리 일정을 함께 엮기 좋습니다.",
+    sourceTitle: "양평산수유한우축제 - 대한민국 구석구석",
+    sourceUrl: "https://travelweek.visitkorea.or.kr/kfes/detail/fstvlDetail.do?fstvlCntntsId=2a22365d-3e1f-4069-8e02-c1e1ef6fbc85"
+  },
+  {
+    id: "donghaeng",
+    region: "전국",
+    location: "전국",
+    festival: "동행축제",
+    period: "2026.04.11 ~ 2026.05.10",
+    place: "전국 온·오프라인 행사장",
+    theme: "상생·마켓",
+    image: "https://kfescdn.visitkorea.or.kr/kfes/upload/contents/db/4056068_image2_1.jpg",
+    description: "전국 단위 소비 행사라 지역 라이딩과 전통시장·상권 방문을 묶기 좋습니다.",
+    sourceTitle: "동행축제 - 대한민국 구석구석",
+    sourceUrl: "https://korean.visitkorea.or.kr/kfes/detail/fstvlDetail.do?fstvlCntntsId=5dc750e5-b645-4a8d-9836-a92fdd87fad0"
+  },
+  {
+    id: "daejeon-science",
+    region: "대전",
+    location: "대전 유성",
+    festival: "대전사이언스페스티벌",
+    period: "2026.04.17 ~ 2026.04.19",
+    place: "대전 일원",
+    theme: "과학·도심",
+    image: "https://kfescdn.visitkorea.or.kr/kfes/upload/contents/db/4056068_image2_1.jpg",
+    description: "도심형 과학 행사로 갑천·유성권 자전거길과 연계하기 좋습니다.",
+    sourceTitle: "대전사이언스페스티벌 - 대한민국 구석구석",
+    sourceUrl: "https://korean.visitkorea.or.kr/kfes/detail/fstvlDetail.do?fstvlCntntsId=e21c4802-a014-414b-9b8b-174244c89e64"
+  },
+  {
+    id: "jeju-gosari",
+    region: "제주",
+    location: "제주 서귀포",
+    festival: "한라산 청정 고사리축제",
+    period: "2026.04.18 ~ 2026.04.19",
+    place: "남원읍 한남리 일원",
+    theme: "자연 체험",
+    image: "https://kfescdn.visitkorea.or.kr/kfes/upload/contents/db/4020641_image2_1.jpg",
+    description: "제주 동남부 자연 체험 행사로 해안도로·중산간 코스와 함께 검토할 만합니다.",
+    sourceTitle: "한라산 청정 고사리축제 - 대한민국 구석구석",
+    sourceUrl: "https://kq.visitkorea.or.kr/kfes/detail/fstvlDetail.do?fstvlCntntsId=2af7ebf4-00c6-4903-8e4a-a284dd6dbf00"
+  },
+  {
+    id: "munkyeong-teabowl",
+    region: "경북",
+    location: "경북 문경",
+    festival: "문경찻사발축제",
+    period: "2026.05.01 ~ 2026.05.10",
+    place: "문경새재 오픈세트장",
+    theme: "문화·도자",
+    image: "https://kfescdn.visitkorea.or.kr/kfes/upload/contents/db/4054281_image2_1.jpg",
+    description: "문경새재와 도자 문화 체험을 함께 묶는 체류형 코스로 잡기 좋습니다.",
+    sourceTitle: "문경찻사발축제 - 대한민국 구석구석",
+    sourceUrl: "https://korean.visitkorea.or.kr/kfes/detail/fstvlDetail.do?fstvlCntntsId=79a118fc-7a02-4262-be71-030a1fc3d815"
+  },
+  {
+    id: "haenam-dino",
+    region: "전남",
+    location: "전남 해남",
+    festival: "해남 공룡대축제",
+    period: "2026.05.02 ~ 2026.05.05",
+    place: "해남공룡박물관",
+    theme: "가족 체험",
+    image: "https://kfescdn.visitkorea.or.kr/kfes/upload/contents/db/4039186_image2_1.jpg",
+    description: "어린이날 연휴 가족형 행사로 해남 땅끝권 드라이브와 짧은 라이딩을 붙일 수 있습니다.",
+    sourceTitle: "해남 공룡대축제 - 대한민국 구석구석",
+    sourceUrl: "https://korean.visitkorea.or.kr/kfes/detail/fstvlDetail.do?fstvlCntntsId=1a73f911-29d9-4bdc-8532-7af072f376c7"
+  },
+  {
+    id: "pocheon-pet",
+    region: "경기",
+    location: "경기 포천",
+    festival: "포천펫스타",
+    period: "2026.05.02 ~ 2026.05.03",
+    place: "한탄강 생태경관단지",
+    theme: "반려동물",
+    image: "https://kfescdn.visitkorea.or.kr/kfes/upload/contents/db/4053995_image2_1.jpg",
+    description: "한탄강 경관을 배경으로 반려가족 산책과 느린 자전거 이동을 함께 고려할 수 있습니다.",
+    sourceTitle: "포천펫스타 - 대한민국 구석구석",
+    sourceUrl: "https://korean.visitkorea.or.kr/kfes/detail/fstvlDetail.do?fstvlCntntsId=06c85b3f-b302-4025-9cc5-27ec77b3a5ff"
+  },
+  {
+    id: "imsil-rose",
+    region: "전북",
+    location: "전북 임실",
+    festival: "임실N장미축제",
+    period: "2026.05.28 ~ 2026.05.31",
+    place: "임실치즈테마파크 장미원",
+    theme: "봄꽃",
+    image: "https://kfescdn.visitkorea.or.kr/kfes/upload/contents/db/4053995_image2_1.jpg",
+    description: "임실치즈테마파크 장미원 중심 행사로 가족형 순환 코스와 잘 맞습니다.",
+    sourceTitle: "임실N장미축제 - 대한민국 구석구석",
+    sourceUrl: "https://korean.visitkorea.or.kr/kfes/detail/fstvlDetail.do?cntntsNm=%EC%9E%84%EC%8B%A4N%EC%9E%A5%EB%AF%B8%EC%B6%95%EC%A0%9C&fstvlCntntsId=4fea6f37-cf6c-4f58-8cd4-61fee73c86ae"
+  },
+  {
+    id: "boryeong-mud",
+    region: "충남",
+    location: "충남 보령",
+    festival: "보령머드축제",
+    period: "2026.07.24 ~ 2026.08.09",
+    place: "대천해수욕장 일원",
+    theme: "여름·해변",
+    image: "https://kfescdn.visitkorea.or.kr/kfes/upload/contents/db/4031705_image2_1.jpg",
+    description: "대천해수욕장 해변 행사라 해안도로 라이딩과 숙박형 여행에 어울립니다.",
+    sourceTitle: "보령머드축제 - 대한민국 구석구석",
+    sourceUrl: "https://korean.visitkorea.or.kr/kfes/detail/fstvlDetail.do?fstvlCntntsId=910bb144-bf74-4eee-9e91-8fbcbaf302ac"
+  },
+  {
+    id: "muju-firefly",
+    region: "전북",
+    location: "전북 무주",
+    festival: "무주반딧불축제",
+    period: "2026.09.04 ~ 2026.09.12",
+    place: "무주군 일원",
+    theme: "생태·야간",
+    image: "https://kfescdn.visitkorea.or.kr/kfes/upload/contents/db/4059274_image2_1.jpg",
+    description: "야간 생태 체험이 강한 행사라 숙박형 일정과 낮 라이딩을 분리하는 편이 좋습니다.",
+    sourceTitle: "무주반딧불축제 - 대한민국 구석구석",
+    sourceUrl: "https://korean.visitkorea.or.kr/kfes/detail/fstvlDetail.do?fstvlCntntsId=0e803334-1e3d-4c57-9005-e4ec9c87657f"
+  },
+  {
+    id: "bupyeong-pungmul",
+    region: "인천",
+    location: "인천 부평",
+    festival: "부평풍물대축제",
+    period: "2026.10.02 ~ 2026.10.04",
+    place: "부평대로 일원",
+    theme: "전통·도심",
+    image: "https://kfescdn.visitkorea.or.kr/kfes/upload/contents/db/4056068_image2_1.jpg",
+    description: "도심 퍼레이드형 행사라 굴포천·아라뱃길 자전거 접근과 분리해서 보는 편이 안전합니다.",
+    sourceTitle: "부평풍물대축제 - 대한민국 구석구석",
+    sourceUrl: "https://korean.visitkorea.or.kr/kfes/detail/fstvlDetail.do?fstvlCntntsId=e7f655b5-b2d3-4923-90ba-6d7ce678b381"
+  },
+  {
+    id: "sancheong-herb",
+    region: "경남",
+    location: "경남 산청",
+    festival: "산청한방약초축제",
+    period: "2026.10.02 ~ 2026.10.11",
+    place: "산청IC축제광장 일원",
+    theme: "웰니스",
+    image: "https://kfescdn.visitkorea.or.kr/kfes/upload/contents/db/4059274_image2_1.jpg",
+    description: "지리산권 웰니스 행사로 숙박 거점형 여행과 중거리 라이딩에 어울립니다.",
+    sourceTitle: "산청한방약초축제 - 대한민국 구석구석",
+    sourceUrl: "https://korean.visitkorea.or.kr/kfes/detail/fstvlDetail.do?fstvlCntntsId=83e1c0ed-fc26-49df-9364-6bc7729d14b6"
+  },
+  {
+    id: "sunchang-sauce",
+    region: "전북",
+    location: "전북 순창",
+    festival: "순창장류축제",
+    period: "2026.10.16 ~ 2026.10.18",
+    place: "순창전통고추장민속마을 일원",
+    theme: "음식·전통",
+    image: "https://kfescdn.visitkorea.or.kr/kfes/upload/contents/db/4058409_image2_1.png",
+    description: "섬진강권 라이딩과 순창 전통 먹거리 체험을 함께 묶기 좋습니다.",
+    sourceTitle: "순창장류축제 - 대한민국 구석구석",
+    sourceUrl: "https://korean.visitkorea.or.kr/kfes/detail/fstvlDetail.do?fstvlCntntsId=f3026b60-0634-49ef-9ccb-8fb68d0e09a5"
+  },
+  {
+    id: "mokpo-harbor",
+    region: "전남",
+    location: "전남 목포",
+    festival: "목포항구축제",
+    period: "2026.10.16 ~ 2026.10.18",
+    place: "목포항·삼학도 일원",
+    theme: "항구·먹거리",
+    image: "https://kfescdn.visitkorea.or.kr/kfes/upload/contents/db/4039186_image2_1.jpg",
+    description: "항구 먹거리와 해안 라이딩을 결합하기 좋은 가을 남도 여행 후보입니다.",
+    sourceTitle: "목포항구축제 - 대한민국 구석구석",
+    sourceUrl: "https://korean.visitkorea.or.kr/kfes/detail/fstvlDetail.do?fstvlCntntsId=47010e81-432c-42b0-a5f7-aaac7a07dbc2"
+  }
+];
+
+const calendarEvents = [
+  ...routes.map((route) => ({
+    id: route.id,
+    region: calendarRegion(route.region),
+    location: route.region,
+    festival: route.festival,
+    period: normalizePeriod(route.period),
+    place: route.place,
+    theme: route.tags.map(tagName).slice(0, 2).join("·"),
+    image: route.image,
+    description: route.points[0],
+    sourceTitle: route.sourceTitle,
+    sourceUrl: route.sourceUrl,
+    routeId: route.id
+  })),
+  ...calendarOnlyEvents
+].sort((a, b) => periodStartValue(a.period) - periodStartValue(b.period) || a.region.localeCompare(b.region, "ko"));
+
 const routeMaps = {
   "jeonju-film": {
     level: 7,
@@ -1033,14 +1340,56 @@ function routeDetailUrl(route) {
   return `event.html?id=${encodeURIComponent(route.id)}`;
 }
 
-function periodStartValue(period = "") {
-  const match = period.match(/(\d{2})\.(\d{2})/);
-  if (!match) return 9999;
-  return Number(match[1]) * 100 + Number(match[2]);
+function eventDetailUrl(event) {
+  return `event.html?id=${encodeURIComponent(event.id)}`;
 }
 
-function getScheduleRoutes() {
-  return [...routes].sort((a, b) => periodStartValue(a.period) - periodStartValue(b.period) || b.score - a.score);
+function calendarRegion(region = "") {
+  return region.split(" ")[0] || "전국";
+}
+
+function normalizePeriod(period = "") {
+  return period.includes("2026.") || period.includes("2025.") ? period : period.replace("-", " ~ ").replace(/(\d{2}\.\d{2})/g, "2026.$1");
+}
+
+function parseDateParts(text = "") {
+  const match = text.match(/(?:20\d{2}\.)?(\d{2})\.(\d{2})/);
+  if (!match) return null;
+  return { month: Number(match[1]), day: Number(match[2]) };
+}
+
+function periodStartValue(period = "") {
+  const start = parseDateParts(period);
+  if (!start) return 9999;
+  return start.month * 100 + start.day;
+}
+
+function periodEndValue(period = "") {
+  const endText = period.split("~").pop() || period.split("-").pop() || period;
+  const end = parseDateParts(endText);
+  if (!end) return periodStartValue(period);
+  return end.month * 100 + end.day;
+}
+
+function eventMonths(event) {
+  const startMonth = Math.floor(periodStartValue(event.period) / 100);
+  const endMonth = Math.floor(periodEndValue(event.period) / 100);
+  if (!startMonth || !endMonth) return [];
+  if (startMonth <= endMonth) return Array.from({ length: endMonth - startMonth + 1 }, (_, index) => startMonth + index);
+  return [...Array.from({ length: endMonth }, (_, index) => index + 1), ...Array.from({ length: 13 - startMonth }, (_, index) => startMonth + index)];
+}
+
+function monthLabel(month) {
+  return `${month}월`;
+}
+
+function eventDisplayMonth(event) {
+  if (event.period.trim().startsWith("2025.")) return 1;
+  return Math.floor(periodStartValue(event.period) / 100);
+}
+
+function getScheduleEvents() {
+  return [...calendarEvents].sort((a, b) => periodStartValue(a.period) - periodStartValue(b.period) || a.region.localeCompare(b.region, "ko"));
 }
 
 function getVisibleRoutes() {
@@ -1097,6 +1446,33 @@ function card(route) {
   `;
 }
 
+function calendarCard(event) {
+  const visual = event.image ? `--card-image:url('${event.image}')` : "--card-image:linear-gradient(135deg, #167355, #1d6f96)";
+  const route = event.routeId ? routes.find((item) => item.id === event.routeId) : null;
+  const distanceText = route ? `<span class="pill">${route.distance}km 내외</span>` : "";
+  return `
+    <a class="route-card calendar-card" href="${eventDetailUrl(event)}" aria-label="${event.festival} 상세 보기">
+      <div class="card-visual" style="${visual}">
+        <strong>${event.location}</strong>
+        <span>${event.period}</span>
+      </div>
+      <div class="route-body">
+        <div class="route-title">
+          <h3>${event.festival}</h3>
+          <p>${event.place}</p>
+        </div>
+        <div class="meta-row">
+          <span class="pill score">${event.region}</span>
+          <span class="pill">${event.theme || "축제"}</span>
+          ${distanceText}
+        </div>
+        <p class="route-summary">${event.description}</p>
+        <span class="card-cta">상세 보기</span>
+      </div>
+    </a>
+  `;
+}
+
 function renderFilters() {
   const filterChips = byId("filterChips");
   if (!filterChips) return;
@@ -1114,11 +1490,71 @@ function renderFilters() {
 function renderHomePage() {
   const homeSchedule = byId("homeSchedule");
   if (!homeSchedule) return;
-  homeSchedule.innerHTML = getScheduleRoutes().map(card).join("");
+  homeSchedule.innerHTML = getScheduleEvents().map(calendarCard).join("");
+}
+
+function calendarRegions() {
+  const order = ["전체", "전국", "서울", "부산", "인천", "대전", "경기", "강원", "충북", "충남", "전북", "전남", "경북", "경남", "제주"];
+  const regions = [...new Set(calendarEvents.map((event) => event.region))];
+  return ["전체", ...regions.sort((a, b) => order.indexOf(a) - order.indexOf(b) || a.localeCompare(b, "ko"))];
+}
+
+function renderCalendarFilters() {
+  const monthFilter = byId("monthFilter");
+  const regionFilter = byId("regionFilter");
+  if (monthFilter && !monthFilter.dataset.ready) {
+    monthFilter.innerHTML = [`<option value="all">전체 월</option>`, ...Array.from({ length: 12 }, (_, index) => `<option value="${index + 1}">${index + 1}월</option>`)].join("");
+    monthFilter.dataset.ready = "true";
+    monthFilter.addEventListener("change", renderFestivalPage);
+  }
+  if (regionFilter && !regionFilter.dataset.ready) {
+    regionFilter.innerHTML = calendarRegions()
+      .map((region) => `<option value="${region === "전체" ? "all" : region}">${region === "전체" ? "전체 지역" : region}</option>`)
+      .join("");
+    regionFilter.dataset.ready = "true";
+    regionFilter.addEventListener("change", renderFestivalPage);
+  }
+}
+
+function getVisibleCalendarEvents() {
+  const monthValue = byId("monthFilter")?.value || "all";
+  const regionValue = byId("regionFilter")?.value || "all";
+  return getScheduleEvents().filter((event) => {
+    const monthMatch = monthValue === "all" || eventMonths(event).includes(Number(monthValue));
+    const regionMatch = regionValue === "all" || event.region === regionValue;
+    return monthMatch && regionMatch;
+  });
 }
 
 function renderFestivalPage() {
   renderFilters();
+  renderCalendarFilters();
+
+  const calendarGrid = byId("calendarGrid");
+  if (calendarGrid) {
+    const events = getVisibleCalendarEvents();
+    const selectedMonth = byId("monthFilter")?.value || "all";
+    const meta = byId("calendarMeta");
+    if (meta) meta.textContent = `총 ${events.length}개 행사 · 월별·지역별로 정리했습니다.`;
+
+    const months = selectedMonth === "all" ? Array.from({ length: 12 }, (_, index) => index + 1) : [Number(selectedMonth)];
+    calendarGrid.innerHTML = months
+      .map((month) => {
+        const monthEvents = events.filter((event) => (selectedMonth === "all" ? eventDisplayMonth(event) === month : eventMonths(event).includes(month)));
+        return `
+          <section class="calendar-month">
+            <div class="calendar-month-head">
+              <strong>${monthLabel(month)}</strong>
+              <span>${monthEvents.length}개 행사</span>
+            </div>
+            ${monthEvents.length ? `<div class="route-grid simple">${monthEvents.map(calendarCard).join("")}</div>` : `<p class="calendar-meta">확인된 행사가 없습니다.</p>`}
+          </section>
+        `;
+      })
+      .join("");
+    if (!events.length) calendarGrid.innerHTML = `<p class="calendar-meta">선택한 조건에 맞는 행사가 없습니다.</p>`;
+  }
+
   const routeGrid = byId("routeGrid");
   if (routeGrid) routeGrid.innerHTML = getVisibleRoutes().map(card).join("");
 
@@ -1217,10 +1653,11 @@ function renderEventDetail() {
   if (!detail) return;
 
   const params = new URLSearchParams(window.location.search);
+  const event = calendarEvents.find((item) => item.id === params.get("id"));
   const route = routes.find((item) => item.id === params.get("id"));
   const hero = byId("eventHero");
 
-  if (!route) {
+  if (!event) {
     if (hero) {
       hero.querySelector(".eyebrow").textContent = "Event Not Found";
       hero.querySelector("h1").textContent = "행사를 찾을 수 없습니다";
@@ -1232,6 +1669,56 @@ function renderEventDetail() {
         <p>주소의 행사 ID가 올바르지 않습니다.</p>
         <a class="button dark" href="festivals.html">전국 행사 일정으로 이동</a>
       </article>
+    `;
+    return;
+  }
+
+  if (!route) {
+    document.title = `${event.festival} | 자전거여행 함께 가요`;
+    if (hero) {
+      const heroImage = event.image || "assets/seomjingang-bike-hero.png";
+      hero.style.setProperty("--page-hero-image", `url("${heroImage}")`);
+      hero.querySelector(".eyebrow").textContent = `${event.location} · ${event.period}`;
+      hero.querySelector("h1").textContent = event.festival;
+      hero.querySelector("p:last-child").textContent = event.place;
+    }
+    detail.innerHTML = `
+      <article class="detail-main">
+        <div class="detail-card">
+          <p class="eyebrow">Overview</p>
+          <h2>행사 개요</h2>
+          <dl class="info-list">
+            <div><dt>지역</dt><dd>${event.location}</dd></div>
+            <div><dt>기간</dt><dd>${event.period}</dd></div>
+            <div><dt>장소</dt><dd>${event.place}</dd></div>
+            <div><dt>분류</dt><dd>${event.theme}</dd></div>
+          </dl>
+        </div>
+
+        <div class="detail-card">
+          <p class="eyebrow">Travel Note</p>
+          <h2>자전거 여행 메모</h2>
+          <p>${event.description}</p>
+          <p>코스 상세가 아직 없는 행사는 행사장 주변 자전거길, 주차 거점, 맛집·카페 후보를 출발 전 별도로 확인하세요.</p>
+        </div>
+      </article>
+
+      <aside class="detail-side">
+        <div class="detail-card">
+          <p class="eyebrow">Next Step</p>
+          <h2>일정에 담기</h2>
+          <p>월별 일정에서 날짜를 고른 뒤, 지도 페이지에서 가까운 자전거길과 거점을 확인해 보세요.</p>
+          <div class="detail-actions">
+            <a class="button primary" href="maps.html">코스 지도 보기</a>
+            <a class="button dark" href="festivals.html">행사 목록으로</a>
+          </div>
+        </div>
+        <div class="detail-card">
+          <p class="eyebrow">Source</p>
+          <h2>자료 출처</h2>
+          <a class="source-link" href="${event.sourceUrl}" target="_blank" rel="noreferrer">${event.sourceTitle}</a>
+        </div>
+      </aside>
     `;
     return;
   }

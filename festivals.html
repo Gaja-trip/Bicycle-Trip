@@ -20,19 +20,37 @@
     <main>
       <section class="page-hero compact">
         <p class="eyebrow">National Events</p>
-        <h1>전국 행사 목록</h1>
-        <p>5월에 열리는 전국 행사를 날짜순으로 보고, 관심 있는 행사는 상세 페이지에서 코스까지 확인하세요.</p>
+        <h1>2026 전국 행사 일정</h1>
+        <p>월별, 지역별로 전국 행사를 정리했습니다. 행사를 선택하면 기본 정보와 자전거 여행 메모를 확인할 수 있습니다.</p>
+      </section>
+
+      <section class="calendar-toolbar" aria-label="전국 행사 일정 필터">
+        <div class="section-head">
+          <p class="eyebrow">Filter</p>
+          <h2>월별·지역별 보기</h2>
+        </div>
+        <div class="controls">
+          <label class="sort-control">
+            <span>월</span>
+            <select id="monthFilter"></select>
+          </label>
+          <label class="sort-control">
+            <span>지역</span>
+            <select id="regionFilter"></select>
+          </label>
+        </div>
       </section>
 
       <section>
         <div class="section-head">
           <p class="eyebrow">Events</p>
-          <h2>행사별 추천 코스</h2>
+          <h2>행사 캘린더</h2>
+          <p id="calendarMeta">전체 일정을 불러오는 중입니다.</p>
         </div>
-        <div class="route-grid simple" id="routeGrid"></div>
+        <div class="calendar-list" id="calendarGrid"></div>
       </section>
     </main>
-    <footer class="site-footer"><p>각 행사 상세 페이지에서 추천 코스, 이동 방식, 주의사항, 출처를 함께 확인할 수 있습니다.</p></footer>
+    <footer class="site-footer"><p>각 행사 상세 페이지에서 기본 정보, 자전거 여행 메모, 출처를 함께 확인할 수 있습니다.</p></footer>
     <script src="script.js" defer></script>
   </body>
 </html>
