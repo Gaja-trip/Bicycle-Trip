@@ -1029,6 +1029,20 @@ function tagName(tag) {
   }[tag] || tag;
 }
 
+function routeDetailUrl(route) {
+  return `event.html?id=${encodeURIComponent(route.id)}`;
+}
+
+function periodStartValue(period = "") {
+  const match = period.match(/(\d{2})\.(\d{2})/);
+  if (!match) return 9999;
+  return Number(match[1]) * 100 + Number(match[2]);
+}
+
+function getScheduleRoutes() {
+  return [...routes].sort((a, b) => periodStartValue(a.period) - periodStartValue(b.period) || b.score - a.score);
+}
+
 function getVisibleRoutes() {
   const sortSelect = byId("sortSelect");
   const list = activeFilter === "all" ? routes : routes.filter((route) => route.tags.includes(activeFilter));
@@ -1041,7 +1055,7 @@ function getVisibleRoutes() {
       case "distance":
         return a.distance - b.distance;
       default:
-        return b.score - a.score;
+        return periodStartValue(a.period) - periodStartValue(b.period) || b.score - a.score;
     }
   });
 }
@@ -1060,7 +1074,7 @@ function scoreLine(label, value, color) {
 function card(route) {
   const visual = route.image ? `--card-image:url('${route.image}')` : `--card-image:linear-gradient(135deg, ${route.score > 88 ? "#167355" : "#1d6f96"}, #d95f4a)`;
   return `
-    <article class="route-card">
+    <a class="route-card" href="${routeDetailUrl(route)}" aria-label="${route.festival} 상세 보기">
       <div class="card-visual" style="${visual}">
         <strong>${route.region}</strong>
         <span>${route.period}</span>
@@ -1075,16 +1089,11 @@ function card(route) {
           <span class="pill">${route.distance}km 내외</span>
           <span class="pill">난이도 ${difficultyLabel(route.difficulty)}</span>
         </div>
-        <div class="score-bars">
-          ${scoreLine("대중교통", route.access, "#167355")}
-          ${scoreLine("트럭거점", route.truck, "#1d6f96")}
-          ${scoreLine("참여도", route.participation, "#d95f4a")}
-          ${scoreLine("시각성", route.visual, "#d6a329")}
-        </div>
-        <ul class="route-points">${route.points.map((point) => `<li>${point}</li>`).join("")}</ul>
+        <p class="route-summary">${route.points[0]}</p>
         <div class="tag-row">${route.tags.map((tag) => `<span class="pill">${tagName(tag)}</span>`).join("")}</div>
+        <span class="card-cta">상세 보기</span>
       </div>
-    </article>
+    </a>
   `;
 }
 
@@ -1100,6 +1109,12 @@ function renderFilters() {
       renderFestivalPage();
     });
   });
+}
+
+function renderHomePage() {
+  const homeSchedule = byId("homeSchedule");
+  if (!homeSchedule) return;
+  homeSchedule.innerHTML = getScheduleRoutes().map(card).join("");
 }
 
 function renderFestivalPage() {
@@ -1195,6 +1210,107 @@ function renderSources() {
       `
     )
     .join("");
+}
+
+function renderEventDetail() {
+  const detail = byId("eventDetail");
+  if (!detail) return;
+
+  const params = new URLSearchParams(window.location.search);
+  const route = routes.find((item) => item.id === params.get("id"));
+  const hero = byId("eventHero");
+
+  if (!route) {
+    if (hero) {
+      hero.querySelector(".eyebrow").textContent = "Event Not Found";
+      hero.querySelector("h1").textContent = "행사를 찾을 수 없습니다";
+      hero.querySelector("p:last-child").textContent = "전국 행사 일정에서 다시 선택해 주세요.";
+    }
+    detail.innerHTML = `
+      <article class="detail-card">
+        <h2>다시 선택하기</h2>
+        <p>주소의 행사 ID가 올바르지 않습니다.</p>
+        <a class="button dark" href="festivals.html">전국 행사 일정으로 이동</a>
+      </article>
+    `;
+    return;
+  }
+
+  document.title = `${route.festival} | Bike Festa 5월`;
+  if (hero) {
+    const heroImage = route.image || "assets/seomjingang-bike-hero.png";
+    hero.style.setProperty("--page-hero-image", `url("${heroImage}")`);
+    hero.querySelector(".eyebrow").textContent = `${route.region} · ${route.period}`;
+    hero.querySelector("h1").textContent = route.festival;
+    hero.querySelector("p:last-child").textContent = route.place;
+  }
+
+  const mapHref = routeMaps[route.id] ? `maps.html?route=${encodeURIComponent(route.id)}` : "maps.html";
+  detail.innerHTML = `
+    <article class="detail-main">
+      <div class="detail-card">
+        <p class="eyebrow">Overview</p>
+        <h2>행사 개요</h2>
+        <dl class="info-list">
+          <div><dt>지역</dt><dd>${route.region}</dd></div>
+          <div><dt>기간</dt><dd>${route.period}</dd></div>
+          <div><dt>장소</dt><dd>${route.place}</dd></div>
+          <div><dt>추천 코스</dt><dd>${route.route}</dd></div>
+        </dl>
+      </div>
+
+      <div class="detail-card">
+        <p class="eyebrow">Highlights</p>
+        <h2>이 행사가 좋은 이유</h2>
+        <ul class="route-points detail-points">${route.points.map((point) => `<li>${point}</li>`).join("")}</ul>
+      </div>
+
+      <div class="detail-card">
+        <p class="eyebrow">Access</p>
+        <h2>이동 방식별 팁</h2>
+        <div class="tip-grid">
+          <article><strong>대중교통</strong><p>${route.publicTransport}</p></article>
+          <article><strong>트럭 거점</strong><p>${route.truckBase}</p></article>
+          <article><strong>숙박 거점</strong><p>${route.lodgeBase}</p></article>
+          <article><strong>여유 거점</strong><p>${route.quietBase}</p></article>
+        </div>
+      </div>
+    </article>
+
+    <aside class="detail-side">
+      <div class="detail-card">
+        <p class="eyebrow">Course</p>
+        <h2>${route.distance}km 내외</h2>
+        <p>${route.route}</p>
+        <div class="meta-row">
+          <span class="pill score">추천 ${route.score}</span>
+          <span class="pill">난이도 ${difficultyLabel(route.difficulty)}</span>
+        </div>
+        <div class="detail-actions">
+          <a class="button primary" href="${mapHref}">지도에서 보기</a>
+          <a class="button dark" href="itineraries.html">여행 일정 보기</a>
+        </div>
+      </div>
+
+      <div class="detail-card">
+        <p class="eyebrow">Scores</p>
+        <h2>운영 점수</h2>
+        <div class="score-bars">
+          ${scoreLine("대중교통", route.access, "#167355")}
+          ${scoreLine("트럭거점", route.truck, "#1d6f96")}
+          ${scoreLine("참여도", route.participation, "#d95f4a")}
+          ${scoreLine("시각성", route.visual, "#d6a329")}
+        </div>
+      </div>
+
+      <div class="detail-card">
+        <p class="eyebrow">Note</p>
+        <h2>주의사항</h2>
+        <p>${route.caution}</p>
+        <a class="source-link" href="${route.sourceUrl}" target="_blank" rel="noreferrer">${route.sourceTitle}</a>
+      </div>
+    </aside>
+  `;
 }
 
 function getMapRoutes() {
@@ -1553,7 +1669,9 @@ function renderMapsPage() {
 function init() {
   const sortSelect = byId("sortSelect");
   if (sortSelect) sortSelect.addEventListener("change", renderFestivalPage);
+  renderHomePage();
   renderFestivalPage();
+  renderEventDetail();
   renderJeonbukPage();
   renderTransportPage();
   renderPlans();

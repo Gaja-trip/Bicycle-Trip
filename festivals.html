@@ -3,81 +3,36 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>전국 축제 비교 | Bike Festa</title>
+    <title>전국 행사 일정 | Bike Festa 5월</title>
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body data-page="festivals">
     <header class="site-header">
-      <a class="brand" href="index.html"><span class="brand-mark" aria-hidden="true"></span><span>Bike Festa 5.1-5.2</span></a>
+      <a class="brand" href="index.html"><span class="brand-mark" aria-hidden="true"></span><span>Bike Festa 5월</span></a>
       <nav aria-label="주요 페이지">
-        <a href="festivals.html" aria-current="page">전국 비교</a>
-        <a href="jeonbuk.html">전북 집중</a>
-        <a href="transport.html">이동·주차</a>
+        <a href="festivals.html" aria-current="page">전국 행사 일정</a>
         <a href="maps.html">코스 지도</a>
-        <a href="itineraries.html">일정</a>
-        <a href="sources.html">출처</a>
+        <a href="itineraries.html">여행 일정</a>
+        <a href="community.html">커뮤니티</a>
       </nav>
     </header>
 
     <main>
       <section class="page-hero compact">
-        <p class="eyebrow">National Comparison</p>
-        <h1>5월 1-2일 전국 후보 비교</h1>
-        <p>전국 후보를 필터링하고, 자전거 접근성과 축제 참여도를 한눈에 비교합니다.</p>
-      </section>
-
-      <section class="control-band">
-        <div class="section-head">
-          <p class="eyebrow">Filter</p>
-          <h2>라이딩 방식으로 고르기</h2>
-        </div>
-        <div class="controls">
-          <div class="chip-group" id="filterChips"></div>
-          <label class="sort-control">
-            <span>정렬</span>
-            <select id="sortSelect">
-              <option value="recommend">추천순</option>
-              <option value="access">접근성 높은 순</option>
-              <option value="easy">쉬운 난이도 순</option>
-              <option value="distance">짧은 거리 순</option>
-            </select>
-          </label>
-        </div>
+        <p class="eyebrow">National Schedule</p>
+        <h1>전국 행사 일정을 한눈에 확인하세요</h1>
+        <p>5월에 열리는 전국 행사를 날짜순으로 정리했습니다. 행사 카드를 클릭하면 상세 페이지로 이동합니다.</p>
       </section>
 
       <section>
         <div class="section-head">
-          <p class="eyebrow">Routes</p>
-          <h2>축제별 자전거 코스</h2>
+          <p class="eyebrow">Events</p>
+          <h2>전국 행사 목록</h2>
         </div>
-        <div class="route-grid" id="routeGrid"></div>
-      </section>
-
-      <section class="compare-section">
-        <div class="section-head">
-          <p class="eyebrow">Score Table</p>
-          <h2>접근성·난이도·참여도 점수표</h2>
-        </div>
-        <div class="table-wrap">
-          <table>
-            <thead>
-              <tr>
-                <th scope="col">지역/축제</th>
-                <th scope="col">기간</th>
-                <th scope="col">추천 코스</th>
-                <th scope="col">거리</th>
-                <th scope="col">난이도</th>
-                <th scope="col">대중교통</th>
-                <th scope="col">트럭 거점</th>
-                <th scope="col">종합</th>
-              </tr>
-            </thead>
-            <tbody id="compareTable"></tbody>
-          </table>
-        </div>
+        <div class="route-grid simple" id="routeGrid"></div>
       </section>
     </main>
-    <footer class="site-footer"><p>난이도는 예상 거리, 경사, 일반도로 혼합도, 축제장 혼잡도를 함께 반영했습니다.</p></footer>
+    <footer class="site-footer"><p>각 행사 상세 페이지에서 추천 코스, 이동 방식, 주의사항, 출처를 함께 확인할 수 있습니다.</p></footer>
     <script src="script.js" defer></script>
   </body>
 </html>

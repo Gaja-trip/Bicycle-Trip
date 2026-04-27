@@ -1,16 +1,15 @@
 # Bicycle-Trip
 
-2026년 5월 1-2일 축제 일정과 자전거 여행 코스를 비교하는 정적 다중 페이지 웹사이트입니다.
+2026년 5월 전국 행사 일정과 자전거 여행 코스, 여행 일정, 커뮤니티 안내를 제공하는 정적 다중 페이지 웹사이트입니다.
 
 ## Pages
 
-- `index.html`: 전체 소개
-- `festivals.html`: 전국 후보 비교와 필터
-- `jeonbuk.html`: 전북권 축제 집중 분석
-- `transport.html`: 대중교통, 트럭 적재, 숙박 거점, 공원 주차 방식
+- `index.html`: 전국 행사 일정 중심 홈
+- `festivals.html`: 전국 행사 일정
+- `event.html`: 행사별 상세 안내
 - `maps.html`: 카카오맵 기반 코스 지도
-- `itineraries.html`: 5월 1-2일 추천 일정
-- `sources.html`: 수집 자료 출처
+- `itineraries.html`: 추천 여행 일정
+- `community.html`: 동행 모집, 코스 제안, 준비물, 후기 안내
 
 ## GitHub Pages
 
