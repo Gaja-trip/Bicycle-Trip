@@ -112,8 +112,7 @@ section {
   z-index: -2;
   background:
     linear-gradient(90deg, rgba(9, 20, 16, 0.84), rgba(9, 20, 16, 0.48) 48%, rgba(9, 20, 16, 0.18)),
-    url("https://kfescdn.visitkorea.or.kr/kfes/upload/contents/db/6995b351-4b45-4c86-947e-f44a07e087f8_47.JPG")
-      center / cover;
+    url("assets/seomjingang-bike-hero.png") 62% center / cover;
 }
 
 .hero::after {
