@@ -1532,6 +1532,256 @@ const localBikeRoadLinks = [
   }
 ];
 
+const premiumBikeRoadItems = [
+  {
+    id: "premium-jeongeup",
+    group: "premium",
+    title: "정읍 정읍천 자전거길",
+    region: "전북 정읍",
+    distanceText: "반나절",
+    time: "2-3시간",
+    description: "정읍천을 따라 도심과 자연을 짧게 잇는 전북권 명품길 후보입니다.",
+    centers: ["정읍천 둔치", "도심 접근 지점", "내장산 연계 후보"],
+    fit: "전북 축제 전후 짧은 회복 라이딩",
+    caution: "보행자와 산책 동선이 겹치는 구간은 저속으로 이동하세요.",
+    officialUrl: "https://www.bike.go.kr/map/roadMap.do",
+    mapPoints: [
+      [27, 58],
+      [39, 53],
+      [52, 49],
+      [66, 44]
+    ]
+  },
+  {
+    id: "premium-gunsan",
+    group: "premium",
+    title: "군산 고군산도 자전거길",
+    region: "전북 군산",
+    distanceText: "섬 연결형",
+    time: "반나절-1일",
+    description: "새만금과 섬 풍경을 함께 보는 해안형 명품 자전거길입니다.",
+    centers: ["새만금 방조제", "선유도", "고군산군도"],
+    fit: "트럭 적재 후 해안 풍경 라이딩",
+    caution: "해상교량 바람과 관광 차량 통행을 확인하세요.",
+    officialUrl: "https://www.bike.go.kr/map/roadMap.do",
+    mapPoints: [
+      [18, 47],
+      [31, 43],
+      [44, 39],
+      [57, 34],
+      [70, 31]
+    ]
+  },
+  {
+    id: "premium-gyeongpo",
+    group: "premium",
+    title: "강릉 경포호 산소길",
+    region: "강원 강릉",
+    distanceText: "호수 순환",
+    time: "1-2시간",
+    description: "경포호 주변을 가볍게 순환하며 바다와 호수를 함께 볼 수 있는 길입니다.",
+    centers: ["경포호", "경포해변", "초당동"],
+    fit: "가족형·초보형 순환",
+    caution: "관광 성수기에는 보행자와 공유하는 구간이 많습니다.",
+    officialUrl: "https://www.bike.go.kr/map/roadMap.do",
+    mapPoints: [
+      [57, 20],
+      [64, 25],
+      [67, 35],
+      [60, 42],
+      [51, 36],
+      [49, 27]
+    ]
+  },
+  {
+    id: "premium-okcheon",
+    group: "premium",
+    title: "옥천 향수 100리길",
+    region: "충북 옥천",
+    distanceText: "중거리",
+    time: "반나절",
+    description: "대청호와 금강권 풍경을 묶어 달리는 내륙형 명품길입니다.",
+    centers: ["옥천", "대청호권", "금강 연계"],
+    fit: "금강자전거길과 함께 보는 후보",
+    caution: "호수 주변 오르내림과 차량 공유 구간을 확인하세요.",
+    officialUrl: "https://www.bike.go.kr/map/roadMap.do",
+    mapPoints: [
+      [35, 39],
+      [45, 35],
+      [54, 40],
+      [60, 50],
+      [52, 58],
+      [40, 55]
+    ]
+  }
+];
+
+const islandBikeRoadItems = [
+  {
+    id: "island-jeju-coast",
+    group: "islandRoad",
+    title: "제주 해맞이 해안로",
+    region: "제주",
+    distanceText: "해안 순환",
+    time: "반나절-1일",
+    description: "제주 동부 해안 풍경을 따라 달리는 섬 자전거길 후보입니다.",
+    centers: ["구좌 해안", "성산권", "해맞이 전망"],
+    fit: "제주환상자전거길 일부 구간 맛보기",
+    caution: "해안 바람과 렌터카 교통량을 확인하세요.",
+    officialUrl: "https://www.bike.go.kr/map/roadMap.do",
+    mapPoints: [
+      [32, 69],
+      [44, 65],
+      [58, 67],
+      [71, 73]
+    ]
+  },
+  {
+    id: "island-sindo",
+    group: "islandRoad",
+    title: "옹진 시시모도 자전거 여행길",
+    region: "인천 옹진",
+    distanceText: "섬 순환",
+    time: "반나절",
+    description: "작은 섬을 이어 여유롭게 달리는 수도권 섬 자전거 여행길입니다.",
+    centers: ["신도", "시도", "모도"],
+    fit: "배편 연계 당일 여행",
+    caution: "선박 시간표와 마지막 배 시간을 먼저 확인하세요.",
+    officialUrl: "https://www.bike.go.kr/map/roadMap.do",
+    mapPoints: [
+      [23, 25],
+      [31, 30],
+      [40, 27],
+      [48, 33]
+    ]
+  },
+  {
+    id: "island-cheongsan",
+    group: "islandRoad",
+    title: "완도 청산도 자전거길",
+    region: "전남 완도",
+    distanceText: "섬 순환",
+    time: "반나절-1일",
+    description: "느림의 미학을 느끼며 바다와 마을길을 함께 지나는 섬 자전거길입니다.",
+    centers: ["청산도 항", "슬로길", "해안 마을"],
+    fit: "풍경 감상형 저속 여행",
+    caution: "언덕과 좁은 마을길에서는 무리한 추월을 피하세요.",
+    officialUrl: "https://www.bike.go.kr/map/roadMap.do",
+    mapPoints: [
+      [29, 75],
+      [43, 72],
+      [55, 76],
+      [63, 84],
+      [49, 88]
+    ]
+  },
+  {
+    id: "island-jeungdo",
+    group: "islandRoad",
+    title: "신안 증도 자전거섬",
+    region: "전남 신안",
+    distanceText: "섬 순환",
+    time: "반나절",
+    description: "갯벌과 염전 풍경을 보며 쉬엄쉬엄 달리는 섬 자전거길입니다.",
+    centers: ["증도", "태평염전", "갯벌 전망"],
+    fit: "사진형·가족형 섬 라이딩",
+    caution: "염전 주변 바람과 일몰 이후 복귀 동선을 확인하세요.",
+    officialUrl: "https://www.bike.go.kr/map/roadMap.do",
+    mapPoints: [
+      [17, 69],
+      [28, 66],
+      [39, 71],
+      [35, 80],
+      [22, 79]
+    ]
+  }
+];
+
+const recommendedBikeRoadItems = [
+  {
+    ...officialBikeRoads.find((road) => road.id === "seomjingang"),
+    group: "recommended",
+    title: "추천 · 섬진강 장군목-대나무숲",
+    distanceText: "65.2km",
+    time: "09:00 출발 기준 당일",
+    description: "현재 코스 지도에 GPX로 반영된 장군목에서 섬진강 대나무숲길까지의 5월 1일 팀 라이딩 추천 코스입니다.",
+    fit: "전북월드컵경기장 집결 후 트럭 이동 팀",
+    officialUrl: "maps.html?route=team-seomjin-66",
+    mapPoints: [
+      [34, 53],
+      [41, 58],
+      [52, 61],
+      [62, 67],
+      [73, 70]
+    ]
+  },
+  {
+    ...officialBikeRoads.find((road) => road.id === "geumgang"),
+    group: "recommended",
+    title: "추천 · 금강 익산-군산 연계",
+    distanceText: "축제 연계",
+    description: "익산·군산권 행사와 연결해 보기 좋은 전북 북부 강변축 추천 후보입니다.",
+    officialUrl: officialBikeRoadMapUrl(7)
+  },
+  {
+    ...premiumBikeRoadItems.find((road) => road.id === "premium-jeongeup"),
+    group: "recommended",
+    title: "추천 · 정읍천 짧은 회복 코스",
+    distanceText: "짧은 순환",
+    description: "전북권 행사 사이에 부담 없이 넣기 좋은 하천형 짧은 라이딩 후보입니다."
+  }
+].filter(Boolean);
+
+const bikeRoadMenuGroups = [
+  { id: "national", label: "국토종주자전거길", caption: "공식 인증 노선", items: officialBikeRoads },
+  { id: "premium", label: "지자체명품자전거길", caption: "지역 대표길", items: premiumBikeRoadItems },
+  { id: "islandRoad", label: "바다를 품은 섬 자전거길", caption: "섬·해안 여행", items: islandBikeRoadItems },
+  { id: "recommended", label: "추천하는 자전거길", caption: "축제 연계 추천", items: recommendedBikeRoadItems }
+];
+
+const bikeMapTopTabs = [
+  { id: "legend", label: "지도범례" },
+  { id: "facility", label: "편의시설" },
+  { id: "nearby", label: "주변정보" }
+];
+
+const fallbackBikeMapPaths = {
+  national: [
+    [24, 21],
+    [34, 27],
+    [43, 36],
+    [49, 47],
+    [57, 56],
+    [68, 65]
+  ],
+  premium: [
+    [22, 49],
+    [34, 46],
+    [47, 43],
+    [60, 38],
+    [72, 34]
+  ],
+  islandRoad: [
+    [18, 68],
+    [31, 64],
+    [45, 68],
+    [59, 74],
+    [72, 71]
+  ],
+  recommended: [
+    [31, 50],
+    [42, 55],
+    [54, 60],
+    [65, 66],
+    [76, 70]
+  ]
+};
+
+let activeBikeRoadGroup = "national";
+let activeBikeRoadId = "seomjingang";
+let activeBikeMapTab = "legend";
+let activeBikeMapMode = "standard";
+
 let activeFilter = "all";
 
 function byId(id) {
@@ -1962,30 +2212,197 @@ function bikeRoadCategoryLabel(category) {
   }[category] || "자전거길";
 }
 
+function bikeRoadDistanceText(road) {
+  return road.distanceText || (road.distance ? `${road.distance}km` : "정보 확인");
+}
+
+function bikeRoadExternalUrl(road) {
+  return road.officialUrl || officialBikeRoadMapUrl(road.roadSn || 1);
+}
+
+function activeBikeRoadItems() {
+  return bikeRoadMenuGroups.find((group) => group.id === activeBikeRoadGroup)?.items || officialBikeRoads;
+}
+
+function findBikeRoad(groupId, roadId) {
+  const group = bikeRoadMenuGroups.find((item) => item.id === groupId);
+  return group?.items.find((road) => road.id === roadId) || group?.items[0] || officialBikeRoads.find((road) => road.id === "seomjingang");
+}
+
+function bikeRoadMapPath(road) {
+  return road.mapPoints || fallbackBikeMapPaths[activeBikeRoadGroup] || fallbackBikeMapPaths.national;
+}
+
+function pointForMarker(points, index, total) {
+  if (!points.length) return [50, 50];
+  if (total <= 1) return points[Math.floor(points.length / 2)];
+  const position = Math.round((index / Math.max(1, total - 1)) * (points.length - 1));
+  return points[Math.min(points.length - 1, position)];
+}
+
+function bikeMapTabContent(road) {
+  if (activeBikeMapTab === "facility") {
+    return {
+      title: "편의시설",
+      items: [
+        `화장실: ${road.centers?.[0] || road.region} 출발 전 확인`,
+        "음수대: 장거리 구간은 보급 공백을 미리 체크",
+        "공기주입기: 인증센터·주요거점 주변 우선 확인"
+      ]
+    };
+  }
+  if (activeBikeMapTab === "nearby") {
+    return {
+      title: "주변정보",
+      items: [
+        `주변상세정보: ${road.fit}`,
+        `주의: ${road.caution}`,
+        "축제·카페·식당은 코스 지도 페이지의 POI와 함께 확인"
+      ]
+    };
+  }
+  return {
+    title: "지도범례",
+    items: [
+      "초록 실선: 선택한 자전거길 개략 선형",
+      "주황 점: 인증센터·주요거점",
+      "파란 점: 출발·도착 또는 추천 회수 지점"
+    ]
+  };
+}
+
+function renderBikeMapTopMenu() {
+  const topMenu = byId("bikeMapTopMenu");
+  if (!topMenu) return;
+  topMenu.innerHTML = bikeMapTopTabs
+    .map((tab) => `<button class="${tab.id === activeBikeMapTab ? "active" : ""}" type="button" data-bike-map-tab="${tab.id}">${tab.label}</button>`)
+    .join("");
+  topMenu.querySelectorAll("[data-bike-map-tab]").forEach((button) => {
+    button.addEventListener("click", () => {
+      activeBikeMapTab = button.getAttribute("data-bike-map-tab") || "legend";
+      renderBikeRoadMap(findBikeRoad(activeBikeRoadGroup, activeBikeRoadId));
+    });
+  });
+}
+
+function renderBikeRoadMap(road) {
+  const canvas = byId("bikeRoadMapCanvas");
+  const svg = canvas?.querySelector(".bike-map-routes");
+  const markerBox = byId("bikeMapMarkers");
+  const infoPanel = byId("bikeMapInfoPanel");
+  if (!canvas || !svg || !markerBox || !infoPanel || !road) return;
+
+  canvas.classList.toggle("satellite", activeBikeMapMode === "satellite");
+  const points = bikeRoadMapPath(road);
+  const pointString = points.map(([x, y]) => `${x},${y}`).join(" ");
+  svg.innerHTML = `
+    <polyline class="bike-map-route-shadow" points="${pointString}"></polyline>
+    <polyline class="bike-map-route-line" points="${pointString}"></polyline>
+  `;
+
+  const centers = (road.centers || []).slice(0, 7);
+  markerBox.innerHTML = centers
+    .map((center, index) => {
+      const [x, y] = pointForMarker(points, index, centers.length);
+      return `
+        <span class="bike-road-map-marker ${index === 0 || index === centers.length - 1 ? "terminal" : ""}" style="left:${x}%;top:${y}%">
+          <b>${index + 1}</b>
+          <small>${escapeHtml(center)}</small>
+        </span>
+      `;
+    })
+    .join("");
+
+  const tabContent = bikeMapTabContent(road);
+  infoPanel.innerHTML = `
+    <span>${escapeHtml(tabContent.title)}</span>
+    <strong>${escapeHtml(road.title)}</strong>
+    <p>${escapeHtml(road.region)} · ${bikeRoadDistanceText(road)} · ${escapeHtml(road.time || "시간 확인")}</p>
+    <ul>${tabContent.items.map((item) => `<li>${escapeHtml(item)}</li>`).join("")}</ul>
+  `;
+
+  renderBikeMapTopMenu();
+  const modeButtons = document.querySelectorAll("[data-map-mode]");
+  modeButtons.forEach((button) => {
+    button.classList.toggle("active", button.dataset.mapMode === activeBikeMapMode);
+    if (!button.dataset.ready) {
+      button.dataset.ready = "true";
+      button.addEventListener("click", () => {
+        activeBikeMapMode = button.getAttribute("data-map-mode") || "standard";
+        renderBikeRoadMap(findBikeRoad(activeBikeRoadGroup, activeBikeRoadId));
+      });
+    }
+  });
+}
+
+function renderBikeRoadMenu() {
+  const categoryMenu = byId("bikeRoadCategoryMenu");
+  const list = byId("bikeRoadMenuList");
+  if (!categoryMenu || !list) return;
+
+  categoryMenu.innerHTML = bikeRoadMenuGroups
+    .map(
+      (group) => `
+        <button class="${group.id === activeBikeRoadGroup ? "active" : ""}" type="button" data-bike-road-group="${group.id}">
+          <strong>${escapeHtml(group.label)}</strong>
+          <span>${escapeHtml(group.caption)}</span>
+        </button>
+      `
+    )
+    .join("");
+
+  categoryMenu.querySelectorAll("[data-bike-road-group]").forEach((button) => {
+    button.addEventListener("click", () => {
+      const groupId = button.getAttribute("data-bike-road-group") || "national";
+      setActiveBikeRoad(groupId, bikeRoadMenuGroups.find((group) => group.id === groupId)?.items[0]?.id);
+    });
+  });
+
+  list.innerHTML = activeBikeRoadItems()
+    .map(
+      (road) => `
+        <button class="${road.id === activeBikeRoadId ? "active" : ""}" type="button" data-bike-road-id="${road.id}">
+          <span>${escapeHtml(road.region)}</span>
+          <strong>${escapeHtml(road.title)}</strong>
+          <small>${bikeRoadDistanceText(road)} · ${escapeHtml(road.time || "시간 확인")}</small>
+        </button>
+      `
+    )
+    .join("");
+
+  list.querySelectorAll("[data-bike-road-id]").forEach((button) => {
+    button.addEventListener("click", () => setActiveBikeRoad(activeBikeRoadGroup, button.getAttribute("data-bike-road-id")));
+  });
+}
+
+function setActiveBikeRoad(groupId, roadId) {
+  activeBikeRoadGroup = groupId || "national";
+  const road = findBikeRoad(activeBikeRoadGroup, roadId);
+  activeBikeRoadId = road?.id || "seomjingang";
+  renderBikeRoadMenu();
+  renderBikeRoadDetail(road);
+  renderBikeRoadMap(road);
+}
+
 function renderBikeRoadDetail(road) {
   const detail = byId("bikeRoadDetail");
-  const frame = byId("officialBikeMapFrame");
   const link = byId("officialBikeMapLink");
-  const select = byId("officialRoadSelect");
   if (!road) return;
 
-  const officialUrl = officialBikeRoadMapUrl(road.roadSn);
-  if (frame) frame.src = officialUrl;
-  if (link) link.href = officialUrl;
-  if (select) select.value = road.id;
+  if (link) link.href = bikeRoadExternalUrl(road);
 
   if (!detail) return;
   detail.innerHTML = `
     <article>
       <div>
-        <p class="eyebrow">${bikeRoadCategoryLabel(road.category)}</p>
+        <p class="eyebrow">${bikeRoadCategoryLabel(road.category)} · ${bikeRoadMenuGroups.find((group) => group.id === activeBikeRoadGroup)?.label || "자전거길"}</p>
         <h3>${escapeHtml(road.title)}</h3>
         <p>${escapeHtml(road.description)}</p>
       </div>
       <dl class="road-stat-list">
         <div><dt>지역</dt><dd>${escapeHtml(road.region)}</dd></div>
-        <div><dt>거리</dt><dd>${road.distance}km</dd></div>
-        <div><dt>예상시간</dt><dd>${escapeHtml(road.time)}</dd></div>
+        <div><dt>거리</dt><dd>${bikeRoadDistanceText(road)}</dd></div>
+        <div><dt>예상시간</dt><dd>${escapeHtml(road.time || "시간 확인")}</dd></div>
         <div><dt>추천 활용</dt><dd>${escapeHtml(road.fit)}</dd></div>
       </dl>
       <div class="center-list">
@@ -1993,7 +2410,10 @@ function renderBikeRoadDetail(road) {
         <p>${road.centers.map(escapeHtml).join(" · ")}</p>
       </div>
       <p class="road-caution">${escapeHtml(road.caution)}</p>
-      ${road.id === "seomjingang" ? `<a class="button primary" href="maps.html?route=team-seomjin-66">장군목-대나무숲 GPX 보기</a>` : ""}
+      <div class="detail-actions">
+        <a class="button dark" href="${bikeRoadExternalUrl(road)}" target="${bikeRoadExternalUrl(road).startsWith("http") ? "_blank" : "_self"}" rel="noreferrer">지도에서 자세히 보기</a>
+        ${road.id === "seomjingang" || road.id === "team-seomjin-66" ? `<a class="button primary" href="maps.html?route=team-seomjin-66">장군목-대나무숲 GPX 보기</a>` : ""}
+      </div>
     </article>
   `;
 }
@@ -2012,7 +2432,7 @@ function renderBikeRoadCards(filter = "all") {
         <article class="bike-road-card" data-road-id="${road.id}">
           <div class="road-card-head">
             <span>${bikeRoadCategoryLabel(road.category)}</span>
-            <b>${road.distance}km</b>
+            <b>${bikeRoadDistanceText(road)}</b>
           </div>
           <h3>${escapeHtml(road.title)}</h3>
           <p>${escapeHtml(road.description)}</p>
@@ -2023,7 +2443,7 @@ function renderBikeRoadCards(filter = "all") {
           </div>
           <div class="road-card-actions">
             <button class="text-button" type="button" data-show-road="${road.id}">상세 보기</button>
-            <a href="${officialBikeRoadMapUrl(road.roadSn)}" target="_blank" rel="noreferrer">공식 지도</a>
+            <a href="${bikeRoadExternalUrl(road)}" target="_blank" rel="noreferrer">공식 지도</a>
           </div>
         </article>
       `
@@ -2032,12 +2452,9 @@ function renderBikeRoadCards(filter = "all") {
 
   grid.querySelectorAll("[data-show-road]").forEach((button) => {
     button.addEventListener("click", () => {
-      const road = officialBikeRoads.find((item) => item.id === button.dataset.showRoad);
-      renderBikeRoadDetail(road);
+      setActiveBikeRoad("national", button.dataset.showRoad);
     });
   });
-
-  renderBikeRoadDetail(roads.find((road) => road.id === "seomjingang") || roads[0]);
 }
 
 function renderCompactRoadList(id, items) {
@@ -2050,18 +2467,43 @@ function renderBikeRoadsPage() {
   const grid = byId("bikeRoadGrid");
   if (!grid) return;
 
-  const filter = byId("bikeRoadFilter");
-  const officialSelect = byId("officialRoadSelect");
-  if (officialSelect) {
-    officialSelect.innerHTML = officialBikeRoads.map((road) => `<option value="${road.id}">${escapeHtml(road.title)}</option>`).join("");
-    officialSelect.value = "seomjingang";
-    officialSelect.addEventListener("change", () => {
-      const road = officialBikeRoads.find((item) => item.id === officialSelect.value);
-      renderBikeRoadDetail(road);
+  if (!document.body.dataset.bikeRoadDelegated) {
+    document.body.dataset.bikeRoadDelegated = "true";
+    document.addEventListener("click", (event) => {
+      const mapTab = event.target.closest("[data-bike-map-tab]");
+      if (mapTab) {
+        activeBikeMapTab = mapTab.getAttribute("data-bike-map-tab") || "legend";
+        renderBikeRoadMap(findBikeRoad(activeBikeRoadGroup, activeBikeRoadId));
+        return;
+      }
+
+      const mapMode = event.target.closest("[data-map-mode]");
+      if (mapMode) {
+        activeBikeMapMode = mapMode.getAttribute("data-map-mode") || "standard";
+        renderBikeRoadMap(findBikeRoad(activeBikeRoadGroup, activeBikeRoadId));
+        return;
+      }
+
+      const menuGroup = event.target.closest("[data-bike-road-group]");
+      if (menuGroup) {
+        const groupId = menuGroup.getAttribute("data-bike-road-group") || "national";
+        setActiveBikeRoad(groupId, bikeRoadMenuGroups.find((group) => group.id === groupId)?.items[0]?.id);
+        return;
+      }
+
+      const menuRoad = event.target.closest("[data-bike-road-id]");
+      if (menuRoad) {
+        setActiveBikeRoad(activeBikeRoadGroup, menuRoad.getAttribute("data-bike-road-id"));
+      }
     });
   }
 
-  filter?.addEventListener("change", () => renderBikeRoadCards(filter.value));
+  const filter = byId("bikeRoadFilter");
+  filter?.addEventListener("change", () => {
+    renderBikeRoadCards(filter.value);
+    const roads = filter.value === "all" ? officialBikeRoads : officialBikeRoads.filter((road) => road.category === filter.value);
+    if (roads[0]) setActiveBikeRoad("national", roads.find((road) => road.id === "seomjingang")?.id || roads[0].id);
+  });
 
   const localLinks = byId("localRoadLinks");
   if (localLinks) {
@@ -2098,7 +2540,7 @@ function renderBikeRoadsPage() {
   renderCompactRoadList("premiumRoadList", premiumBikeRoads);
   renderCompactRoadList("islandRoadList", islandBikeRoads);
   renderBikeRoadCards("all");
-  renderBikeRoadDetail(officialBikeRoads.find((road) => road.id === "seomjingang"));
+  setActiveBikeRoad("national", "seomjingang");
 }
 
 const communityStateKey = "bikeFestaCommunityAlerts:v1";

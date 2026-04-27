@@ -1132,11 +1132,330 @@ tbody tr:last-child td {
   background: #d95f4a;
 }
 
-.bike-road-layout {
+.bike-map-service-section {
+  padding-bottom: clamp(32px, 5vw, 58px);
+}
+
+.bike-map-service {
   display: grid;
-  grid-template-columns: minmax(320px, 0.82fr) minmax(0, 1.18fr);
-  gap: 22px;
-  align-items: start;
+  grid-template-columns: minmax(250px, 0.32fr) minmax(0, 1fr);
+  min-height: 660px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--surface);
+  box-shadow: var(--shadow);
+  overflow: hidden;
+}
+
+.bike-map-left {
+  display: grid;
+  grid-template-rows: auto auto minmax(0, 1fr) auto;
+  gap: 16px;
+  padding: 20px;
+  border-right: 1px solid var(--line);
+  background: #f3f7f3;
+}
+
+.bike-map-brand {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid var(--line);
+}
+
+.bike-map-brand strong {
+  font-size: 1.32rem;
+  line-height: 1.05;
+}
+
+.bike-map-brand span {
+  color: var(--green);
+  font-size: 0.78rem;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.bike-road-menu,
+.bike-road-menu-list {
+  display: grid;
+  gap: 8px;
+}
+
+.bike-road-menu button,
+.bike-road-menu-list button {
+  width: 100%;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--surface);
+  color: var(--ink);
+  text-align: left;
+  cursor: pointer;
+}
+
+.bike-road-menu button {
+  display: grid;
+  gap: 4px;
+  min-height: 70px;
+  padding: 13px;
+}
+
+.bike-road-menu button strong,
+.bike-road-menu-list button strong {
+  display: block;
+  line-height: 1.2;
+}
+
+.bike-road-menu button span,
+.bike-road-menu-list button span,
+.bike-road-menu-list button small {
+  display: block;
+  color: var(--muted);
+  font-size: 0.82rem;
+  font-weight: 800;
+}
+
+.bike-road-menu button.active,
+.bike-road-menu button:hover,
+.bike-road-menu-list button.active,
+.bike-road-menu-list button:hover {
+  border-color: var(--green);
+  background: #e7f3ed;
+}
+
+.bike-road-menu-list {
+  max-height: 310px;
+  overflow: auto;
+  padding-right: 4px;
+}
+
+.bike-road-menu-list button {
+  display: grid;
+  gap: 5px;
+  padding: 12px;
+}
+
+.bike-road-menu-list button span {
+  color: var(--coral);
+  font-size: 0.78rem;
+}
+
+.bike-map-window {
+  position: relative;
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr);
+  min-width: 0;
+  background: #e8efe8;
+}
+
+.bike-map-topbar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 54px;
+  padding: 10px 112px 10px 16px;
+  border-bottom: 1px solid rgba(16, 35, 28, 0.12);
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(12px);
+}
+
+.bike-map-topbar button {
+  min-height: 34px;
+  padding: 7px 12px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: #fbfcf8;
+  color: var(--muted);
+  font-weight: 900;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.bike-map-topbar button.active,
+.bike-map-topbar button:hover {
+  border-color: var(--green);
+  background: var(--green);
+  color: #fff;
+}
+
+.bike-map-mode {
+  position: absolute;
+  z-index: 4;
+  top: 12px;
+  right: 14px;
+  display: flex;
+  gap: 5px;
+}
+
+.bike-map-mode button {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  min-height: 30px;
+  padding: 5px 7px;
+  border: 1px solid rgba(16, 35, 28, 0.16);
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.92);
+  color: var(--muted);
+  font-size: 0.76rem;
+  font-weight: 900;
+  cursor: pointer;
+  box-shadow: 0 8px 18px rgba(16, 35, 28, 0.08);
+}
+
+.bike-map-mode button.active {
+  background: var(--ink);
+  color: #fff;
+}
+
+.bike-map-canvas {
+  position: relative;
+  min-height: 604px;
+  overflow: hidden;
+  background:
+    linear-gradient(110deg, rgba(29, 111, 150, 0.16) 0 13%, transparent 13% 100%),
+    linear-gradient(28deg, transparent 0 35%, rgba(214, 163, 41, 0.24) 35% 36.5%, transparent 36.5% 100%),
+    linear-gradient(145deg, transparent 0 56%, rgba(217, 95, 74, 0.18) 56% 57.5%, transparent 57.5% 100%),
+    radial-gradient(circle at 72% 24%, rgba(22, 115, 85, 0.18), transparent 20%),
+    radial-gradient(circle at 24% 74%, rgba(29, 111, 150, 0.16), transparent 22%),
+    #edf4ec;
+}
+
+.bike-map-canvas::before {
+  content: "";
+  position: absolute;
+  inset: -20%;
+  background-image:
+    linear-gradient(rgba(16, 35, 28, 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(16, 35, 28, 0.05) 1px, transparent 1px);
+  background-size: 58px 58px;
+  transform: rotate(-8deg);
+}
+
+.bike-map-canvas.satellite {
+  background:
+    linear-gradient(110deg, rgba(24, 76, 83, 0.32) 0 13%, transparent 13% 100%),
+    linear-gradient(28deg, transparent 0 35%, rgba(246, 196, 95, 0.28) 35% 36.5%, transparent 36.5% 100%),
+    radial-gradient(circle at 26% 68%, rgba(61, 109, 63, 0.35), transparent 26%),
+    radial-gradient(circle at 73% 28%, rgba(25, 92, 61, 0.32), transparent 28%),
+    #50665a;
+}
+
+.bike-map-routes {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  width: 100%;
+  height: 100%;
+}
+
+.bike-map-route-shadow,
+.bike-map-route-line {
+  fill: none;
+  vector-effect: non-scaling-stroke;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.bike-map-route-shadow {
+  stroke: rgba(255, 255, 255, 0.88);
+  stroke-width: 12;
+}
+
+.bike-map-route-line {
+  stroke: var(--green);
+  stroke-width: 7;
+}
+
+.bike-map-markers {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+}
+
+.bike-road-map-marker {
+  position: absolute;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transform: translate(-17px, -17px);
+  max-width: 180px;
+}
+
+.bike-road-map-marker b {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+  width: 34px;
+  height: 34px;
+  border: 2px solid #fff;
+  border-radius: 50%;
+  background: var(--coral);
+  color: #fff;
+  box-shadow: 0 9px 20px rgba(16, 35, 28, 0.26);
+}
+
+.bike-road-map-marker.terminal b {
+  background: var(--blue);
+}
+
+.bike-road-map-marker small {
+  display: inline-block;
+  padding: 5px 8px;
+  border: 1px solid rgba(16, 35, 28, 0.12);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.94);
+  color: var(--ink);
+  font-size: 0.72rem;
+  font-weight: 900;
+  white-space: nowrap;
+  box-shadow: 0 9px 20px rgba(16, 35, 28, 0.12);
+}
+
+.bike-map-info-panel {
+  position: absolute;
+  z-index: 3;
+  left: 18px;
+  bottom: 18px;
+  width: min(430px, calc(100% - 36px));
+  padding: 18px;
+  border: 1px solid rgba(16, 35, 28, 0.14);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.94);
+  box-shadow: 0 16px 34px rgba(16, 35, 28, 0.16);
+}
+
+.bike-map-info-panel span {
+  color: var(--coral);
+  font-size: 0.78rem;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.bike-map-info-panel strong {
+  display: block;
+  margin-top: 4px;
+  font-size: 1.18rem;
+}
+
+.bike-map-info-panel p {
+  margin: 7px 0 0;
+  color: var(--muted);
+  font-weight: 800;
+}
+
+.bike-map-info-panel ul {
+  display: grid;
+  gap: 5px;
+  margin: 12px 0 0;
+  padding-left: 18px;
+  color: var(--ink);
+}
+
+.bike-road-layout {
+  display: block;
 }
 
 .official-map-panel,
@@ -1685,6 +2004,7 @@ tbody tr:last-child td {
   .plan-grid,
   .source-list,
   .bike-road-layout,
+  .bike-map-service,
   .map-stops,
   .map-route-list,
   .bike-road-grid,
@@ -1700,8 +2020,14 @@ tbody tr:last-child td {
     grid-template-columns: 1fr;
   }
 
-  .official-map-panel {
-    position: static;
+  .bike-map-service {
+    grid-template-columns: minmax(240px, 0.34fr) minmax(0, 1fr);
+    min-height: 0;
+  }
+
+  .bike-map-left {
+    border-right: 0;
+    border-bottom: 1px solid var(--line);
   }
 
   .alert-layout {
@@ -1755,6 +2081,7 @@ tbody tr:last-child td {
   .source-list,
   .bike-road-layout,
   .bike-road-tools,
+  .bike-map-service,
   .bike-road-grid,
   .road-stat-list,
   .road-list-layout,
@@ -1767,6 +2094,32 @@ tbody tr:last-child td {
   .alert-dashboard,
   .alert-layout {
     grid-template-columns: 1fr;
+  }
+
+  .bike-map-left {
+    padding: 16px;
+  }
+
+  .bike-road-menu-list {
+    max-height: 260px;
+  }
+
+  .bike-map-topbar {
+    flex-wrap: wrap;
+    padding-right: 16px;
+  }
+
+  .bike-map-mode {
+    top: 68px;
+    right: 12px;
+  }
+
+  .bike-map-canvas {
+    min-height: 560px;
+  }
+
+  .bike-road-map-marker small {
+    display: none;
   }
 
   .festival-calendar {

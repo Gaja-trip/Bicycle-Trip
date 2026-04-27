@@ -29,31 +29,40 @@
         <p>공식 자전거길 지도정보 서비스를 참고해 국토종주 코스, 인증센터, 거리, 예상시간, 편의시설 확인 동선을 정리했습니다.</p>
       </section>
 
-      <section class="bike-road-layout">
-        <aside class="official-map-panel" aria-label="공식 자전거길 지도">
-          <div class="section-head">
-            <p class="eyebrow">Official Map</p>
-            <h2>공식 지도 바로 보기</h2>
-            <p>선택한 코스의 공식 지도 화면을 함께 띄웁니다. iframe이 차단되면 새 창 버튼으로 확인하세요.</p>
-          </div>
-          <label class="sort-control full">
-            <span>국토종주 코스</span>
-            <select id="officialRoadSelect"></select>
-          </label>
-          <a class="button dark" id="officialBikeMapLink" href="https://www.bike.go.kr/map/roadMap.do" target="_blank" rel="noreferrer">공식 지도 새 창</a>
-          <div class="official-map-frame">
-            <iframe
-              id="officialBikeMapFrame"
-              title="자전거길 지도정보 서비스"
-              loading="lazy"
-              src="https://www.bike.go.kr/map/roadMap.do?roadSn=1&roadType=1&xp=37.570595&yp=126.699981&key=2008148358544&zm=12"
-            ></iframe>
-          </div>
-          <p class="road-source-note">
-            자료 기준: 행정안전부 자전거길 지도정보 서비스의 공개 화면에 표시된 거리, 예상시간, 인증센터 정보를 요약했습니다.
-          </p>
-        </aside>
+      <section class="bike-map-service-section">
+        <div class="section-head">
+          <p class="eyebrow">Map Service</p>
+          <h2>지도 기반 자전거길 정보</h2>
+          <p>좌측에서 자전거길 종류를 고르고, 상단 메뉴로 지도범례·편의시설·주변정보를 전환해 확인합니다.</p>
+        </div>
 
+        <div class="bike-map-service" aria-label="자전거길 지도 정보 서비스">
+          <aside class="bike-map-left" aria-label="자전거길 메뉴">
+            <div class="bike-map-brand">
+              <strong>자전거길</strong>
+              <span>Bike Road</span>
+            </div>
+            <nav class="bike-road-menu" id="bikeRoadCategoryMenu" aria-label="자전거길 분류"></nav>
+            <div class="bike-road-menu-list" id="bikeRoadMenuList"></div>
+            <a class="button dark" id="officialBikeMapLink" href="https://www.bike.go.kr/map/roadMap.do" target="_blank" rel="noreferrer">공식 지도 새 창</a>
+          </aside>
+
+          <section class="bike-map-window" aria-label="자전거길 지도창">
+            <div class="bike-map-topbar" id="bikeMapTopMenu" aria-label="지도 정보 메뉴"></div>
+            <div class="bike-map-mode" aria-label="지도 타입">
+              <button type="button" data-map-mode="standard" aria-label="일반지도">▦<span>일반</span></button>
+              <button type="button" data-map-mode="satellite" aria-label="항공사진">◈<span>항공</span></button>
+            </div>
+            <div class="bike-map-canvas" id="bikeRoadMapCanvas">
+              <svg class="bike-map-routes" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"></svg>
+              <div class="bike-map-markers" id="bikeMapMarkers"></div>
+              <div class="bike-map-info-panel" id="bikeMapInfoPanel"></div>
+            </div>
+          </section>
+        </div>
+      </section>
+
+      <section class="bike-road-layout">
         <section aria-label="자전거길 상세 정보">
           <div class="bike-road-tools">
             <div class="section-head">
