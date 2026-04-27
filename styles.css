@@ -1454,6 +1454,243 @@ tbody tr:last-child td {
   color: var(--ink);
 }
 
+.bike-kakao-service {
+  padding: 0 0 clamp(34px, 5vw, 58px);
+}
+
+.bike-map-service.kakao-version {
+  min-height: calc(100vh - 132px);
+  box-shadow: 0 18px 44px rgba(16, 35, 28, 0.12);
+}
+
+.bike-kakao-stage {
+  position: relative;
+  min-width: 0;
+  min-height: 680px;
+  background: #e5ece7;
+}
+
+.bike-kakao-canvas {
+  position: relative;
+  width: 100%;
+  min-height: calc(100vh - 132px);
+  height: 100%;
+  overflow: hidden;
+  background:
+    linear-gradient(135deg, rgba(18, 46, 37, 0.72), rgba(29, 111, 150, 0.54)),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.18) 1px, transparent 1px),
+    linear-gradient(rgba(255, 255, 255, 0.18) 1px, transparent 1px),
+    #183b31;
+  background-size: auto, 64px 64px, 64px 64px, auto;
+}
+
+.bike-layer-panel {
+  position: absolute;
+  z-index: 8;
+  top: 14px;
+  right: 14px;
+  display: grid;
+  gap: 8px;
+  width: min(420px, calc(100% - 28px));
+}
+
+.bike-layer-group {
+  display: grid;
+  grid-template-columns: 88px minmax(0, 1fr);
+  align-items: center;
+  gap: 8px;
+  padding: 8px;
+  border: 1px solid rgba(16, 35, 28, 0.13);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.94);
+  box-shadow: 0 12px 28px rgba(16, 35, 28, 0.12);
+  backdrop-filter: blur(12px);
+}
+
+.bike-layer-group strong {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--ink);
+  font-size: 0.86rem;
+  line-height: 1.1;
+}
+
+.bike-layer-group strong span {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: var(--ink);
+  color: #fff;
+  font-size: 0.72rem;
+}
+
+.bike-layer-group div {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  justify-content: flex-end;
+}
+
+.bike-layer-group button {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  min-height: 30px;
+  padding: 5px 8px;
+  border: 1px solid rgba(16, 35, 28, 0.14);
+  border-radius: 999px;
+  background: #fbfcf8;
+  color: var(--muted);
+  font-size: 0.78rem;
+  font-weight: 900;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.bike-layer-group button b {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 22px;
+  height: 22px;
+  border-radius: 999px;
+  background: rgba(16, 35, 28, 0.08);
+  color: var(--ink);
+  font-size: 0.68rem;
+}
+
+.bike-layer-group button.active,
+.bike-layer-group button:hover {
+  border-color: var(--green);
+  background: var(--green);
+  color: #fff;
+}
+
+.bike-layer-group button.active b,
+.bike-layer-group button:hover b {
+  background: rgba(255, 255, 255, 0.20);
+  color: #fff;
+}
+
+.bike-layer-marker {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transform: translate(-17px, -20px);
+  max-width: 190px;
+  font-family: inherit;
+  pointer-events: none;
+}
+
+.bike-layer-marker b {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  border: 2px solid #fff;
+  border-radius: 50%;
+  background: var(--green);
+  color: #fff;
+  font-size: 0.74rem;
+  font-weight: 900;
+  box-shadow: 0 10px 22px rgba(16, 35, 28, 0.28);
+}
+
+.bike-layer-marker small {
+  display: inline-block;
+  max-width: 142px;
+  overflow: hidden;
+  padding: 5px 8px;
+  border: 1px solid rgba(16, 35, 28, 0.12);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.96);
+  color: var(--ink);
+  font-size: 0.72rem;
+  font-weight: 900;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  box-shadow: 0 9px 20px rgba(16, 35, 28, 0.14);
+}
+
+.bike-layer-marker.cert b {
+  background: var(--coral);
+}
+
+.bike-layer-marker.toilet b {
+  background: #1d6f96;
+}
+
+.bike-layer-marker.air b {
+  background: #d6a329;
+}
+
+.bike-layer-marker.food b {
+  background: #d95f4a;
+}
+
+.bike-layer-marker.cafe b {
+  background: #7a9b3f;
+}
+
+.bike-kakao-info {
+  position: absolute;
+  z-index: 7;
+  left: 18px;
+  bottom: 18px;
+  width: min(440px, calc(100% - 36px));
+  padding: 18px;
+  border: 1px solid rgba(16, 35, 28, 0.14);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.95);
+  box-shadow: 0 18px 36px rgba(16, 35, 28, 0.17);
+  backdrop-filter: blur(14px);
+}
+
+.bike-kakao-info span {
+  color: var(--coral);
+  font-size: 0.78rem;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.bike-kakao-info strong {
+  display: block;
+  margin-top: 5px;
+  font-size: 1.18rem;
+  line-height: 1.2;
+}
+
+.bike-kakao-info p {
+  margin: 7px 0 0;
+  color: var(--muted);
+  font-weight: 800;
+}
+
+.bike-info-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 12px;
+}
+
+.bike-info-chips em {
+  display: inline-flex;
+  align-items: center;
+  min-height: 26px;
+  padding: 4px 8px;
+  border-radius: 999px;
+  background: #e7f3ed;
+  color: var(--green);
+  font-size: 0.76rem;
+  font-style: normal;
+  font-weight: 900;
+}
+
 .bike-road-layout {
   display: block;
 }
@@ -2118,6 +2355,43 @@ tbody tr:last-child td {
     min-height: 560px;
   }
 
+  .bike-map-service.kakao-version {
+    min-height: 0;
+  }
+
+  .bike-kakao-stage {
+    min-height: 650px;
+  }
+
+  .bike-kakao-canvas {
+    min-height: 650px;
+    height: 650px;
+  }
+
+  .bike-layer-panel {
+    top: 10px;
+    right: 10px;
+    width: min(380px, calc(100% - 20px));
+  }
+
+  .bike-layer-group {
+    grid-template-columns: 1fr;
+  }
+
+  .bike-layer-group div {
+    justify-content: flex-start;
+  }
+
+  .bike-kakao-info {
+    left: 12px;
+    bottom: 12px;
+    width: calc(100% - 24px);
+  }
+
+  .bike-layer-marker small {
+    display: none;
+  }
+
   .bike-road-map-marker small {
     display: none;
   }
@@ -2174,6 +2448,36 @@ tbody tr:last-child td {
 
   .timeline li {
     grid-template-columns: 54px minmax(0, 1fr);
+  }
+
+  .bike-layer-panel {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    width: calc(100% - 16px);
+  }
+
+  .bike-layer-group {
+    padding: 7px;
+  }
+
+  .bike-layer-group button {
+    min-height: 29px;
+    padding: 4px 7px;
+    font-size: 0.74rem;
+  }
+
+  .bike-kakao-stage,
+  .bike-kakao-canvas {
+    min-height: 700px;
+  }
+
+  .bike-kakao-canvas {
+    height: 700px;
+  }
+
+  .bike-kakao-info {
+    padding: 14px;
   }
 
 }

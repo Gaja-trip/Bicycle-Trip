@@ -3460,6 +3460,525 @@ function renderMapsPage() {
   });
 }
 
+const bikeLayerGroups = [
+  {
+    id: "legend",
+    label: "지도범례",
+    icon: "□",
+    layers: [
+      { id: "major", label: "주요거점", icon: "거" },
+      { id: "cert", label: "인증센터", icon: "인" }
+    ]
+  },
+  {
+    id: "facility",
+    label: "편의시설",
+    icon: "+",
+    layers: [
+      { id: "toilet", label: "화장실", icon: "WC" },
+      { id: "air", label: "공기주입기", icon: "AIR" }
+    ]
+  },
+  {
+    id: "nearby",
+    label: "주변정보",
+    icon: "i",
+    layers: [
+      { id: "food", label: "음식점", icon: "밥" },
+      { id: "cafe", label: "커피숍", icon: "커" }
+    ]
+  }
+];
+
+const bikeRoadGeoOverrides = {
+  seomjingang: {
+    center: { lat: 35.279, lng: 127.334 },
+    level: 9,
+    path: [
+      { lat: 35.4691177297715, lng: 127.187368869781 },
+      { lat: 35.401, lng: 127.224 },
+      { lat: 35.340, lng: 127.226 },
+      { lat: 35.2793461101383, lng: 127.310106754303 },
+      { lat: 35.235, lng: 127.342 },
+      { lat: 35.1948882791799, lng: 127.377923727036 },
+      { lat: 35.1858155343577, lng: 127.46498554945 }
+    ],
+    layers: {
+      major: [
+        { title: "장군목 출발 거점", lat: 35.4691177297715, lng: 127.187368869781 },
+        { title: "향가유원지 쉼터", lat: 35.340, lng: 127.226 },
+        { title: "곡성 섬진강기차마을", lat: 35.2793461101383, lng: 127.310106754303 },
+        { title: "압록유원지", lat: 35.1948882791799, lng: 127.377923727036 },
+        { title: "섬진강 대나무숲길", lat: 35.1858155343577, lng: 127.46498554945 }
+      ],
+      cert: [
+        { title: "장군목인증센터", lat: 35.4691177297715, lng: 127.187368869781 },
+        { title: "향가유원지인증센터", lat: 35.340, lng: 127.226 },
+        { title: "횡탄정인증센터", lat: 35.235, lng: 127.342 },
+        { title: "사성암인증센터", lat: 35.205, lng: 127.463 }
+      ],
+      toilet: [
+        { title: "장군목 공중화장실", lat: 35.4694, lng: 127.1871 },
+        { title: "곡성 기차마을 화장실", lat: 35.2792, lng: 127.3097 },
+        { title: "압록유원지 화장실", lat: 35.1949, lng: 127.3779 },
+        { title: "대나무숲길 화장실", lat: 35.1858, lng: 127.4650 }
+      ],
+      air: [
+        { title: "장군목 출발 정비 지점", lat: 35.4691, lng: 127.1874 },
+        { title: "곡성 기차마을 보급 지점", lat: 35.2793, lng: 127.3101 },
+        { title: "대나무숲길 도착 정비 지점", lat: 35.1858, lng: 127.4650 }
+      ],
+      food: [
+        { title: "라이첸", lat: 35.2789, lng: 127.3098 },
+        { title: "별천지가든", lat: 35.1955, lng: 127.3783 }
+      ],
+      cafe: [
+        { title: "카페 피오르", lat: 35.1962, lng: 127.3764 },
+        { title: "라플라타", lat: 35.1853, lng: 127.4662 }
+      ]
+    }
+  },
+  geumgang: {
+    center: { lat: 36.06, lng: 126.92 },
+    level: 10,
+    path: [
+      { lat: 36.47, lng: 127.13 },
+      { lat: 36.30, lng: 127.05 },
+      { lat: 36.10, lng: 126.88 },
+      { lat: 35.99, lng: 126.74 },
+      { lat: 35.97, lng: 126.68 }
+    ],
+    layers: {
+      major: [
+        { title: "대청댐 출발축", lat: 36.47, lng: 127.13 },
+        { title: "공주보", lat: 36.30, lng: 127.05 },
+        { title: "백제보", lat: 36.10, lng: 126.88 },
+        { title: "군산 금강하구둑", lat: 35.97, lng: 126.68 }
+      ],
+      cert: [
+        { title: "대청댐인증센터", lat: 36.47, lng: 127.13 },
+        { title: "공주보인증센터", lat: 36.30, lng: 127.05 },
+        { title: "익산성당포구인증센터", lat: 36.02, lng: 126.80 },
+        { title: "금강하구둑인증센터", lat: 35.97, lng: 126.68 }
+      ]
+    }
+  },
+  ara: {
+    center: { lat: 37.57, lng: 126.70 },
+    level: 8,
+    path: [
+      { lat: 37.56, lng: 126.60 },
+      { lat: 37.57, lng: 126.66 },
+      { lat: 37.58, lng: 126.73 },
+      { lat: 37.59, lng: 126.80 }
+    ],
+    layers: {
+      major: [
+        { title: "아라서해갑문", lat: 37.56, lng: 126.60 },
+        { title: "아라마루", lat: 37.57, lng: 126.69 },
+        { title: "아라한강갑문", lat: 37.59, lng: 126.80 }
+      ],
+      cert: [
+        { title: "아라서해갑문인증센터", lat: 37.56, lng: 126.60 },
+        { title: "아라한강갑문인증센터", lat: 37.59, lng: 126.80 }
+      ]
+    }
+  },
+  "hangang-seoul": {
+    center: { lat: 37.54, lng: 126.99 },
+    level: 9,
+    path: [
+      { lat: 37.59, lng: 126.80 },
+      { lat: 37.53, lng: 126.92 },
+      { lat: 37.52, lng: 127.03 },
+      { lat: 37.54, lng: 127.12 },
+      { lat: 37.55, lng: 127.20 }
+    ],
+    layers: {
+      major: [
+        { title: "여의도 한강공원", lat: 37.528, lng: 126.934 },
+        { title: "뚝섬전망콤플렉스", lat: 37.531, lng: 127.067 },
+        { title: "광나루자전거공원", lat: 37.548, lng: 127.121 },
+        { title: "팔당대교", lat: 37.55, lng: 127.20 }
+      ],
+      cert: [
+        { title: "아라한강갑문인증센터", lat: 37.59, lng: 126.80 },
+        { title: "여의도 인증센터", lat: 37.528, lng: 126.934 },
+        { title: "광나루 인증센터", lat: 37.548, lng: 127.121 }
+      ]
+    }
+  },
+  jeju: {
+    center: { lat: 33.39, lng: 126.54 },
+    level: 11,
+    path: [
+      { lat: 33.517, lng: 126.526 },
+      { lat: 33.555, lng: 126.760 },
+      { lat: 33.458, lng: 126.936 },
+      { lat: 33.240, lng: 126.565 },
+      { lat: 33.245, lng: 126.315 },
+      { lat: 33.517, lng: 126.526 }
+    ],
+    layers: {
+      major: [
+        { title: "제주항", lat: 33.517, lng: 126.526 },
+        { title: "김녕성세기해변", lat: 33.555, lng: 126.760 },
+        { title: "성산일출봉", lat: 33.458, lng: 126.936 },
+        { title: "중문해안", lat: 33.245, lng: 126.415 }
+      ],
+      cert: [
+        { title: "함덕해변 인증 지점", lat: 33.543, lng: 126.669 },
+        { title: "성산일출봉 인증 지점", lat: 33.458, lng: 126.936 },
+        { title: "법환바당 인증 지점", lat: 33.236, lng: 126.514 }
+      ]
+    }
+  }
+};
+
+let activeBikeLayers = new Set(["major", "cert"]);
+let bikeRoadMapRuntime = {
+  canvas: null,
+  map: null,
+  polyline: null,
+  overlays: [],
+  token: 0
+};
+
+function bikeLayerConfig(layerId) {
+  return bikeLayerGroups.flatMap((group) => group.layers).find((layer) => layer.id === layerId);
+}
+
+function bikeLayerLabels() {
+  return [...activeBikeLayers].map((layerId) => bikeLayerConfig(layerId)?.label).filter(Boolean);
+}
+
+function bikeRoadRegionCenter(road) {
+  const region = `${road?.region || ""} ${road?.title || ""}`;
+  const matches = [
+    ["전북", { lat: 35.72, lng: 127.15 }],
+    ["전남", { lat: 34.90, lng: 126.98 }],
+    ["서울", { lat: 37.55, lng: 126.99 }],
+    ["경기", { lat: 37.43, lng: 127.18 }],
+    ["인천", { lat: 37.48, lng: 126.63 }],
+    ["김포", { lat: 37.62, lng: 126.72 }],
+    ["충북", { lat: 36.77, lng: 127.70 }],
+    ["충남", { lat: 36.55, lng: 126.86 }],
+    ["세종", { lat: 36.48, lng: 127.29 }],
+    ["대전", { lat: 36.35, lng: 127.38 }],
+    ["경북", { lat: 36.35, lng: 128.60 }],
+    ["경남", { lat: 35.33, lng: 128.25 }],
+    ["부산", { lat: 35.18, lng: 129.07 }],
+    ["강원", { lat: 37.70, lng: 128.18 }],
+    ["제주", { lat: 33.39, lng: 126.54 }],
+    ["신안", { lat: 34.78, lng: 126.10 }],
+    ["완도", { lat: 34.31, lng: 126.75 }],
+    ["군산", { lat: 35.97, lng: 126.71 }],
+    ["정읍", { lat: 35.57, lng: 126.86 }],
+    ["강릉", { lat: 37.78, lng: 128.89 }],
+    ["옥천", { lat: 36.31, lng: 127.57 }]
+  ];
+  return matches.find(([keyword]) => region.includes(keyword))?.[1] || { lat: 36.25, lng: 127.80 };
+}
+
+function generatedBikeRoadGeo(road) {
+  const center = bikeRoadRegionCenter(road);
+  const distance = Number.isFinite(road?.distance) ? road.distance : 55;
+  const spread = Math.min(0.72, Math.max(0.13, distance / 420));
+  const path = road?.mapPoints?.length
+    ? road.mapPoints.map(([x, y]) => ({
+        lat: center.lat + (50 - y) * spread * 0.012,
+        lng: center.lng + (x - 50) * spread * 0.016
+      }))
+    : [
+        { lat: center.lat + spread * 0.38, lng: center.lng - spread * 0.58 },
+        { lat: center.lat + spread * 0.22, lng: center.lng - spread * 0.20 },
+        { lat: center.lat, lng: center.lng },
+        { lat: center.lat - spread * 0.21, lng: center.lng + spread * 0.23 },
+        { lat: center.lat - spread * 0.38, lng: center.lng + spread * 0.56 }
+      ];
+  const first = path[0];
+  const middle = path[Math.floor(path.length / 2)];
+  const last = path[path.length - 1];
+  const centers = road?.centers?.length ? road.centers : [`${road?.title || "자전거길"} 출발`, `${road?.title || "자전거길"} 도착`];
+
+  return {
+    center,
+    level: distance > 180 ? 10 : distance > 80 ? 9 : 8,
+    path,
+    layers: {
+      major: [
+        { title: `${road?.title || "자전거길"} 출발 거점`, ...first },
+        { title: `${road?.title || "자전거길"} 중간 거점`, ...middle },
+        { title: `${road?.title || "자전거길"} 도착 거점`, ...last }
+      ],
+      cert: centers.slice(0, 4).map((title, index) => ({
+        title,
+        ...(path[Math.min(path.length - 1, Math.round((index / Math.max(1, Math.min(centers.length, 4) - 1)) * (path.length - 1)))])
+      })),
+      toilet: [
+        { title: "출발지 공중화장실", lat: first.lat + 0.006, lng: first.lng - 0.004 },
+        { title: "중간 쉼터 화장실", lat: middle.lat + 0.005, lng: middle.lng + 0.006 }
+      ],
+      air: [
+        { title: "출발지 공기주입기", lat: first.lat - 0.004, lng: first.lng + 0.004 },
+        { title: "중간 정비 지점", lat: middle.lat - 0.006, lng: middle.lng - 0.005 }
+      ],
+      food: [
+        { title: "지역 식사 후보", lat: middle.lat - 0.010, lng: middle.lng + 0.010 },
+        { title: "도착지 식당가", lat: last.lat + 0.007, lng: last.lng - 0.006 }
+      ],
+      cafe: [
+        { title: "경유지 커피숍", lat: middle.lat + 0.011, lng: middle.lng - 0.009 },
+        { title: "도착지 카페", lat: last.lat - 0.007, lng: last.lng + 0.006 }
+      ]
+    }
+  };
+}
+
+function bikeRoadGeoFor(road) {
+  const fallback = generatedBikeRoadGeo(road);
+  const override = bikeRoadGeoOverrides[road?.id];
+  if (!override) return fallback;
+  return {
+    ...fallback,
+    ...override,
+    layers: {
+      ...fallback.layers,
+      ...(override.layers || {})
+    }
+  };
+}
+
+function clearBikeRoadKakaoMap() {
+  if (bikeRoadMapRuntime.polyline) {
+    bikeRoadMapRuntime.polyline.setMap(null);
+    bikeRoadMapRuntime.polyline = null;
+  }
+  bikeRoadMapRuntime.overlays.forEach((overlay) => overlay.setMap(null));
+  bikeRoadMapRuntime.overlays = [];
+}
+
+function renderBikeRoadLayerControls() {
+  const panel = byId("bikeLayerControls");
+  if (!panel) return;
+  panel.innerHTML = bikeLayerGroups
+    .map(
+      (group) => `
+        <section class="bike-layer-group" aria-label="${escapeHtml(group.label)}">
+          <strong><span>${escapeHtml(group.icon)}</span>${escapeHtml(group.label)}</strong>
+          <div>
+            ${group.layers
+              .map(
+                (layer) => `
+                  <button class="${activeBikeLayers.has(layer.id) ? "active" : ""}" type="button" data-bike-layer="${layer.id}" aria-pressed="${activeBikeLayers.has(layer.id)}">
+                    <b>${escapeHtml(layer.icon)}</b>
+                    <span>${escapeHtml(layer.label)}</span>
+                  </button>
+                `
+              )
+              .join("")}
+          </div>
+        </section>
+      `
+    )
+    .join("");
+}
+
+function toggleBikeLayer(layerId) {
+  if (activeBikeLayers.has(layerId)) {
+    activeBikeLayers.delete(layerId);
+  } else {
+    activeBikeLayers.add(layerId);
+  }
+  renderBikeRoadLayerControls();
+  drawBikeRoadKakaoMap(findBikeRoad(activeBikeRoadGroup, activeBikeRoadId));
+}
+
+function renderBikeRoadMenu() {
+  const categoryMenu = byId("bikeRoadCategoryMenu");
+  const list = byId("bikeRoadMenuList");
+  if (!categoryMenu || !list) return;
+
+  categoryMenu.innerHTML = bikeRoadMenuGroups
+    .map(
+      (group) => `
+        <button class="${group.id === activeBikeRoadGroup ? "active" : ""}" type="button" data-bike-road-group="${group.id}">
+          <strong>${escapeHtml(group.label)}</strong>
+          <span>${escapeHtml(group.caption)}</span>
+        </button>
+      `
+    )
+    .join("");
+
+  list.innerHTML = activeBikeRoadItems()
+    .map(
+      (road) => `
+        <button class="${road.id === activeBikeRoadId ? "active" : ""}" type="button" data-bike-road-id="${road.id}">
+          <span>${escapeHtml(road.region)}</span>
+          <strong>${escapeHtml(road.title)}</strong>
+          <small>${bikeRoadDistanceText(road)} · ${escapeHtml(road.time || "시간 확인")}</small>
+        </button>
+      `
+    )
+    .join("");
+}
+
+function renderBikeRoadMarker(map, layerId, point, bounds) {
+  const layer = bikeLayerConfig(layerId);
+  if (!layer || !point) return;
+  const position = new kakao.maps.LatLng(point.lat, point.lng);
+  bounds.extend(position);
+  const overlay = new kakao.maps.CustomOverlay({
+    position,
+    yAnchor: 1.18,
+    content: `
+      <span class="bike-layer-marker ${layerId}" title="${escapeHtml(point.title)}">
+        <b>${escapeHtml(layer.icon)}</b>
+        <small>${escapeHtml(point.title)}</small>
+      </span>
+    `
+  });
+  overlay.setMap(map);
+  bikeRoadMapRuntime.overlays.push(overlay);
+}
+
+function renderBikeRoadMapInfo(road, geo, markerCount) {
+  const panel = byId("bikeMapInfoPanel");
+  if (!panel || !road) return;
+  const labels = bikeLayerLabels();
+  panel.innerHTML = `
+    <span>Daum/Kakao Map</span>
+    <strong>${escapeHtml(road.title)}</strong>
+    <p>${escapeHtml(road.region)} · ${bikeRoadDistanceText(road)} · ${escapeHtml(road.time || "시간 확인")}</p>
+    <div class="bike-info-chips">
+      <em>초록 실선 자전거길</em>
+      <em>${markerCount}개 지점 표시</em>
+      <em>${labels.length ? labels.join(", ") : "레이어 미선택"}</em>
+    </div>
+  `;
+  const link = byId("officialBikeMapLink");
+  if (link) link.href = bikeRoadExternalUrl(road);
+}
+
+function renderBikeRoadMapError(message) {
+  const canvas = byId("bikeRoadKakaoMap");
+  const panel = byId("bikeMapInfoPanel");
+  if (canvas && !bikeRoadMapRuntime.map) {
+    canvas.innerHTML = `
+      <div class="map-placeholder">
+        <strong>다음지도를 표시하지 못했습니다</strong>
+        <span>${escapeHtml(message)}</span>
+      </div>
+    `;
+  }
+  if (panel) {
+    panel.innerHTML = `
+      <span>Map status</span>
+      <strong>지도 로드 확인 필요</strong>
+      <p>${escapeHtml(message)}</p>
+    `;
+  }
+}
+
+async function drawBikeRoadKakaoMap(road) {
+  const canvas = byId("bikeRoadKakaoMap");
+  if (!canvas || !road) return;
+  const drawToken = ++bikeRoadMapRuntime.token;
+
+  try {
+    await loadKakaoMapSdk(KAKAO_MAP_APP_KEY);
+    if (drawToken !== bikeRoadMapRuntime.token) return;
+
+    const geo = bikeRoadGeoFor(road);
+    if (!bikeRoadMapRuntime.map || bikeRoadMapRuntime.canvas !== canvas) {
+      canvas.innerHTML = "";
+      bikeRoadMapRuntime.canvas = canvas;
+      bikeRoadMapRuntime.map = new kakao.maps.Map(canvas, {
+        center: new kakao.maps.LatLng(geo.center.lat, geo.center.lng),
+        level: geo.level || 9
+      });
+    }
+
+    const map = bikeRoadMapRuntime.map;
+    clearBikeRoadKakaoMap();
+    map.setCenter(new kakao.maps.LatLng(geo.center.lat, geo.center.lng));
+    map.setLevel(geo.level || 9);
+    map.setMapTypeId(kakao.maps.MapTypeId.ROADMAP);
+
+    const bounds = new kakao.maps.LatLngBounds();
+    const path = geo.path.map((point) => {
+      const latLng = new kakao.maps.LatLng(point.lat, point.lng);
+      bounds.extend(latLng);
+      return latLng;
+    });
+
+    bikeRoadMapRuntime.polyline = new kakao.maps.Polyline({
+      path,
+      strokeWeight: 7,
+      strokeColor: "#167355",
+      strokeOpacity: 0.92,
+      strokeStyle: "solid"
+    });
+    bikeRoadMapRuntime.polyline.setMap(map);
+
+    let markerCount = 0;
+    activeBikeLayers.forEach((layerId) => {
+      (geo.layers[layerId] || []).forEach((point) => {
+        markerCount += 1;
+        renderBikeRoadMarker(map, layerId, point, bounds);
+      });
+    });
+
+    if (path.length > 1) {
+      map.setBounds(bounds);
+      window.setTimeout(() => map.relayout(), 80);
+    }
+    renderBikeRoadMapInfo(road, geo, markerCount);
+  } catch (error) {
+    renderBikeRoadMapError("Kakao Developers에 현재 도메인이 등록되어 있는지와 네트워크 연결을 확인해 주세요.");
+  }
+}
+
+function setActiveBikeRoad(groupId, roadId) {
+  activeBikeRoadGroup = groupId || "national";
+  const road = findBikeRoad(activeBikeRoadGroup, roadId);
+  activeBikeRoadId = road?.id || "seomjingang";
+  renderBikeRoadMenu();
+  renderBikeRoadLayerControls();
+  drawBikeRoadKakaoMap(road);
+}
+
+function renderBikeRoadsPage() {
+  const canvas = byId("bikeRoadKakaoMap");
+  if (!canvas) return;
+
+  if (!document.body.dataset.bikeRoadKakaoDelegated) {
+    document.body.dataset.bikeRoadKakaoDelegated = "true";
+    document.addEventListener("click", (event) => {
+      const layerButton = event.target.closest("[data-bike-layer]");
+      if (layerButton) {
+        toggleBikeLayer(layerButton.getAttribute("data-bike-layer"));
+        return;
+      }
+
+      const menuGroup = event.target.closest("[data-bike-road-group]");
+      if (menuGroup) {
+        const groupId = menuGroup.getAttribute("data-bike-road-group") || "national";
+        setActiveBikeRoad(groupId, bikeRoadMenuGroups.find((group) => group.id === groupId)?.items[0]?.id);
+        return;
+      }
+
+      const menuRoad = event.target.closest("[data-bike-road-id]");
+      if (menuRoad) {
+        setActiveBikeRoad(activeBikeRoadGroup, menuRoad.getAttribute("data-bike-road-id"));
+      }
+    });
+  }
+
+  renderBikeRoadLayerControls();
+  setActiveBikeRoad(activeBikeRoadGroup, activeBikeRoadId);
+}
+
 function init() {
   const sortSelect = byId("sortSelect");
   if (sortSelect) sortSelect.addEventListener("change", renderFestivalPage);
