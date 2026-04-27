@@ -112,7 +112,7 @@ section {
   z-index: -2;
   background:
     linear-gradient(90deg, rgba(9, 20, 16, 0.84), rgba(9, 20, 16, 0.48) 48%, rgba(9, 20, 16, 0.18)),
-    url("assets/seomjingang-bike-hero.png") 62% center / cover;
+    url("https://commons.wikimedia.org/wiki/Special:FilePath/Han%20river%20bike%20path%20-%20panoramio.jpg") center / cover;
 }
 
 .hero::after {
@@ -260,6 +260,22 @@ h1 {
     url("https://kfescdn.visitkorea.or.kr/kfes/upload/contents/db/4058409_image2_1.png") center / cover;
 }
 
+body[data-page="festivals"] {
+  --page-hero-image: url("https://kfescdn.visitkorea.or.kr/kfes/upload/contents/db/4041273_image2_1.jpg");
+}
+
+body[data-page="maps"] {
+  --page-hero-image: url("https://commons.wikimedia.org/wiki/Special:FilePath/Han%20river%20bike%20path%20-%20panoramio.jpg");
+}
+
+body[data-page="itineraries"] {
+  --page-hero-image: url("https://kfescdn.visitkorea.or.kr/kfes/upload/contents/db/4058409_image2_1.png");
+}
+
+body[data-page="community"] {
+  --page-hero-image: url("https://kfescdn.visitkorea.or.kr/kfes/upload/contents/db/4056068_image2_1.jpg");
+}
+
 .page-hero .eyebrow {
   color: #f6c45f;
 }
@@ -277,6 +293,7 @@ h1 {
 
 .intro-grid,
 .scenario-grid,
+.service-grid,
 .route-grid,
 .cluster-grid,
 .method-grid,
@@ -355,6 +372,31 @@ h1 {
 
 .scenario-grid {
   grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.service-grid {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  margin-bottom: 24px;
+}
+
+.service-grid article {
+  min-height: 142px;
+  padding: 22px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--surface);
+  box-shadow: 0 10px 24px rgba(16, 35, 28, 0.06);
+}
+
+.service-grid strong {
+  display: block;
+  font-size: 1.12rem;
+}
+
+.service-grid p {
+  margin: 10px 0 0;
+  color: var(--muted);
+  font-size: 0.94rem;
 }
 
 .control-band {
@@ -1108,6 +1150,7 @@ tbody tr:last-child td {
 @media (max-width: 1160px) {
   .intro-grid,
   .intro-grid.simple,
+  .service-grid,
   .method-grid,
   .method-grid.large,
   .flow-grid,
@@ -1155,6 +1198,7 @@ tbody tr:last-child td {
   .intro-grid,
   .intro-grid.simple,
   .scenario-grid,
+  .service-grid,
   .control-band,
   .insight-strip,
   .route-grid,

@@ -14,7 +14,7 @@ const routes = [
     visual: 4,
     score: 91,
     tags: ["jeonbuk", "train", "city", "beginner", "culture"],
-    image: "",
+    image: "https://commons.wikimedia.org/wiki/Special:FilePath/Jeonju%20Hanok%20Village%2020220701%20001.jpg",
     points: [
       "KTX·일반열차 접근이 좋아 자전거를 접이식 또는 분해 운반하는 팀에게 가장 편합니다.",
       "도심 축제라 속도보다 보행자 동선 분리가 중요하고, 전주천 자전거길을 주행 축으로 삼는 편이 안전합니다.",
@@ -43,7 +43,7 @@ const routes = [
     visual: 4,
     score: 93,
     tags: ["jeonbuk", "train", "truck", "beginner", "culture"],
-    image: "",
+    image: "https://kfescdn.visitkorea.or.kr/kfes/upload/contents/db/4013557_image2_1.jpg",
     points: [
       "축제 기간 남원 시청 주차장 등 유료 공영주차장 5곳이 무료 개방된다는 보도가 있어 트럭 거점형에 유리합니다.",
       "요천변은 축제장과 붙어 있어 자전거 이동 거리를 짧게 줄이고 공연·야경 시간을 확보하기 좋습니다.",
@@ -159,7 +159,7 @@ const routes = [
     visual: 5,
     score: 84,
     tags: ["jeonbuk", "truck", "photo", "overnight"],
-    image: "",
+    image: "https://kfescdn.visitkorea.or.kr/kfes/upload/contents/db/4041273_image2_1.jpg",
     points: [
       "4월 18일부터 5월 10일까지 열려 5월 1-2일 모두 방문 가능합니다.",
       "축제는 걷는 콘텐츠가 강화되어 자전거는 외곽 접근 수단, 현장에서는 산책 중심으로 전환하는 편이 좋습니다.",
@@ -217,7 +217,7 @@ const routes = [
     visual: 4.5,
     score: 92,
     tags: ["train", "beginner", "photo"],
-    image: "https://kfescdn.visitkorea.or.kr/kfes/upload/contents/db/6995b351-4b45-4c86-947e-f44a07e087f8_47.JPG",
+    image: "https://kfescdn.visitkorea.or.kr/kfes/upload/contents/db/3482842_image2_1.jpg",
     points: [
       "3호선 정발산역과 호수공원 접근성이 뛰어나 차 없이 가기 좋습니다.",
       "초보자는 호수공원 순환, 중급자는 행주산성·한강 자전거길까지 연장합니다.",
@@ -1236,7 +1236,7 @@ function renderEventDetail() {
     return;
   }
 
-  document.title = `${route.festival} | Bike Festa 5월`;
+  document.title = `${route.festival} | 자전거여행 함께 가요`;
   if (hero) {
     const heroImage = route.image || "assets/seomjingang-bike-hero.png";
     hero.style.setProperty("--page-hero-image", `url("${heroImage}")`);
