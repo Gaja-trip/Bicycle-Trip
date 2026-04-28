@@ -1532,6 +1532,43 @@ const localBikeRoadLinks = [
   }
 ];
 
+function localBikeRoadItem({
+  id,
+  group,
+  title,
+  region,
+  distanceText,
+  distance,
+  time,
+  description,
+  centers,
+  fit,
+  caution,
+  mapPoints
+}) {
+  return {
+    id,
+    group,
+    title,
+    region,
+    distanceText: distanceText || "현장 확인",
+    distance,
+    time: time || "반나절",
+    description,
+    centers: centers?.length ? centers : [`${title} 출발`, `${title} 중간`, `${title} 도착`],
+    fit: fit || "지역 대표 자전거길 탐방",
+    caution: caution || "선박, 기상, 현장 교통 상황을 출발 전에 확인하세요.",
+    officialUrl: "https://www.bike.go.kr/map/roadMap.do",
+    mapPoints: mapPoints || [
+      [24, 52],
+      [36, 47],
+      [50, 51],
+      [64, 45],
+      [76, 49]
+    ]
+  };
+}
+
 const premiumBikeRoadItems = [
   {
     id: "premium-jeongeup",
@@ -1613,7 +1650,102 @@ const premiumBikeRoadItems = [
       [52, 58],
       [40, 55]
     ]
-  }
+  },
+  localBikeRoadItem({
+    id: "premium-hwacheon-paroho",
+    group: "premium",
+    title: "화천파로호 100리 산소길",
+    region: "강원 화천",
+    distanceText: "호수 순환",
+    time: "반나절-1일",
+    description: "파로호와 북한강 수변 풍경을 따라 달리는 산소길형 명품 자전거길입니다.",
+    centers: ["파로호", "화천생활체육공원", "북한강 수변"],
+    fit: "호수 풍경과 완만한 수변 라이딩",
+    caution: "호수 주변 바람과 차량 공유 구간을 확인하세요.",
+    mapPoints: [
+      [22, 48],
+      [33, 41],
+      [48, 38],
+      [61, 45],
+      [76, 42]
+    ]
+  }),
+  localBikeRoadItem({
+    id: "premium-ongjin-deokjeokdo",
+    group: "premium",
+    title: "옹진 덕적도 자전거길",
+    region: "인천 옹진",
+    distanceText: "섬 순환",
+    time: "반나절",
+    description: "덕적도 해안과 마을길을 연결해 섬 여행 감각을 살리는 자전거길입니다.",
+    centers: ["덕적도항", "서포리해변", "능동자갈마당"],
+    fit: "배편 연계 당일 또는 1박 섬 라이딩",
+    caution: "선박 시간과 섬 내부 오르막 구간을 미리 확인하세요.",
+    mapPoints: [
+      [25, 55],
+      [37, 47],
+      [50, 43],
+      [62, 52],
+      [73, 46]
+    ]
+  }),
+  localBikeRoadItem({
+    id: "premium-shinan-jeungdo",
+    group: "premium",
+    title: "신안증도 자전거섬",
+    region: "전남 신안",
+    distanceText: "섬 순환",
+    time: "반나절",
+    description: "증도 갯벌, 염전, 해안 풍경을 느리게 이어 달리는 자전거섬 코스입니다.",
+    centers: ["증도", "태평염전", "우전해변"],
+    fit: "감성 사진과 가족형 섬 라이딩",
+    caution: "염전 주변 바람과 일몰 후 복귀 동선을 확인하세요.",
+    mapPoints: [
+      [20, 57],
+      [33, 50],
+      [46, 55],
+      [58, 47],
+      [70, 55]
+    ]
+  }),
+  localBikeRoadItem({
+    id: "premium-gyeongju-history",
+    group: "premium",
+    title: "경주 역사탐방 자전거길",
+    region: "경북 경주",
+    distanceText: "문화 탐방",
+    time: "2-4시간",
+    description: "첨성대, 월성, 보문권 등 역사 유적과 도심 자전거 동선을 연결하는 탐방형 길입니다.",
+    centers: ["첨성대", "월성", "보문관광단지"],
+    fit: "문화 답사와 가벼운 도심 라이딩",
+    caution: "관광객 밀집 구간에서는 저속 주행하세요.",
+    mapPoints: [
+      [27, 53],
+      [39, 49],
+      [51, 45],
+      [64, 41],
+      [74, 47]
+    ]
+  }),
+  localBikeRoadItem({
+    id: "premium-jeju-sunrise",
+    group: "premium",
+    title: "제주 해맞이 해안로",
+    region: "제주 구좌",
+    distanceText: "해안 주행",
+    time: "반나절",
+    description: "제주 동부 해안과 일출 풍경을 중심으로 구성한 해안형 명품 자전거길입니다.",
+    centers: ["구좌 해안", "월정리", "성산권"],
+    fit: "일출·해안 풍경 라이딩",
+    caution: "해안 바람과 렌터카 통행량을 확인하세요.",
+    mapPoints: [
+      [23, 48],
+      [36, 44],
+      [50, 47],
+      [63, 51],
+      [78, 48]
+    ]
+  })
 ];
 
 const islandBikeRoadItems = [
@@ -1694,7 +1826,211 @@ const islandBikeRoadItems = [
       [35, 80],
       [22, 79]
     ]
-  }
+  },
+  localBikeRoadItem({
+    id: "island-ganghwa-museum",
+    group: "islandRoad",
+    title: "강화군(지붕없는 박물관)자전거길",
+    region: "인천 강화",
+    distanceText: "역사·해안 순환",
+    time: "반나절-1일",
+    description: "강화의 역사 유적과 해안 풍경을 함께 엮는 섬형 자전거길입니다.",
+    centers: ["강화읍", "광성보", "초지진"],
+    fit: "역사 답사와 해안 라이딩",
+    caution: "주말 관광 차량과 유적지 보행 동선을 주의하세요."
+  }),
+  localBikeRoadItem({
+    id: "island-yeosu-geumodo",
+    group: "islandRoad",
+    title: "여수 금오도 해안도로 자전거길",
+    region: "전남 여수",
+    distanceText: "섬 해안도로",
+    time: "반나절-1일",
+    description: "금오도 해안도로의 바다 조망과 마을길을 따라 달리는 섬 코스입니다.",
+    centers: ["금오도 여객선", "비렁길 권역", "해안도로"],
+    fit: "선박 연계 해안 풍경 라이딩",
+    caution: "선박 시간, 해안도로 경사, 차량 교행 구간을 확인하세요."
+  }),
+  localBikeRoadItem({
+    id: "island-wando-arboretum",
+    group: "islandRoad",
+    title: "완도 수목원 자전거길",
+    region: "전남 완도",
+    distanceText: "숲·해안 연계",
+    time: "2-4시간",
+    description: "완도 수목원 주변의 숲길과 남해안 풍경을 연결하는 휴식형 자전거길입니다.",
+    centers: ["완도수목원", "완도읍", "해안 조망"],
+    fit: "숲 그늘과 조용한 회복 라이딩",
+    caution: "수목원 주변 오르막과 도로 폭을 확인하세요."
+  }),
+  localBikeRoadItem({
+    id: "island-wando-cheongsando-slow",
+    group: "islandRoad",
+    title: "느림의 미학 완도군 청산도 자전거길",
+    region: "전남 완도 청산도",
+    distanceText: "섬 순환",
+    time: "반나절-1일",
+    description: "청산도의 슬로길, 마을, 해안 풍경을 천천히 감상하는 섬 자전거길입니다.",
+    centers: ["청산도항", "범바위", "서편제 촬영지"],
+    fit: "느린 여행과 사진 중심 라이딩",
+    caution: "마을길과 언덕 구간에서는 속도를 낮추세요."
+  }),
+  localBikeRoadItem({
+    id: "island-wando-saengildo",
+    group: "islandRoad",
+    title: "항상 새로운 섬 완도군 생일도 자전거길",
+    region: "전남 완도 생일도",
+    distanceText: "섬 순환",
+    time: "반나절",
+    description: "생일도의 한적한 해안과 마을 풍경을 연결하는 조용한 섬 라이딩 코스입니다.",
+    centers: ["생일도 선착장", "금곡해변", "해안 전망"],
+    fit: "한적한 섬길과 여유 있는 팀 라이딩",
+    caution: "배편과 섬 내 보급 지점을 먼저 확인하세요."
+  }),
+  localBikeRoadItem({
+    id: "island-jindo-shimihyang",
+    group: "islandRoad",
+    title: "쉬미향~청용삼거리 자전거길(진도군)",
+    region: "전남 진도",
+    distanceText: "해안 연결",
+    time: "2-4시간",
+    description: "진도 서남해안의 조망과 마을 연결길을 따라 달리는 해안형 자전거길입니다.",
+    centers: ["쉬미항", "해안 조망", "청용삼거리"],
+    fit: "해안 사진과 조용한 도로 라이딩",
+    caution: "바람, 갓길 폭, 차량 속도를 확인하세요."
+  }),
+  localBikeRoadItem({
+    id: "island-shinan-iphaedo",
+    group: "islandRoad",
+    title: "신안군(입해도)자전거길",
+    region: "전남 신안",
+    distanceText: "섬 탐방",
+    time: "반나절",
+    description: "신안 섬 지역의 바다와 마을길을 짧게 연결하는 탐방형 자전거길입니다.",
+    centers: ["입해도 선착장", "섬마을", "해안 전망"],
+    fit: "배편 연계 섬 탐방 라이딩",
+    caution: "현장 표기와 선박 운항 여부를 출발 전에 확인하세요."
+  }),
+  localBikeRoadItem({
+    id: "island-shinan-jeungdo",
+    group: "islandRoad",
+    title: "신안군(증도)자전거길",
+    region: "전남 신안 증도",
+    distanceText: "섬 순환",
+    time: "반나절",
+    description: "증도의 염전, 갯벌, 해변 풍경을 따라 구성한 섬 자전거길입니다.",
+    centers: ["증도대교", "태평염전", "우전해변"],
+    fit: "가족형·사진형 섬 라이딩",
+    caution: "염전 주변 바람과 관광객 동선을 주의하세요."
+  }),
+  localBikeRoadItem({
+    id: "island-shinan-imjado",
+    group: "islandRoad",
+    title: "신안군(임자도)자전거길",
+    region: "전남 신안 임자도",
+    distanceText: "해변 순환",
+    time: "반나절-1일",
+    description: "임자도의 해변과 섬마을을 이어 달리는 넓은 풍경의 섬 자전거길입니다.",
+    centers: ["임자대교", "대광해변", "섬마을"],
+    fit: "해변 조망과 한적한 도로 라이딩",
+    caution: "강한 바람과 장거리 보급 간격을 확인하세요."
+  }),
+  localBikeRoadItem({
+    id: "island-shinan-jaeun-imtae",
+    group: "islandRoad",
+    title: "신안군(자은, 임태도)자전거길",
+    region: "전남 신안 자은·임태도",
+    distanceText: "섬 연결",
+    time: "반나절-1일",
+    description: "자은도와 임태도 권역의 해안, 다리, 마을길을 연결하는 섬 코스입니다.",
+    centers: ["자은도", "임태도 권역", "해안 연결로"],
+    fit: "섬 연결형 장거리 후보",
+    caution: "교량 바람과 섬 사이 이동 시간을 확인하세요."
+  }),
+  localBikeRoadItem({
+    id: "island-shinan-heuksando",
+    group: "islandRoad",
+    title: "신안군(흑산도)자전거길",
+    region: "전남 신안 흑산도",
+    distanceText: "섬 산악·해안",
+    time: "반나절-1일",
+    description: "흑산도의 굴곡 있는 해안도로와 섬 조망을 체험하는 자전거길입니다.",
+    centers: ["흑산도항", "해안 조망", "섬 순환로"],
+    fit: "중상급 섬 라이딩",
+    caution: "급경사, 굽은 도로, 선박 결항 가능성을 확인하세요."
+  }),
+  localBikeRoadItem({
+    id: "island-ulleung-dream",
+    group: "islandRoad",
+    title: "우리섬 울릉도 꿈이 있는 자전거길",
+    region: "경북 울릉",
+    distanceText: "섬 해안",
+    time: "반나절-1일",
+    description: "울릉도 해안 절경과 항구 마을을 이어 보는 강한 인상의 섬 자전거길입니다.",
+    centers: ["도동항", "저동항", "해안 전망"],
+    fit: "도전형 섬 해안 라이딩",
+    caution: "터널, 급경사, 해안 낙석 안내를 반드시 확인하세요."
+  }),
+  localBikeRoadItem({
+    id: "island-sacheon-sinsudo",
+    group: "islandRoad",
+    title: "환상의 사천시 신수도 바다 자전거길",
+    region: "경남 사천",
+    distanceText: "섬 바다길",
+    time: "반나절",
+    description: "신수도 주변 바다 풍경과 작은 섬마을을 잇는 사천권 섬 자전거길입니다.",
+    centers: ["신수도 선착장", "바다 전망", "섬마을"],
+    fit: "짧고 감성적인 섬 라이딩",
+    caution: "선박 시간과 섬 내부 도로 폭을 확인하세요."
+  }),
+  localBikeRoadItem({
+    id: "island-namhae-bridge-seonso",
+    group: "islandRoad",
+    title: "경남 남해(남해대교~남해읍 선소)자전거길",
+    region: "경남 남해",
+    distanceText: "해안 연결",
+    time: "반나절",
+    description: "남해대교에서 남해읍 선소 권역까지 바다 조망을 따라 이어지는 해안 코스입니다.",
+    centers: ["남해대교", "남해읍", "선소"],
+    fit: "남해권 해안 풍경 라이딩",
+    caution: "교량 주변 바람과 도로 교통량을 확인하세요."
+  }),
+  localBikeRoadItem({
+    id: "island-jeju-gujwa-sunrise",
+    group: "islandRoad",
+    title: "제주도(구좌읍 해맞이 해안로)자전거길",
+    region: "제주 구좌",
+    distanceText: "해안 주행",
+    time: "반나절",
+    description: "구좌읍 해맞이 해안로의 일출, 해변, 오름 조망을 연결하는 제주 동부 코스입니다.",
+    centers: ["월정리", "세화해변", "성산권"],
+    fit: "일출 감상과 해안 사진 라이딩",
+    caution: "해안 바람과 관광 차량을 주의하세요."
+  }),
+  localBikeRoadItem({
+    id: "island-jeju-ojo-seongsan",
+    group: "islandRoad",
+    title: "제주 환상 자전거길(오조리~성산리)",
+    region: "제주 성산",
+    distanceText: "제주 환상 일부",
+    time: "1-2시간",
+    description: "오조리에서 성산리까지 성산일출봉 조망을 끼고 달리는 제주 환상 자전거길 일부 구간입니다.",
+    centers: ["오조리", "성산일출봉", "성산리"],
+    fit: "짧은 해안 조망 라이딩",
+    caution: "관광 차량과 보행자 밀집 구간에서는 저속 주행하세요."
+  }),
+  localBikeRoadItem({
+    id: "island-jeju-samo-sagye",
+    group: "islandRoad",
+    title: "제주도(상모리~사계리)자전거길",
+    region: "제주 서귀포",
+    distanceText: "해안 연결",
+    time: "1-2시간",
+    description: "상모리와 사계리 해안을 잇고 산방산 조망을 함께 보는 제주 남서부 코스입니다.",
+    centers: ["상모리", "산방산", "사계리"],
+    fit: "짧은 해안 경관 라이딩",
+    caution: "해안 바람과 주차장 진출입 차량을 확인하세요."
+  })
 ];
 
 const recommendedBikeRoadItems = [
@@ -2396,10 +2732,7 @@ function setActiveBikeRoad(groupId, roadId) {
 
 function renderBikeRoadDetail(road) {
   const detail = byId("bikeRoadDetail");
-  const link = byId("officialBikeMapLink");
   if (!road) return;
-
-  if (link) link.href = bikeRoadExternalUrl(road);
 
   if (!detail) return;
   detail.innerHTML = `
@@ -3991,6 +4324,41 @@ function buildBikeSentimentPlaces(road, points, type) {
 function bikeRoadRegionCenter(road) {
   const region = `${road?.region || ""} ${road?.title || ""}`;
   const matches = [
+    ["화천", { lat: 38.10, lng: 127.70 }],
+    ["파로호", { lat: 38.10, lng: 127.70 }],
+    ["덕적도", { lat: 37.23, lng: 126.15 }],
+    ["옹진", { lat: 37.23, lng: 126.15 }],
+    ["증도", { lat: 35.00, lng: 126.14 }],
+    ["경주", { lat: 35.84, lng: 129.22 }],
+    ["강화", { lat: 37.75, lng: 126.48 }],
+    ["금오도", { lat: 34.52, lng: 127.75 }],
+    ["여수", { lat: 34.76, lng: 127.66 }],
+    ["완도수목원", { lat: 34.36, lng: 126.67 }],
+    ["수목원", { lat: 34.36, lng: 126.67 }],
+    ["청산도", { lat: 34.18, lng: 126.87 }],
+    ["생일도", { lat: 34.32, lng: 126.96 }],
+    ["진도", { lat: 34.48, lng: 126.26 }],
+    ["쉬미", { lat: 34.49, lng: 126.24 }],
+    ["입해도", { lat: 34.78, lng: 126.10 }],
+    ["임자도", { lat: 35.08, lng: 126.10 }],
+    ["자은", { lat: 34.88, lng: 126.04 }],
+    ["임태도", { lat: 34.86, lng: 126.08 }],
+    ["흑산도", { lat: 34.68, lng: 125.43 }],
+    ["울릉", { lat: 37.50, lng: 130.87 }],
+    ["신수도", { lat: 34.91, lng: 128.06 }],
+    ["사천", { lat: 34.94, lng: 128.08 }],
+    ["남해", { lat: 34.84, lng: 127.89 }],
+    ["구좌", { lat: 33.53, lng: 126.83 }],
+    ["오조리", { lat: 33.47, lng: 126.91 }],
+    ["성산", { lat: 33.46, lng: 126.93 }],
+    ["상모리", { lat: 33.22, lng: 126.29 }],
+    ["사계리", { lat: 33.24, lng: 126.31 }],
+    ["군산", { lat: 35.97, lng: 126.71 }],
+    ["정읍", { lat: 35.57, lng: 126.86 }],
+    ["강릉", { lat: 37.78, lng: 128.89 }],
+    ["옥천", { lat: 36.31, lng: 127.57 }],
+    ["신안", { lat: 34.78, lng: 126.10 }],
+    ["완도", { lat: 34.31, lng: 126.75 }],
     ["전북", { lat: 35.72, lng: 127.15 }],
     ["전남", { lat: 34.90, lng: 126.98 }],
     ["서울", { lat: 37.55, lng: 126.99 }],
@@ -4005,13 +4373,7 @@ function bikeRoadRegionCenter(road) {
     ["경남", { lat: 35.33, lng: 128.25 }],
     ["부산", { lat: 35.18, lng: 129.07 }],
     ["강원", { lat: 37.70, lng: 128.18 }],
-    ["제주", { lat: 33.39, lng: 126.54 }],
-    ["신안", { lat: 34.78, lng: 126.10 }],
-    ["완도", { lat: 34.31, lng: 126.75 }],
-    ["군산", { lat: 35.97, lng: 126.71 }],
-    ["정읍", { lat: 35.57, lng: 126.86 }],
-    ["강릉", { lat: 37.78, lng: 128.89 }],
-    ["옥천", { lat: 36.31, lng: 127.57 }]
+    ["제주", { lat: 33.39, lng: 126.54 }]
   ];
   return matches.find(([keyword]) => region.includes(keyword))?.[1] || { lat: 36.25, lng: 127.80 };
 }
@@ -4426,8 +4788,6 @@ function renderBikeRoadMapInfo(road, geo, markerCount) {
       </span>
     </div>
   `;
-  const link = byId("officialBikeMapLink");
-  if (link) link.href = bikeRoadExternalUrl(road);
 }
 
 function renderBikeRoadDetailPanel(road, geo, markerCount) {
@@ -4583,12 +4943,6 @@ function setActiveBikeRoad(groupId, roadId) {
     document.body.dataset.bikeRoadMenuReady = "true";
   }
   renderBikeRoadLayerControls();
-  const link = byId("officialBikeMapLink");
-  if (link) {
-    link.textContent = road?.custom ? "나만의 코스 관리" : "공식 지도 새 창";
-    link.href = road?.custom ? "#customBikeGpxFile" : bikeRoadExternalUrl(road);
-    link.target = road?.custom ? "_self" : "_blank";
-  }
   drawBikeRoadKakaoMap(road);
 }
 
