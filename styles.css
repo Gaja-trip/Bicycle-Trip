@@ -1186,6 +1186,7 @@ tbody tr:last-child td {
 .bike-road-menu,
 .bike-road-menu-list {
   display: grid;
+  align-content: start;
   gap: 8px;
 }
 
@@ -1202,9 +1203,9 @@ tbody tr:last-child td {
 
 .bike-road-menu button {
   display: grid;
-  gap: 4px;
-  min-height: 70px;
-  padding: 13px;
+  gap: 2px;
+  min-height: 54px;
+  padding: 10px 12px;
 }
 
 .bike-road-menu button strong,
@@ -1249,24 +1250,46 @@ tbody tr:last-child td {
 
 .bike-road-category {
   display: grid;
-  gap: 8px;
+  gap: 6px;
 }
 
 .bike-road-category > button {
   position: sticky;
   top: 0;
   z-index: 1;
+  grid-template-columns: minmax(0, 1fr) auto;
+}
+
+.bike-road-category > button strong,
+.bike-road-category > button span {
+  grid-column: 1;
+}
+
+.bike-road-category > button i {
+  grid-column: 2;
+  grid-row: 1 / span 2;
+  align-self: center;
+  width: 9px;
+  height: 9px;
+  border-right: 2px solid currentColor;
+  border-bottom: 2px solid currentColor;
+  transform: rotate(45deg);
+  transition: transform 0.18s ease;
+}
+
+.bike-road-category.expanded > button i {
+  transform: rotate(-135deg);
 }
 
 .bike-road-sublist {
   display: grid;
-  gap: 8px;
-  padding: 4px 0 8px 12px;
+  gap: 6px;
+  padding: 3px 0 6px 10px;
   border-left: 3px solid rgba(22, 115, 85, 0.22);
 }
 
 .bike-road-sublist button {
-  min-height: 76px;
+  min-height: 60px;
 }
 
 .bike-map-window {
@@ -1538,16 +1561,14 @@ tbody tr:last-child td {
   top: 14px;
   right: 14px;
   display: grid;
-  gap: 8px;
+  gap: 7px;
   width: min(420px, calc(100% - 28px));
 }
 
 .bike-layer-group {
   display: grid;
-  grid-template-columns: 88px minmax(0, 1fr);
-  align-items: center;
-  gap: 8px;
-  padding: 8px;
+  gap: 7px;
+  padding: 7px 8px;
   border: 1px solid rgba(16, 35, 28, 0.13);
   border-radius: 8px;
   background: rgba(255, 255, 255, 0.94);
@@ -1555,16 +1576,28 @@ tbody tr:last-child td {
   backdrop-filter: blur(12px);
 }
 
-.bike-layer-group strong {
+.bike-layer-title {
+  width: 100%;
+  border: 0;
+  background: transparent;
+  color: var(--ink);
+  cursor: pointer;
+}
+
+.bike-layer-title,
+.bike-layer-title strong {
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  color: var(--ink);
   font-size: 0.86rem;
   line-height: 1.1;
 }
 
-.bike-layer-group strong span {
+.bike-layer-title strong {
+  font-weight: 900;
+}
+
+.bike-layer-title > span {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -1574,6 +1607,20 @@ tbody tr:last-child td {
   background: var(--ink);
   color: #fff;
   font-size: 0.72rem;
+}
+
+.bike-layer-title i {
+  margin-left: auto;
+  width: 8px;
+  height: 8px;
+  border-right: 2px solid currentColor;
+  border-bottom: 2px solid currentColor;
+  transform: rotate(45deg);
+  transition: transform 0.18s ease;
+}
+
+.bike-layer-group.expanded .bike-layer-title i {
+  transform: rotate(-135deg);
 }
 
 .bike-layer-group svg,
@@ -1592,14 +1639,14 @@ tbody tr:last-child td {
   height: 18px;
 }
 
-.bike-layer-group div {
+.bike-layer-detail {
   display: flex;
   flex-wrap: wrap;
   gap: 6px;
-  justify-content: flex-end;
+  justify-content: flex-start;
 }
 
-.bike-layer-group button {
+.bike-layer-detail button {
   display: inline-flex;
   align-items: center;
   gap: 5px;
@@ -1615,7 +1662,7 @@ tbody tr:last-child td {
   white-space: nowrap;
 }
 
-.bike-layer-group button b {
+.bike-layer-detail button b {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -1627,15 +1674,15 @@ tbody tr:last-child td {
   font-size: 0.68rem;
 }
 
-.bike-layer-group button.active,
-.bike-layer-group button:hover {
+.bike-layer-detail button.active,
+.bike-layer-detail button:hover {
   border-color: var(--green);
   background: var(--green);
   color: #fff;
 }
 
-.bike-layer-group button.active b,
-.bike-layer-group button:hover b {
+.bike-layer-detail button.active b,
+.bike-layer-detail button:hover b {
   background: rgba(255, 255, 255, 0.20);
   color: #fff;
 }
@@ -1717,7 +1764,7 @@ tbody tr:last-child td {
   position: absolute;
   z-index: 7;
   left: 18px;
-  bottom: 18px;
+  bottom: 156px;
   width: min(440px, calc(100% - 36px));
   padding: 18px;
   border: 1px solid rgba(16, 35, 28, 0.14);
@@ -1725,6 +1772,95 @@ tbody tr:last-child td {
   background: rgba(255, 255, 255, 0.95);
   box-shadow: 0 18px 36px rgba(16, 35, 28, 0.17);
   backdrop-filter: blur(14px);
+}
+
+.bike-elevation-panel {
+  position: absolute;
+  z-index: 7;
+  right: 18px;
+  bottom: 18px;
+  left: 18px;
+  display: grid;
+  gap: 8px;
+  padding: 14px 16px;
+  border: 1px solid rgba(16, 35, 28, 0.14);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.95);
+  box-shadow: 0 18px 36px rgba(16, 35, 28, 0.17);
+  backdrop-filter: blur(14px);
+}
+
+.elevation-head,
+.elevation-stats {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.elevation-head strong {
+  font-size: 1rem;
+}
+
+.elevation-head span,
+.elevation-stats,
+.elevation-note {
+  color: var(--muted);
+  font-size: 0.78rem;
+  font-weight: 900;
+}
+
+.elevation-note {
+  margin: 0;
+}
+
+.slope-bars {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  min-height: 70px;
+  padding: 8px;
+  border-radius: 8px;
+  background:
+    linear-gradient(to top, rgba(16, 35, 28, 0.08) 1px, transparent 1px),
+    #f3f7f3;
+  background-size: 100% 18px;
+}
+
+.slope-bars i {
+  flex: 1 1 0;
+  min-width: 2px;
+  border-radius: 999px 999px 0 0;
+  background: var(--green);
+}
+
+.slope-bars i.elevation {
+  background: linear-gradient(180deg, #1d6f96, #167355);
+}
+
+.slope-bars i.up {
+  background: #d6a329;
+}
+
+.slope-bars i.hard-up {
+  background: #d95f4a;
+}
+
+.slope-bars i.down {
+  background: #1d6f96;
+}
+
+.slope-bars i.hard-down {
+  background: #6554a4;
+}
+
+.slope-bars.no-elevation i,
+.slope-bars.is-loading i {
+  background: #b9c4bd;
+}
+
+.slope-bars.is-loading i:nth-child(3n) {
+  height: 42px;
 }
 
 .bike-kakao-info span {
@@ -2463,14 +2599,20 @@ tbody tr:last-child td {
     grid-template-columns: 1fr;
   }
 
-  .bike-layer-group div {
+  .bike-layer-detail {
     justify-content: flex-start;
   }
 
   .bike-kakao-info {
     left: 12px;
-    bottom: 12px;
+    bottom: 162px;
     width: calc(100% - 24px);
+  }
+
+  .bike-elevation-panel {
+    right: 12px;
+    bottom: 12px;
+    left: 12px;
   }
 
   .bike-layer-marker small {
@@ -2546,7 +2688,7 @@ tbody tr:last-child td {
     padding: 7px;
   }
 
-  .bike-layer-group button {
+  .bike-layer-detail button {
     min-height: 29px;
     padding: 4px 7px;
     font-size: 0.74rem;
@@ -2563,6 +2705,18 @@ tbody tr:last-child td {
 
   .bike-kakao-info {
     padding: 14px;
+  }
+
+  .elevation-head,
+  .elevation-stats {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .slope-bars {
+    min-height: 54px;
+    padding: 6px;
   }
 
 }

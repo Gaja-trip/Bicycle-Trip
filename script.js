@@ -1781,6 +1781,9 @@ let activeBikeRoadGroup = "national";
 let activeBikeRoadId = "ara";
 let activeBikeMapTab = "legend";
 let activeBikeMapMode = "standard";
+let expandedBikeRoadGroups = new Set();
+let expandedBikeLayerGroups = new Set();
+const bikeRoadGpxCache = new Map();
 
 let activeFilter = "all";
 
@@ -3490,6 +3493,22 @@ const bikeLayerGroups = [
   }
 ];
 
+const bikeRoadGpxFiles = {
+  ara: "gpx/아라자전거길.gpx",
+  "hangang-seoul": "gpx/한강종주자전거길(서울구간).gpx",
+  namhangang: "gpx/남한강자전거길.gpx",
+  bukhangang: "gpx/북한강자전거길.gpx",
+  saejae: "gpx/새재자전거길.gpx",
+  nakdonggang: "gpx/낙동강자전거길.gpx",
+  geumgang: "gpx/금강자전거길.gpx",
+  yeongsangang: "gpx/영산강자전거길.gpx",
+  seomjingang: "gpx/섬진강자전거길.gpx",
+  ocheon: "gpx/오천자전거길.gpx",
+  "east-coast-gangwon": "gpx/동해안자전거길(강원).gpx",
+  "east-coast-gyeongbuk": "gpx/동해안자전거길(경북).gpx",
+  jeju: "gpx/제주환상자전거길.gpx"
+};
+
 const bikeRoadGeoOverrides = {
   seomjingang: {
     center: { lat: 35.279, lng: 127.334 },
@@ -3652,6 +3671,10 @@ function bikeLayerLabels() {
   return [...activeBikeLayers].map((layerId) => bikeLayerConfig(layerId)?.label).filter(Boolean);
 }
 
+function bikeRoadGpxFile(road) {
+  return road?.gpxFile || bikeRoadGpxFiles[road?.id] || "";
+}
+
 function bikeIconSvg(name) {
   const icons = {
     legend: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6.5h16M4 12h16M4 17.5h16"/><path d="M7 4v5M12 9.5v5M17 15v5"/></svg>',
@@ -3764,6 +3787,163 @@ function bikeRoadGeoFor(road) {
   };
 }
 
+function sampleBikeTrackPoints(points, maxCount = 1700) {
+  if (!points?.length) return [];
+  if (points.length <= maxCount) return points.map(({ lat, lng }) => ({ lat, lng }));
+  const sampled = [];
+  const step = (points.length - 1) / (maxCount - 1);
+  for (let index = 0; index < maxCount; index += 1) {
+    const point = points[Math.round(index * step)];
+    sampled.push({ lat: point.lat, lng: point.lng });
+  }
+  return sampled;
+}
+
+function gradeClass(grade) {
+  if (!Number.isFinite(grade)) return "unknown";
+  if (grade >= 4) return "hard-up";
+  if (grade >= 1.5) return "up";
+  if (grade <= -4) return "hard-down";
+  if (grade <= -1.5) return "down";
+  return "flat";
+}
+
+function slopeSamples(points, hasElevation, count = 84) {
+  if (!points?.length) return [];
+  if (!hasElevation) {
+    return Array.from({ length: count }, (_, index) => ({ distance: index, grade: 0, elevation: 0, hasElevation: false }));
+  }
+  const stride = Math.max(1, Math.floor(points.length / count));
+  const samples = [];
+  for (let index = stride; index < points.length; index += stride) {
+    const previous = points[Math.max(0, index - stride)];
+    const current = points[index];
+    const distanceDelta = Math.max(0.001, current.distance - previous.distance);
+    const elevationDelta = current.ele - previous.ele;
+    const grade = Math.max(-14, Math.min(14, (elevationDelta / (distanceDelta * 1000)) * 100));
+    samples.push({ distance: current.distance, grade, elevation: current.ele, hasElevation: true });
+    if (samples.length >= count) break;
+  }
+  return samples;
+}
+
+function parseBikeRoadGpx(gpxText, source) {
+  const documentXml = new DOMParser().parseFromString(gpxText, "application/xml");
+  if (documentXml.querySelector("parsererror")) throw new Error("GPX 파싱 오류");
+
+  const rawPoints = [...documentXml.getElementsByTagName("trkpt")]
+    .map((point) => {
+      const ele = Number(point.getElementsByTagName("ele")[0]?.textContent || "0");
+      return {
+        lat: Number(point.getAttribute("lat")),
+        lng: Number(point.getAttribute("lon")),
+        ele: Number.isFinite(ele) ? ele : 0
+      };
+    })
+    .filter((point) => Number.isFinite(point.lat) && Number.isFinite(point.lng));
+  if (rawPoints.length < 2) throw new Error("GPX 트랙 포인트가 부족합니다.");
+
+  let totalDistance = 0;
+  let climb = 0;
+  let descent = 0;
+  const points = rawPoints.map((point, index) => {
+    if (index > 0) {
+      const previous = rawPoints[index - 1];
+      totalDistance += pointDistanceKm(previous, point);
+      const elevationDelta = point.ele - previous.ele;
+      if (elevationDelta > 0) climb += elevationDelta;
+      if (elevationDelta < 0) descent += Math.abs(elevationDelta);
+    }
+    return { ...point, distance: totalDistance };
+  });
+
+  const elevations = points.map((point) => point.ele).filter(Number.isFinite);
+  const minEle = Math.min(...elevations);
+  const maxEle = Math.max(...elevations);
+  const hasElevation = elevations.length > 0 && maxEle - minEle > 3 && elevations.some((value) => Math.abs(value) > 0.5);
+
+  return {
+    points,
+    distance: totalDistance,
+    pointCount: points.length,
+    source,
+    minEle,
+    maxEle,
+    climb,
+    descent,
+    hasElevation,
+    samples: slopeSamples(points, hasElevation)
+  };
+}
+
+async function loadBikeRoadGpxTrack(road) {
+  const file = bikeRoadGpxFile(road);
+  if (!file) return null;
+  if (bikeRoadGpxCache.has(file)) return bikeRoadGpxCache.get(file);
+  const trackPromise = fetch(encodeURI(file))
+    .then((response) => {
+      if (!response.ok) throw new Error("GPX 파일을 불러오지 못했습니다.");
+      return response.text();
+    })
+    .then((text) => parseBikeRoadGpx(text, file))
+    .catch(() => null);
+  bikeRoadGpxCache.set(file, trackPromise);
+  return trackPromise;
+}
+
+function buildTrackLayerPoints(road, track) {
+  const points = track.points;
+  const first = points[0];
+  const middle = points[Math.floor(points.length / 2)];
+  const last = points[points.length - 1];
+  const centers = road?.centers?.length ? road.centers : [`${road?.title || "자전거길"} 출발`, `${road?.title || "자전거길"} 도착`];
+
+  return {
+    major: [
+      { title: `${road?.title || "자전거길"} 출발`, lat: first.lat, lng: first.lng },
+      { title: `${road?.title || "자전거길"} 중간 거점`, lat: middle.lat, lng: middle.lng },
+      { title: `${road?.title || "자전거길"} 도착`, lat: last.lat, lng: last.lng }
+    ],
+    cert: centers.slice(0, 9).map((title, index) => {
+      const point = points[Math.min(points.length - 1, Math.round((index / Math.max(1, Math.min(centers.length, 9) - 1)) * (points.length - 1)))];
+      return { title, lat: point.lat, lng: point.lng };
+    }),
+    toilet: [
+      { title: "출발지 화장실 확인 지점", lat: first.lat + 0.003, lng: first.lng - 0.003 },
+      { title: "중간 쉼터 화장실 확인 지점", lat: middle.lat + 0.003, lng: middle.lng + 0.003 }
+    ],
+    air: [
+      { title: "출발지 공기주입기 확인 지점", lat: first.lat - 0.003, lng: first.lng + 0.003 },
+      { title: "중간 정비 지점", lat: middle.lat - 0.003, lng: middle.lng - 0.003 }
+    ],
+    food: [
+      { title: "중간 식사 후보", lat: middle.lat - 0.006, lng: middle.lng + 0.006 },
+      { title: "도착지 식당가", lat: last.lat + 0.004, lng: last.lng - 0.004 }
+    ],
+    cafe: [
+      { title: "중간 커피 휴식 후보", lat: middle.lat + 0.006, lng: middle.lng - 0.006 },
+      { title: "도착지 커피숍", lat: last.lat - 0.004, lng: last.lng + 0.004 }
+    ]
+  };
+}
+
+function bikeRoadGeoFromTrack(road, track, baseGeo) {
+  const points = sampleBikeTrackPoints(track.points);
+  const middle = points[Math.floor(points.length / 2)];
+  const trackLayers = buildTrackLayerPoints(road, track);
+  return {
+    ...baseGeo,
+    center: middle || baseGeo.center,
+    level: road?.distance > 180 ? 11 : road?.distance > 90 ? 10 : 8,
+    path: points,
+    layers: {
+      ...baseGeo.layers,
+      ...trackLayers
+    },
+    gpxTrack: track
+  };
+}
+
 function clearBikeRoadKakaoMap() {
   if (bikeRoadMapRuntime.polyline) {
     bikeRoadMapRuntime.polyline.setMap(null);
@@ -3778,25 +3958,45 @@ function renderBikeRoadLayerControls() {
   if (!panel) return;
   panel.innerHTML = bikeLayerGroups
     .map(
-      (group) => `
-        <section class="bike-layer-group" aria-label="${escapeHtml(group.label)}">
-          <strong><span>${bikeIconSvg(group.icon)}</span>${escapeHtml(group.label)}</strong>
-          <div>
-            ${group.layers
-              .map(
-                (layer) => `
-                  <button class="${activeBikeLayers.has(layer.id) ? "active" : ""}" type="button" data-bike-layer="${layer.id}" aria-pressed="${activeBikeLayers.has(layer.id)}">
-                    <b>${bikeIconSvg(layer.icon)}</b>
-                    <span>${escapeHtml(layer.label)}</span>
-                  </button>
-                `
-              )
-              .join("")}
-          </div>
-        </section>
-      `
+      (group) => {
+        const isExpanded = expandedBikeLayerGroups.has(group.id);
+        return `
+          <section class="bike-layer-group ${isExpanded ? "expanded" : ""}" aria-label="${escapeHtml(group.label)}">
+            <button class="bike-layer-title" type="button" data-bike-layer-group="${group.id}" aria-expanded="${isExpanded}">
+              <span>${bikeIconSvg(group.icon)}</span>
+              <strong>${escapeHtml(group.label)}</strong>
+              <i aria-hidden="true"></i>
+            </button>
+            ${
+              isExpanded
+                ? `<div class="bike-layer-detail">
+                    ${group.layers
+                      .map(
+                        (layer) => `
+                          <button class="${activeBikeLayers.has(layer.id) ? "active" : ""}" type="button" data-bike-layer="${layer.id}" aria-pressed="${activeBikeLayers.has(layer.id)}">
+                            <b>${bikeIconSvg(layer.icon)}</b>
+                            <span>${escapeHtml(layer.label)}</span>
+                          </button>
+                        `
+                      )
+                      .join("")}
+                  </div>`
+                : ""
+            }
+          </section>
+        `;
+      }
     )
     .join("");
+}
+
+function toggleBikeLayerGroup(groupId) {
+  if (expandedBikeLayerGroups.has(groupId)) {
+    expandedBikeLayerGroups.delete(groupId);
+  } else {
+    expandedBikeLayerGroups.add(groupId);
+  }
+  renderBikeRoadLayerControls();
 }
 
 function toggleBikeLayer(layerId) {
@@ -3818,14 +4018,16 @@ function renderBikeRoadMenu() {
     .map(
       (group) => {
         const isActive = group.id === activeBikeRoadGroup;
+        const isExpanded = expandedBikeRoadGroups.has(group.id);
         return `
-          <div class="bike-road-category ${isActive ? "active" : ""}">
-            <button class="${isActive ? "active" : ""}" type="button" data-bike-road-group="${group.id}">
+          <div class="bike-road-category ${isActive ? "active" : ""} ${isExpanded ? "expanded" : ""}">
+            <button class="${isActive ? "active" : ""}" type="button" data-bike-road-group="${group.id}" aria-expanded="${isExpanded}">
               <strong>${escapeHtml(group.label)}</strong>
               <span>${escapeHtml(group.caption)}</span>
+              <i aria-hidden="true"></i>
             </button>
             ${
-              isActive
+              isExpanded
                 ? `<div class="bike-road-sublist" aria-label="${escapeHtml(group.label)} 노선">
                     ${group.items
                       .map(
@@ -3897,18 +4099,72 @@ function renderBikeRoadMapInfo(road, geo, markerCount) {
   const panel = byId("bikeMapInfoPanel");
   if (!panel || !road) return;
   const labels = bikeLayerLabels();
+  const gpxTrack = geo.gpxTrack;
   panel.innerHTML = `
     <span>Daum/Kakao Map</span>
     <strong>${escapeHtml(road.title)}</strong>
     <p>${escapeHtml(road.region)} · ${bikeRoadDistanceText(road)} · ${escapeHtml(road.time || "시간 확인")}</p>
     <div class="bike-info-chips">
-      <em>초록 실선 자전거길</em>
+      <em>${gpxTrack ? "GPX 실선 자전거길" : "초록 실선 자전거길"}</em>
       <em>${markerCount}개 지점 표시</em>
+      ${gpxTrack ? `<em>${gpxTrack.distance.toFixed(1)}km · ${gpxTrack.pointCount.toLocaleString("ko-KR")}포인트</em>` : ""}
       <em>${labels.length ? labels.join(", ") : "레이어 미선택"}</em>
     </div>
   `;
   const link = byId("officialBikeMapLink");
   if (link) link.href = bikeRoadExternalUrl(road);
+}
+
+function renderBikeElevationPanel(road, track, state = "ready") {
+  const panel = byId("bikeElevationPanel");
+  if (!panel) return;
+  const file = bikeRoadGpxFile(road);
+  if (state === "loading") {
+    panel.innerHTML = `
+      <div class="elevation-head">
+        <strong>고도</strong>
+        <span>GPX를 불러오는 중입니다.</span>
+      </div>
+      <div class="slope-bars is-loading" aria-hidden="true">${Array.from({ length: 42 }, () => "<i></i>").join("")}</div>
+    `;
+    return;
+  }
+  if (!track) {
+    panel.innerHTML = `
+      <div class="elevation-head">
+        <strong>고도</strong>
+        <span>${file ? "GPX를 읽지 못했습니다." : "이 노선은 GPX 파일이 연결되지 않았습니다."}</span>
+      </div>
+      <p class="elevation-note">국토종주자전거길에 연결된 GPX 파일이 있으면 이 영역에 거리별 고도가 표시됩니다.</p>
+    `;
+    return;
+  }
+  const minEle = track.hasElevation ? track.minEle : 0;
+  const maxEle = track.hasElevation ? track.maxEle : 1;
+  const eleRange = Math.max(1, maxEle - minEle);
+  const bars = track.samples
+    .map((sample) => {
+      const height = track.hasElevation ? 14 + ((sample.elevation - minEle) / eleRange) * 56 : 24;
+      const title = track.hasElevation
+        ? `${sample.distance.toFixed(1)}km · ${Math.round(sample.elevation)}m`
+        : `${sample.distance} · GPX 고도값 없음`;
+      return `<i class="elevation" style="height:${height}px" title="${escapeHtml(title)}"></i>`;
+    })
+    .join("");
+  const elevationText = track.hasElevation
+    ? `최저 ${Math.round(track.minEle)}m · 최고 ${Math.round(track.maxEle)}m · 누적상승 ${Math.round(track.climb)}m`
+    : "GPX 고도값이 0m로 기록되어 실제 고도 프로파일 보강이 필요합니다.";
+  panel.innerHTML = `
+    <div class="elevation-head">
+      <strong>고도</strong>
+      <span>${escapeHtml(road.title)} · ${track.distance.toFixed(1)}km · ${track.pointCount.toLocaleString("ko-KR")}포인트</span>
+    </div>
+    <div class="slope-bars ${track.hasElevation ? "" : "no-elevation"}" aria-label="거리별 고도">${bars}</div>
+    <div class="elevation-stats">
+      <span>${escapeHtml(elevationText)}</span>
+      <span>GPX: ${escapeHtml(track.source)}</span>
+    </div>
+  `;
 }
 
 function renderBikeRoadMapError(message) {
@@ -3935,12 +4191,14 @@ async function drawBikeRoadKakaoMap(road) {
   const canvas = byId("bikeRoadKakaoMap");
   if (!canvas || !road) return;
   const drawToken = ++bikeRoadMapRuntime.token;
+  renderBikeElevationPanel(road, null, "loading");
 
   try {
-    await loadKakaoMapSdk(KAKAO_MAP_APP_KEY);
+    const [_, gpxTrack] = await Promise.all([loadKakaoMapSdk(KAKAO_MAP_APP_KEY), loadBikeRoadGpxTrack(road)]);
     if (drawToken !== bikeRoadMapRuntime.token) return;
 
-    const geo = bikeRoadGeoFor(road);
+    const baseGeo = bikeRoadGeoFor(road);
+    const geo = gpxTrack ? bikeRoadGeoFromTrack(road, gpxTrack, baseGeo) : baseGeo;
     if (!bikeRoadMapRuntime.map || bikeRoadMapRuntime.canvas !== canvas) {
       canvas.innerHTML = "";
       bikeRoadMapRuntime.canvas = canvas;
@@ -3989,7 +4247,9 @@ async function drawBikeRoadKakaoMap(road) {
       window.setTimeout(() => map.relayout(), 80);
     }
     renderBikeRoadMapInfo(road, geo, markerItems.length);
+    renderBikeElevationPanel(road, gpxTrack);
   } catch (error) {
+    renderBikeElevationPanel(road, null);
     renderBikeRoadMapError("Kakao Developers에 현재 도메인이 등록되어 있는지와 네트워크 연결을 확인해 주세요.");
   }
 }
@@ -3999,7 +4259,7 @@ function setActiveBikeRoad(groupId, roadId) {
   const shouldResetMenuScroll = nextGroup !== activeBikeRoadGroup || !document.body.dataset.bikeRoadMenuReady;
   activeBikeRoadGroup = nextGroup;
   const road = findBikeRoad(activeBikeRoadGroup, roadId);
-  activeBikeRoadId = road?.id || "seomjingang";
+  activeBikeRoadId = road?.id || "ara";
   renderBikeRoadMenu();
   if (shouldResetMenuScroll) {
     const categoryMenu = byId("bikeRoadCategoryMenu");
@@ -4008,6 +4268,20 @@ function setActiveBikeRoad(groupId, roadId) {
   }
   renderBikeRoadLayerControls();
   drawBikeRoadKakaoMap(road);
+}
+
+function toggleBikeRoadGroup(groupId) {
+  const group = bikeRoadMenuGroups.find((item) => item.id === groupId);
+  if (!group) return;
+  if (expandedBikeRoadGroups.has(groupId)) {
+    expandedBikeRoadGroups.delete(groupId);
+    activeBikeRoadGroup = groupId;
+    renderBikeRoadMenu();
+    return;
+  }
+  expandedBikeRoadGroups.add(groupId);
+  const currentRoadInGroup = group.items.find((road) => road.id === activeBikeRoadId);
+  setActiveBikeRoad(groupId, currentRoadInGroup?.id || group.items[0]?.id);
 }
 
 function renderBikeRoadsPage() {
@@ -4023,10 +4297,16 @@ function renderBikeRoadsPage() {
         return;
       }
 
+      const layerGroup = event.target.closest("[data-bike-layer-group]");
+      if (layerGroup) {
+        toggleBikeLayerGroup(layerGroup.getAttribute("data-bike-layer-group"));
+        return;
+      }
+
       const menuGroup = event.target.closest("[data-bike-road-group]");
       if (menuGroup) {
         const groupId = menuGroup.getAttribute("data-bike-road-group") || "national";
-        setActiveBikeRoad(groupId, bikeRoadMenuGroups.find((group) => group.id === groupId)?.items[0]?.id);
+        toggleBikeRoadGroup(groupId);
         return;
       }
 
