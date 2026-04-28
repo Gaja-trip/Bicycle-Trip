@@ -1781,6 +1781,7 @@ let activeBikeRoadGroup = "national";
 let activeBikeRoadId = "ara";
 let activeBikeMapTab = "legend";
 let activeBikeMapMode = "standard";
+let activeBikeRoadDetailOpen = false;
 let expandedBikeRoadGroups = new Set();
 let expandedBikeLayerGroups = new Set();
 const bikeRoadGpxCache = new Map();
@@ -3660,7 +3661,8 @@ let bikeRoadMapRuntime = {
   map: null,
   polyline: null,
   overlays: [],
-  token: 0
+  token: 0,
+  zoomDetailReady: false
 };
 
 function bikeLayerConfig(layerId) {
@@ -3810,18 +3812,15 @@ function gradeClass(grade) {
 
 function slopeSamples(points, hasElevation, count = 84) {
   if (!points?.length) return [];
-  if (!hasElevation) {
-    return Array.from({ length: count }, (_, index) => ({ distance: index, grade: 0, elevation: 0, hasElevation: false }));
-  }
   const stride = Math.max(1, Math.floor(points.length / count));
   const samples = [];
-  for (let index = stride; index < points.length; index += stride) {
+  for (let index = hasElevation ? stride : 0; index < points.length; index += stride) {
     const previous = points[Math.max(0, index - stride)];
     const current = points[index];
     const distanceDelta = Math.max(0.001, current.distance - previous.distance);
     const elevationDelta = current.ele - previous.ele;
-    const grade = Math.max(-14, Math.min(14, (elevationDelta / (distanceDelta * 1000)) * 100));
-    samples.push({ distance: current.distance, grade, elevation: current.ele, hasElevation: true });
+    const grade = hasElevation ? Math.max(-14, Math.min(14, (elevationDelta / (distanceDelta * 1000)) * 100)) : 0;
+    samples.push({ distance: current.distance, grade, elevation: current.ele, hasElevation });
     if (samples.length >= count) break;
   }
   return samples;
@@ -3833,11 +3832,13 @@ function parseBikeRoadGpx(gpxText, source) {
 
   const rawPoints = [...documentXml.getElementsByTagName("trkpt")]
     .map((point) => {
-      const ele = Number(point.getElementsByTagName("ele")[0]?.textContent || "0");
+      const eleNode = point.getElementsByTagName("ele")[0];
+      const ele = Number(eleNode?.textContent || "0");
       return {
         lat: Number(point.getAttribute("lat")),
         lng: Number(point.getAttribute("lon")),
-        ele: Number.isFinite(ele) ? ele : 0
+        ele: Number.isFinite(ele) ? ele : 0,
+        hasEle: Boolean(eleNode) && Number.isFinite(ele)
       };
     })
     .filter((point) => Number.isFinite(point.lat) && Number.isFinite(point.lng));
@@ -3857,18 +3858,21 @@ function parseBikeRoadGpx(gpxText, source) {
     return { ...point, distance: totalDistance };
   });
 
-  const elevations = points.map((point) => point.ele).filter(Number.isFinite);
+  const elevations = points.filter((point) => point.hasEle).map((point) => point.ele).filter(Number.isFinite);
   const minEle = Math.min(...elevations);
   const maxEle = Math.max(...elevations);
-  const hasElevation = elevations.length > 0 && maxEle - minEle > 3 && elevations.some((value) => Math.abs(value) > 0.5);
+  const nonZeroElevationCount = elevations.filter((value) => Math.abs(value) > 0.5).length;
+  const hasElevation = elevations.length > 0 && maxEle - minEle > 3 && nonZeroElevationCount > 0;
 
   return {
     points,
     distance: totalDistance,
     pointCount: points.length,
+    elevationPointCount: elevations.length,
+    nonZeroElevationCount,
     source,
-    minEle,
-    maxEle,
+    minEle: Number.isFinite(minEle) ? minEle : 0,
+    maxEle: Number.isFinite(maxEle) ? maxEle : 0,
     climb,
     descent,
     hasElevation,
@@ -3961,7 +3965,7 @@ function renderBikeRoadLayerControls() {
       (group) => {
         const isExpanded = expandedBikeLayerGroups.has(group.id);
         return `
-          <section class="bike-layer-group ${isExpanded ? "expanded" : ""}" aria-label="${escapeHtml(group.label)}">
+          <section class="bike-layer-group ${group.id} ${isExpanded ? "expanded" : ""}" aria-label="${escapeHtml(group.label)}">
             <button class="bike-layer-title" type="button" data-bike-layer-group="${group.id}" aria-expanded="${isExpanded}">
               <span>${bikeIconSvg(group.icon)}</span>
               <strong>${escapeHtml(group.label)}</strong>
@@ -4052,20 +4056,6 @@ function renderBikeRoadMenu() {
   list.innerHTML = "";
 }
 
-function bikeMarkerOffset(index, total) {
-  if (total <= 1) return { x: 0, y: 0 };
-  const radius = total === 2 ? 15 : 19;
-  const angle = -Math.PI / 2 + (Math.PI * 2 * index) / total;
-  return {
-    x: Math.round(Math.cos(angle) * radius),
-    y: Math.round(Math.sin(angle) * radius)
-  };
-}
-
-function bikeMarkerClusterKey(point) {
-  return `${Number(point.lat).toFixed(4)}:${Number(point.lng).toFixed(4)}`;
-}
-
 function collectBikeRoadMarkers(geo) {
   const markers = [];
   activeBikeLayers.forEach((layerId) => {
@@ -4076,16 +4066,17 @@ function collectBikeRoadMarkers(geo) {
   return markers;
 }
 
-function renderBikeRoadMarker(map, layerId, point, bounds, offset = { x: 0, y: 0 }) {
+function renderBikeRoadMarker(map, layerId, point, bounds) {
   const layer = bikeLayerConfig(layerId);
   if (!layer || !point) return;
   const position = new kakao.maps.LatLng(point.lat, point.lng);
   bounds.extend(position);
   const overlay = new kakao.maps.CustomOverlay({
     position,
-    yAnchor: 1.18,
+    xAnchor: 0.5,
+    yAnchor: 0.5,
     content: `
-      <span class="bike-layer-marker ${layerId}" style="--marker-x:${offset.x}px;--marker-y:${offset.y}px" title="${escapeHtml(point.title)}" aria-label="${escapeHtml(layer.label)} ${escapeHtml(point.title)}">
+      <span class="bike-layer-marker ${layerId}" title="${escapeHtml(point.title)}" aria-label="${escapeHtml(layer.label)} ${escapeHtml(point.title)}">
         <b>${bikeIconSvg(layer.icon)}</b>
         <small>${escapeHtml(point.title)}</small>
       </span>
@@ -4093,6 +4084,39 @@ function renderBikeRoadMarker(map, layerId, point, bounds, offset = { x: 0, y: 0
   });
   overlay.setMap(map);
   bikeRoadMapRuntime.overlays.push(overlay);
+}
+
+function updateBikeRoadZoomDetail() {
+  const canvas = byId("bikeRoadKakaoMap");
+  const map = bikeRoadMapRuntime.map;
+  if (!canvas || !map) return;
+  canvas.dataset.zoomDetail = map.getLevel() <= 7 ? "true" : "false";
+}
+
+function bikeRoadDetailPanelMarkup(road, geo, markerCount) {
+  const labels = bikeLayerLabels();
+  const gpxTrack = geo.gpxTrack;
+  const elevationSummary = gpxTrack
+    ? gpxTrack.hasElevation
+      ? `고도 ${Math.round(gpxTrack.minEle)}m~${Math.round(gpxTrack.maxEle)}m, 누적상승 ${Math.round(gpxTrack.climb)}m`
+      : `고도 태그 ${gpxTrack.elevationPointCount.toLocaleString("ko-KR")}개 확인, 0m가 아닌 값 ${gpxTrack.nonZeroElevationCount.toLocaleString("ko-KR")}개`
+    : "연결된 GPX 고도 데이터가 없습니다.";
+  return `
+    <aside id="bikeRoadDetailPanel" class="bike-road-detail-panel">
+      <div class="detail-panel-head">
+        <span>상세내용</span>
+        <a href="#bikeMapInfoPanel" aria-label="상세내용 닫기">×</a>
+      </div>
+      <strong>${escapeHtml(road.title)}</strong>
+      <p>${escapeHtml(road.region)} · ${bikeRoadDistanceText(road)} · ${escapeHtml(road.time || "시간 확인")}</p>
+      <ul>
+        <li>${gpxTrack ? `GPX 경로 ${gpxTrack.distance.toFixed(1)}km, ${gpxTrack.pointCount.toLocaleString("ko-KR")}개 포인트를 지도에 표시합니다.` : "기본 안내 경로를 지도에 표시합니다."}</li>
+        <li>${escapeHtml(elevationSummary)}</li>
+        <li>${markerCount.toLocaleString("ko-KR")}개 지점 표시 · ${labels.length ? escapeHtml(labels.join(", ")) : "선택된 레이어 없음"}</li>
+        <li>출발·도착, 인증센터, 편의시설을 함께 켜서 라이딩 전 보급과 회수 지점을 확인할 수 있습니다.</li>
+      </ul>
+    </aside>
+  `;
 }
 
 function renderBikeRoadMapInfo(road, geo, markerCount) {
@@ -4109,62 +4133,63 @@ function renderBikeRoadMapInfo(road, geo, markerCount) {
       <em>${markerCount}개 지점 표시</em>
       ${gpxTrack ? `<em>${gpxTrack.distance.toFixed(1)}km · ${gpxTrack.pointCount.toLocaleString("ko-KR")}포인트</em>` : ""}
       <em>${labels.length ? labels.join(", ") : "레이어 미선택"}</em>
+      <span class="bike-detail-control">
+        <a class="bike-detail-tab" href="#bikeRoadDetailPanel">상세내용</a>
+        ${bikeRoadDetailPanelMarkup(road, geo, markerCount)}
+      </span>
     </div>
   `;
   const link = byId("officialBikeMapLink");
   if (link) link.href = bikeRoadExternalUrl(road);
 }
 
-function renderBikeElevationPanel(road, track, state = "ready") {
-  const panel = byId("bikeElevationPanel");
-  if (!panel) return;
-  const file = bikeRoadGpxFile(road);
-  if (state === "loading") {
-    panel.innerHTML = `
-      <div class="elevation-head">
-        <strong>고도</strong>
-        <span>GPX를 불러오는 중입니다.</span>
-      </div>
-      <div class="slope-bars is-loading" aria-hidden="true">${Array.from({ length: 42 }, () => "<i></i>").join("")}</div>
-    `;
+function renderBikeRoadDetailPanel(road, geo, markerCount) {
+  const stage = document.querySelector(".bike-kakao-stage");
+  if (!stage || !road) return;
+  let panel = byId("bikeRoadDetailPanel");
+  if (!activeBikeRoadDetailOpen) {
+    if (panel) panel.remove();
     return;
   }
-  if (!track) {
-    panel.innerHTML = `
-      <div class="elevation-head">
-        <strong>고도</strong>
-        <span>${file ? "GPX를 읽지 못했습니다." : "이 노선은 GPX 파일이 연결되지 않았습니다."}</span>
-      </div>
-      <p class="elevation-note">국토종주자전거길에 연결된 GPX 파일이 있으면 이 영역에 거리별 고도가 표시됩니다.</p>
-    `;
-    return;
+  if (!panel) {
+    panel = document.createElement("aside");
+    panel.id = "bikeRoadDetailPanel";
+    panel.className = "bike-road-detail-panel";
+    stage.appendChild(panel);
   }
-  const minEle = track.hasElevation ? track.minEle : 0;
-  const maxEle = track.hasElevation ? track.maxEle : 1;
-  const eleRange = Math.max(1, maxEle - minEle);
-  const bars = track.samples
-    .map((sample) => {
-      const height = track.hasElevation ? 14 + ((sample.elevation - minEle) / eleRange) * 56 : 24;
-      const title = track.hasElevation
-        ? `${sample.distance.toFixed(1)}km · ${Math.round(sample.elevation)}m`
-        : `${sample.distance} · GPX 고도값 없음`;
-      return `<i class="elevation" style="height:${height}px" title="${escapeHtml(title)}"></i>`;
-    })
-    .join("");
-  const elevationText = track.hasElevation
-    ? `최저 ${Math.round(track.minEle)}m · 최고 ${Math.round(track.maxEle)}m · 누적상승 ${Math.round(track.climb)}m`
-    : "GPX 고도값이 0m로 기록되어 실제 고도 프로파일 보강이 필요합니다.";
+  const labels = bikeLayerLabels();
+  const gpxTrack = geo?.gpxTrack;
+  const elevationSummary = gpxTrack
+    ? gpxTrack.hasElevation
+      ? `고도 ${Math.round(gpxTrack.minEle)}m~${Math.round(gpxTrack.maxEle)}m, 누적상승 ${Math.round(gpxTrack.climb)}m`
+      : `고도 태그 ${gpxTrack.elevationPointCount.toLocaleString("ko-KR")}개 확인, 0m가 아닌 값 ${gpxTrack.nonZeroElevationCount.toLocaleString("ko-KR")}개`
+    : "연결된 GPX 고도 데이터가 없습니다.";
   panel.innerHTML = `
-    <div class="elevation-head">
-      <strong>고도</strong>
-      <span>${escapeHtml(road.title)} · ${track.distance.toFixed(1)}km · ${track.pointCount.toLocaleString("ko-KR")}포인트</span>
+    <div class="detail-panel-head">
+      <span>상세내용</span>
+      <button type="button" data-bike-detail-close aria-label="상세내용 닫기">×</button>
     </div>
-    <div class="slope-bars ${track.hasElevation ? "" : "no-elevation"}" aria-label="거리별 고도">${bars}</div>
-    <div class="elevation-stats">
-      <span>${escapeHtml(elevationText)}</span>
-      <span>GPX: ${escapeHtml(track.source)}</span>
-    </div>
+    <strong>${escapeHtml(road.title)}</strong>
+    <p>${escapeHtml(road.region)} · ${bikeRoadDistanceText(road)} · ${escapeHtml(road.time || "시간 확인")}</p>
+    <ul>
+      <li>${gpxTrack ? `GPX 경로 ${gpxTrack.distance.toFixed(1)}km, ${gpxTrack.pointCount.toLocaleString("ko-KR")}개 포인트를 지도에 표시합니다.` : "기본 안내 경로를 지도에 표시합니다."}</li>
+      <li>${escapeHtml(elevationSummary)}</li>
+      <li>${markerCount.toLocaleString("ko-KR")}개 지점 표시 · ${labels.length ? escapeHtml(labels.join(", ")) : "선택된 레이어 없음"}</li>
+      <li>출발·도착, 인증센터, 편의시설을 함께 켜서 라이딩 전 보급과 회수 지점을 확인할 수 있습니다.</li>
+    </ul>
   `;
+  const closeButton = panel.querySelector("[data-bike-detail-close]");
+  if (closeButton) {
+    closeButton.addEventListener("click", () => setBikeRoadDetailOpen(false));
+  }
+}
+
+function setBikeRoadDetailOpen(isOpen) {
+  activeBikeRoadDetailOpen = isOpen;
+  const road = findBikeRoad(activeBikeRoadGroup, activeBikeRoadId);
+  if (bikeRoadMapRuntime.lastGeo && road) {
+    renderBikeRoadMapInfo(road, bikeRoadMapRuntime.lastGeo, bikeRoadMapRuntime.lastMarkerCount || 0);
+  }
 }
 
 function renderBikeRoadMapError(message) {
@@ -4191,7 +4216,6 @@ async function drawBikeRoadKakaoMap(road) {
   const canvas = byId("bikeRoadKakaoMap");
   if (!canvas || !road) return;
   const drawToken = ++bikeRoadMapRuntime.token;
-  renderBikeElevationPanel(road, null, "loading");
 
   try {
     const [_, gpxTrack] = await Promise.all([loadKakaoMapSdk(KAKAO_MAP_APP_KEY), loadBikeRoadGpxTrack(road)]);
@@ -4206,6 +4230,10 @@ async function drawBikeRoadKakaoMap(road) {
         center: new kakao.maps.LatLng(geo.center.lat, geo.center.lng),
         level: geo.level || 9
       });
+      if (!bikeRoadMapRuntime.zoomDetailReady) {
+        kakao.maps.event.addListener(bikeRoadMapRuntime.map, "zoom_changed", updateBikeRoadZoomDetail);
+        bikeRoadMapRuntime.zoomDetailReady = true;
+      }
     }
 
     const map = bikeRoadMapRuntime.map;
@@ -4223,7 +4251,7 @@ async function drawBikeRoadKakaoMap(road) {
 
     bikeRoadMapRuntime.polyline = new kakao.maps.Polyline({
       path,
-      strokeWeight: 7,
+      strokeWeight: 4,
       strokeColor: "#167355",
       strokeOpacity: 0.92,
       strokeStyle: "solid"
@@ -4231,25 +4259,25 @@ async function drawBikeRoadKakaoMap(road) {
     bikeRoadMapRuntime.polyline.setMap(map);
 
     const markerItems = collectBikeRoadMarkers(geo);
-    const markerGroups = new Map();
     markerItems.forEach((item) => {
-      const key = bikeMarkerClusterKey(item.point);
-      markerGroups.set(key, [...(markerGroups.get(key) || []), item]);
-    });
-    markerGroups.forEach((items) => {
-      items.forEach((item, index) => {
-        renderBikeRoadMarker(map, item.layerId, item.point, bounds, bikeMarkerOffset(index, items.length));
-      });
+      renderBikeRoadMarker(map, item.layerId, item.point, bounds);
     });
 
+    bikeRoadMapRuntime.lastGeo = geo;
+    bikeRoadMapRuntime.lastMarkerCount = markerItems.length;
+    updateBikeRoadZoomDetail();
     if (path.length > 1) {
-      map.setBounds(bounds);
-      window.setTimeout(() => map.relayout(), 80);
+      map.relayout();
+      map.setBounds(bounds, 34, 34, 260, 34);
+      updateBikeRoadZoomDetail();
+      window.setTimeout(() => {
+        map.relayout();
+        map.setBounds(bounds, 34, 34, 260, 34);
+        updateBikeRoadZoomDetail();
+      }, 100);
     }
     renderBikeRoadMapInfo(road, geo, markerItems.length);
-    renderBikeElevationPanel(road, gpxTrack);
   } catch (error) {
-    renderBikeElevationPanel(road, null);
     renderBikeRoadMapError("Kakao Developers에 현재 도메인이 등록되어 있는지와 네트워크 연결을 확인해 주세요.");
   }
 }
@@ -4294,6 +4322,18 @@ function renderBikeRoadsPage() {
       const layerButton = event.target.closest("[data-bike-layer]");
       if (layerButton) {
         toggleBikeLayer(layerButton.getAttribute("data-bike-layer"));
+        return;
+      }
+
+      const detailToggle = event.target.closest("[data-bike-detail-toggle]");
+      if (detailToggle) {
+        setBikeRoadDetailOpen(detailToggle.getAttribute("aria-expanded") !== "true");
+        return;
+      }
+
+      const detailClose = event.target.closest("[data-bike-detail-close]");
+      if (detailClose) {
+        setBikeRoadDetailOpen(false);
         return;
       }
 

@@ -1538,15 +1538,18 @@ tbody tr:last-child td {
   position: relative;
   min-width: 0;
   min-height: calc(100vh - 64px);
+  padding: 8px;
+  box-sizing: border-box;
   background: #e5ece7;
 }
 
 .bike-kakao-canvas {
   position: relative;
   width: 100%;
-  min-height: calc(100vh - 64px);
-  height: 100%;
+  min-height: calc(100vh - 80px);
+  height: calc(100vh - 80px);
   overflow: hidden;
+  border-radius: 8px;
   background:
     linear-gradient(135deg, rgba(18, 46, 37, 0.72), rgba(29, 111, 150, 0.54)),
     linear-gradient(90deg, rgba(255, 255, 255, 0.18) 1px, transparent 1px),
@@ -1555,14 +1558,32 @@ tbody tr:last-child td {
   background-size: auto, 64px 64px, 64px 64px, auto;
 }
 
+.bike-kakao-canvas > div:first-child {
+  width: 100% !important;
+  height: 100% !important;
+}
+
 .bike-layer-panel {
   position: absolute;
   z-index: 8;
   top: 14px;
   right: 14px;
   display: grid;
+  grid-template-columns: repeat(3, minmax(132px, 1fr));
+  align-items: start;
   gap: 7px;
-  width: min(420px, calc(100% - 28px));
+  width: min(560px, calc(100% - 28px));
+}
+
+.bike-road-category > button {
+  border-color: rgba(22, 115, 85, 0.24);
+  background: #edf5ef;
+  box-shadow: inset 4px 0 0 rgba(22, 115, 85, 0.32);
+}
+
+.bike-road-category > button:hover,
+.bike-road-category > button.active {
+  background: #dfeee6;
 }
 
 .bike-layer-group {
@@ -1574,6 +1595,33 @@ tbody tr:last-child td {
   background: rgba(255, 255, 255, 0.94);
   box-shadow: 0 12px 28px rgba(16, 35, 28, 0.12);
   backdrop-filter: blur(12px);
+}
+
+.bike-layer-group.legend {
+  border-color: rgba(22, 115, 85, 0.26);
+  background: rgba(232, 244, 237, 0.96);
+}
+
+.bike-layer-group.facility {
+  border-color: rgba(29, 111, 150, 0.24);
+  background: rgba(232, 243, 247, 0.96);
+}
+
+.bike-layer-group.nearby {
+  border-color: rgba(214, 163, 41, 0.28);
+  background: rgba(252, 247, 228, 0.97);
+}
+
+.bike-layer-group.legend .bike-layer-title > span {
+  background: var(--green);
+}
+
+.bike-layer-group.facility .bike-layer-title > span {
+  background: #1d6f96;
+}
+
+.bike-layer-group.nearby .bike-layer-title > span {
+  background: #a87316;
 }
 
 .bike-layer-title {
@@ -1691,7 +1739,7 @@ tbody tr:last-child td {
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  transform: translate(calc(-50% + var(--marker-x, 0px)), calc(-100% + var(--marker-y, 0px)));
+  transform: translate(0, 0);
   max-width: 190px;
   font-family: inherit;
   pointer-events: auto;
@@ -1740,6 +1788,11 @@ tbody tr:last-child td {
   transform: translateX(-50%) translateY(0);
 }
 
+.bike-kakao-canvas[data-zoom-detail="true"] .bike-layer-marker small {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
 .bike-layer-marker.cert b {
   background: var(--coral);
 }
@@ -1764,7 +1817,7 @@ tbody tr:last-child td {
   position: absolute;
   z-index: 7;
   left: 18px;
-  bottom: 156px;
+  bottom: 18px;
   width: min(440px, calc(100% - 36px));
   padding: 18px;
   border: 1px solid rgba(16, 35, 28, 0.14);
@@ -1774,20 +1827,73 @@ tbody tr:last-child td {
   backdrop-filter: blur(14px);
 }
 
-.bike-elevation-panel {
+.bike-road-detail-panel {
   position: absolute;
   z-index: 7;
+  top: 78px;
   right: 18px;
-  bottom: 18px;
-  left: 18px;
+  width: min(370px, calc(100% - 36px));
   display: grid;
-  gap: 8px;
-  padding: 14px 16px;
+  gap: 10px;
+  padding: 16px;
   border: 1px solid rgba(16, 35, 28, 0.14);
   border-radius: 8px;
-  background: rgba(255, 255, 255, 0.95);
+  background: rgba(255, 255, 255, 0.96);
   box-shadow: 0 18px 36px rgba(16, 35, 28, 0.17);
   backdrop-filter: blur(14px);
+}
+
+.detail-panel-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.detail-panel-head span {
+  color: var(--coral);
+  font-size: 0.78rem;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.detail-panel-head a {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border: 1px solid rgba(16, 35, 28, 0.12);
+  border-radius: 50%;
+  background: #f3f7f3;
+  color: var(--ink);
+  font-size: 1rem;
+  font-weight: 900;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.bike-road-detail-panel strong {
+  font-size: 1.1rem;
+  line-height: 1.2;
+}
+
+.bike-road-detail-panel p,
+.bike-road-detail-panel li {
+  color: var(--muted);
+  font-size: 0.82rem;
+  font-weight: 800;
+}
+
+.bike-road-detail-panel p {
+  margin: 0;
+}
+
+.bike-road-detail-panel ul {
+  display: grid;
+  gap: 7px;
+  margin: 0;
+  padding-left: 18px;
 }
 
 .elevation-head,
@@ -1812,6 +1918,53 @@ tbody tr:last-child td {
 
 .elevation-note {
   margin: 0;
+}
+
+.elevation-line-chart {
+  position: relative;
+  min-height: 70px;
+  padding: 8px;
+  border-radius: 8px;
+  background:
+    linear-gradient(to top, rgba(16, 35, 28, 0.08) 1px, transparent 1px),
+    #f3f7f3;
+  background-size: 100% 18px;
+}
+
+.elevation-line-chart svg {
+  display: block;
+  width: 100%;
+  height: 76px;
+}
+
+.elevation-grid {
+  stroke: rgba(16, 35, 28, 0.13);
+  stroke-width: 1;
+}
+
+.elevation-grid.mid {
+  stroke-dasharray: 5 7;
+}
+
+.elevation-area {
+  fill: rgba(22, 115, 85, 0.13);
+}
+
+.elevation-line {
+  fill: none;
+  stroke: var(--green);
+  stroke-width: 4;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.elevation-line-chart.no-elevation .elevation-line {
+  stroke: #1d6f96;
+  stroke-dasharray: 7 7;
+}
+
+.elevation-line-chart.is-loading .elevation-line {
+  stroke: #b9c4bd;
 }
 
 .slope-bars {
@@ -1901,6 +2054,53 @@ tbody tr:last-child td {
   font-size: 0.76rem;
   font-style: normal;
   font-weight: 900;
+}
+
+.bike-detail-control {
+  position: relative;
+  display: inline-flex;
+}
+
+.bike-info-chips button,
+.bike-detail-tab {
+  position: relative;
+  z-index: 1;
+  display: inline-flex;
+  align-items: center;
+  min-height: 26px;
+  padding: 4px 10px;
+  border: 1px solid rgba(22, 115, 85, 0.24);
+  border-radius: 999px;
+  background: #fff;
+  color: var(--ink);
+  font-size: 0.76rem;
+  font-weight: 900;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.bike-info-chips button.active,
+.bike-info-chips button:hover,
+.bike-detail-control:has(.bike-road-detail-panel:target) .bike-detail-tab,
+.bike-detail-tab:hover {
+  border-color: var(--green);
+  background: var(--green);
+  color: #fff;
+}
+
+.bike-detail-control .bike-road-detail-panel {
+  top: auto;
+  right: auto;
+  bottom: calc(100% + 10px);
+  left: 0;
+  width: min(370px, calc(100vw - 330px));
+  display: none;
+}
+
+.bike-road-detail-panel:target,
+.bike-detail-control:focus-within .bike-road-detail-panel,
+.bike-detail-control:hover .bike-road-detail-panel {
+  display: grid;
 }
 
 .bike-road-layout {
@@ -2592,7 +2792,8 @@ tbody tr:last-child td {
   .bike-layer-panel {
     top: 10px;
     right: 10px;
-    width: min(380px, calc(100% - 20px));
+    grid-template-columns: repeat(3, minmax(108px, 1fr));
+    width: min(460px, calc(100% - 20px));
   }
 
   .bike-layer-group {
@@ -2605,18 +2806,20 @@ tbody tr:last-child td {
 
   .bike-kakao-info {
     left: 12px;
-    bottom: 162px;
+    bottom: 12px;
     width: calc(100% - 24px);
   }
 
-  .bike-elevation-panel {
+  .bike-road-detail-panel {
+    top: 72px;
     right: 12px;
-    bottom: 12px;
-    left: 12px;
+    width: min(360px, calc(100% - 24px));
   }
 
-  .bike-layer-marker small {
-    display: none;
+  .bike-detail-control .bike-road-detail-panel {
+    right: 0;
+    left: auto;
+    width: min(360px, calc(100vw - 36px));
   }
 
   .bike-road-map-marker small {
@@ -2681,6 +2884,7 @@ tbody tr:last-child td {
     position: absolute;
     top: 8px;
     right: 8px;
+    grid-template-columns: 1fr;
     width: calc(100% - 16px);
   }
 
@@ -2692,6 +2896,18 @@ tbody tr:last-child td {
     min-height: 29px;
     padding: 4px 7px;
     font-size: 0.74rem;
+  }
+
+  .bike-road-detail-panel {
+    top: 172px;
+    right: 8px;
+    width: calc(100% - 16px);
+  }
+
+  .bike-detail-control .bike-road-detail-panel {
+    right: 0;
+    left: auto;
+    width: calc(100vw - 32px);
   }
 
   .bike-kakao-stage,
@@ -2714,9 +2930,14 @@ tbody tr:last-child td {
     gap: 4px;
   }
 
-  .slope-bars {
+  .slope-bars,
+  .elevation-line-chart {
     min-height: 54px;
     padding: 6px;
+  }
+
+  .elevation-line-chart svg {
+    height: 58px;
   }
 
 }
