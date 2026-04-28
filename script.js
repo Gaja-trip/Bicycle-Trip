@@ -3706,9 +3706,11 @@ function setBikeRoadMapType(type) {
 }
 
 function bikeRoadMapFitPadding() {
-  if (window.matchMedia("(max-width: 540px)").matches) return [142, 14, 178, 14];
-  if (window.matchMedia("(max-width: 820px)").matches) return [118, 18, 188, 18];
-  return [34, 34, 260, 34];
+  const controlsHeight = Math.ceil(document.querySelector(".bike-floating-controls")?.getBoundingClientRect().height || 0);
+  const topPadding = Math.max(34, controlsHeight + 30);
+  if (window.matchMedia("(max-width: 540px)").matches) return [Math.max(156, topPadding), 14, 178, 14];
+  if (window.matchMedia("(max-width: 820px)").matches) return [Math.max(132, topPadding), 18, 188, 18];
+  return [topPadding, 34, 260, 34];
 }
 
 function fitBikeRoadKakaoMapBounds() {
@@ -4055,6 +4057,7 @@ function toggleBikeLayerGroup(groupId) {
     expandedBikeLayerGroups.add(groupId);
   }
   renderBikeRoadLayerControls();
+  window.setTimeout(fitBikeRoadKakaoMapBounds, 0);
 }
 
 function toggleBikeLayer(layerId) {

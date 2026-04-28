@@ -1,4 +1,4 @@
-<!doctype html>
+﻿<!doctype html>
 <html lang="ko">
   <head>
     <meta charset="utf-8" />
@@ -37,16 +37,18 @@
           </aside>
 
           <section class="bike-kakao-stage" aria-label="다음지도 자전거길 지도창">
-            <div class="bike-layer-panel" id="bikeLayerControls" aria-label="지도 정보 레이어"></div>
-            <div class="bike-map-type-control" id="bikeRoadMapTypeControl" aria-label="지도 표시 방식">
-              <button class="active" type="button" data-bike-road-map-type="roadmap" aria-pressed="true">
-                <span aria-hidden="true">지도</span>
-                <strong>일반지도</strong>
-              </button>
-              <button type="button" data-bike-road-map-type="hybrid" aria-pressed="false">
-                <span aria-hidden="true">항공</span>
-                <strong>항공사진</strong>
-              </button>
+            <div class="bike-floating-controls" aria-label="지도 컨트롤 영역">
+              <div class="bike-layer-panel" id="bikeLayerControls" aria-label="지도 정보 레이어"></div>
+              <div class="bike-map-type-control" id="bikeRoadMapTypeControl" aria-label="지도 표시 방식">
+                <button class="active" type="button" data-bike-road-map-type="roadmap" aria-pressed="true">
+                  <span aria-hidden="true">지도</span>
+                  <strong>일반지도</strong>
+                </button>
+                <button type="button" data-bike-road-map-type="hybrid" aria-pressed="false">
+                  <span aria-hidden="true">항공</span>
+                  <strong>항공사진</strong>
+                </button>
+              </div>
             </div>
             <div id="bikeRoadKakaoMap" class="bike-kakao-canvas">
               <div class="map-placeholder">

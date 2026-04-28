@@ -1563,24 +1563,28 @@ tbody tr:last-child td {
   height: 100% !important;
 }
 
-.bike-layer-panel {
+.bike-floating-controls {
   position: absolute;
-  z-index: 8;
+  z-index: 9;
   top: 14px;
   right: 14px;
   display: grid;
-  grid-template-columns: repeat(3, minmax(132px, 1fr));
-  align-items: start;
+  justify-items: end;
   gap: 7px;
   width: min(560px, calc(100% - 28px));
 }
 
+.bike-layer-panel {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(132px, 1fr));
+  align-items: start;
+  gap: 7px;
+  width: 100%;
+}
+
 .bike-map-type-control {
-  position: absolute;
-  z-index: 9;
-  top: 14px;
-  left: 14px;
   display: inline-flex;
+  justify-self: end;
   gap: 4px;
   padding: 4px;
   border: 1px solid rgba(16, 35, 28, 0.14);
@@ -2853,16 +2857,17 @@ tbody tr:last-child td {
     height: 100%;
   }
 
-  .bike-layer-panel {
-    top: 58px;
+  .bike-floating-controls {
+    top: 10px;
     right: 10px;
-    grid-template-columns: repeat(3, minmax(108px, 1fr));
     width: min(460px, calc(100% - 20px));
   }
 
+  .bike-layer-panel {
+    grid-template-columns: repeat(3, minmax(108px, 1fr));
+  }
+
   .bike-map-type-control {
-    top: 10px;
-    left: 10px;
     max-width: calc(100% - 20px);
   }
 
@@ -2950,19 +2955,19 @@ tbody tr:last-child td {
     grid-template-columns: 54px minmax(0, 1fr);
   }
 
-  .bike-layer-panel {
-    position: absolute;
-    top: 58px;
+  .bike-floating-controls {
+    top: 8px;
     right: 8px;
-    grid-template-columns: 1fr;
     width: calc(100% - 16px);
   }
 
+  .bike-layer-panel {
+    grid-template-columns: 1fr;
+  }
+
   .bike-map-type-control {
-    top: 8px;
-    left: 8px;
-    right: 8px;
-    width: auto;
+    justify-self: stretch;
+    width: 100%;
   }
 
   .bike-map-type-control button {
