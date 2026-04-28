@@ -1781,6 +1781,7 @@ let activeBikeRoadGroup = "national";
 let activeBikeRoadId = "ara";
 let activeBikeMapTab = "legend";
 let activeBikeMapMode = "standard";
+let activeBikeRoadMapType = "roadmap";
 let activeBikeRoadDetailOpen = false;
 let expandedBikeRoadGroups = new Set();
 let expandedBikeLayerGroups = new Set();
@@ -3661,8 +3662,11 @@ let bikeRoadMapRuntime = {
   map: null,
   polyline: null,
   overlays: [],
+  bounds: null,
   token: 0,
-  zoomDetailReady: false
+  zoomDetailReady: false,
+  resizeReady: false,
+  resizeTimer: null
 };
 
 function bikeLayerConfig(layerId) {
@@ -3671,6 +3675,55 @@ function bikeLayerConfig(layerId) {
 
 function bikeLayerLabels() {
   return [...activeBikeLayers].map((layerId) => bikeLayerConfig(layerId)?.label).filter(Boolean);
+}
+
+function bikeRoadMapTypeId() {
+  if (!window.kakao?.maps) return null;
+  return activeBikeRoadMapType === "hybrid"
+    ? kakao.maps.MapTypeId.HYBRID || kakao.maps.MapTypeId.SKYVIEW
+    : kakao.maps.MapTypeId.ROADMAP;
+}
+
+function updateBikeRoadMapTypeButtons() {
+  document.querySelectorAll("[data-bike-road-map-type]").forEach((button) => {
+    const isActive = button.getAttribute("data-bike-road-map-type") === activeBikeRoadMapType;
+    button.classList.toggle("active", isActive);
+    button.setAttribute("aria-pressed", String(isActive));
+  });
+}
+
+function applyBikeRoadMapType() {
+  const mapTypeId = bikeRoadMapTypeId();
+  if (bikeRoadMapRuntime.map && mapTypeId) {
+    bikeRoadMapRuntime.map.setMapTypeId(mapTypeId);
+  }
+  updateBikeRoadMapTypeButtons();
+}
+
+function setBikeRoadMapType(type) {
+  activeBikeRoadMapType = type === "hybrid" ? "hybrid" : "roadmap";
+  applyBikeRoadMapType();
+}
+
+function bikeRoadMapFitPadding() {
+  if (window.matchMedia("(max-width: 540px)").matches) return [142, 14, 178, 14];
+  if (window.matchMedia("(max-width: 820px)").matches) return [118, 18, 188, 18];
+  return [34, 34, 260, 34];
+}
+
+function fitBikeRoadKakaoMapBounds() {
+  const { map, bounds } = bikeRoadMapRuntime;
+  if (!map || !bounds) return;
+  const [top, right, bottom, left] = bikeRoadMapFitPadding();
+  map.relayout();
+  map.setBounds(bounds, top, right, bottom, left);
+  updateBikeRoadZoomDetail();
+}
+
+function handleBikeRoadMapResize() {
+  if (!bikeRoadMapRuntime.map) return;
+  window.clearTimeout(bikeRoadMapRuntime.resizeTimer);
+  bikeRoadMapRuntime.resizeTimer = window.setTimeout(fitBikeRoadKakaoMapBounds, 80);
 }
 
 function bikeRoadGpxFile(road) {
@@ -3955,6 +4008,7 @@ function clearBikeRoadKakaoMap() {
   }
   bikeRoadMapRuntime.overlays.forEach((overlay) => overlay.setMap(null));
   bikeRoadMapRuntime.overlays = [];
+  bikeRoadMapRuntime.bounds = null;
 }
 
 function renderBikeRoadLayerControls() {
@@ -4234,13 +4288,17 @@ async function drawBikeRoadKakaoMap(road) {
         kakao.maps.event.addListener(bikeRoadMapRuntime.map, "zoom_changed", updateBikeRoadZoomDetail);
         bikeRoadMapRuntime.zoomDetailReady = true;
       }
+      if (!bikeRoadMapRuntime.resizeReady) {
+        window.addEventListener("resize", handleBikeRoadMapResize);
+        bikeRoadMapRuntime.resizeReady = true;
+      }
     }
 
     const map = bikeRoadMapRuntime.map;
     clearBikeRoadKakaoMap();
     map.setCenter(new kakao.maps.LatLng(geo.center.lat, geo.center.lng));
     map.setLevel(geo.level || 9);
-    map.setMapTypeId(kakao.maps.MapTypeId.ROADMAP);
+    applyBikeRoadMapType();
 
     const bounds = new kakao.maps.LatLngBounds();
     const path = geo.path.map((point) => {
@@ -4265,15 +4323,12 @@ async function drawBikeRoadKakaoMap(road) {
 
     bikeRoadMapRuntime.lastGeo = geo;
     bikeRoadMapRuntime.lastMarkerCount = markerItems.length;
+    bikeRoadMapRuntime.bounds = bounds;
     updateBikeRoadZoomDetail();
     if (path.length > 1) {
-      map.relayout();
-      map.setBounds(bounds, 34, 34, 260, 34);
-      updateBikeRoadZoomDetail();
+      fitBikeRoadKakaoMapBounds();
       window.setTimeout(() => {
-        map.relayout();
-        map.setBounds(bounds, 34, 34, 260, 34);
-        updateBikeRoadZoomDetail();
+        fitBikeRoadKakaoMapBounds();
       }, 100);
     }
     renderBikeRoadMapInfo(road, geo, markerItems.length);
@@ -4319,6 +4374,12 @@ function renderBikeRoadsPage() {
   if (!document.body.dataset.bikeRoadKakaoDelegated) {
     document.body.dataset.bikeRoadKakaoDelegated = "true";
     document.addEventListener("click", (event) => {
+      const mapTypeButton = event.target.closest("[data-bike-road-map-type]");
+      if (mapTypeButton) {
+        setBikeRoadMapType(mapTypeButton.getAttribute("data-bike-road-map-type"));
+        return;
+      }
+
       const layerButton = event.target.closest("[data-bike-layer]");
       if (layerButton) {
         toggleBikeLayer(layerButton.getAttribute("data-bike-layer"));
@@ -4358,6 +4419,7 @@ function renderBikeRoadsPage() {
   }
 
   renderBikeRoadLayerControls();
+  updateBikeRoadMapTypeButtons();
   if (!document.body.dataset.bikeRoadWindowReady) {
     window.scrollTo(0, 0);
     document.body.dataset.bikeRoadWindowReady = "true";

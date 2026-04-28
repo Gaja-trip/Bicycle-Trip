@@ -1575,6 +1575,63 @@ tbody tr:last-child td {
   width: min(560px, calc(100% - 28px));
 }
 
+.bike-map-type-control {
+  position: absolute;
+  z-index: 9;
+  top: 14px;
+  left: 14px;
+  display: inline-flex;
+  gap: 4px;
+  padding: 4px;
+  border: 1px solid rgba(16, 35, 28, 0.14);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.94);
+  box-shadow: 0 12px 28px rgba(16, 35, 28, 0.12);
+  backdrop-filter: blur(12px);
+}
+
+.bike-map-type-control button {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 34px;
+  padding: 5px 9px;
+  border: 1px solid transparent;
+  border-radius: 7px;
+  background: transparent;
+  color: var(--muted);
+  font-size: 0.78rem;
+  font-weight: 900;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.bike-map-type-control button span {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 30px;
+  height: 22px;
+  padding: 0 6px;
+  border-radius: 999px;
+  background: rgba(16, 35, 28, 0.08);
+  color: var(--ink);
+  font-size: 0.7rem;
+}
+
+.bike-map-type-control button.active,
+.bike-map-type-control button:hover {
+  border-color: var(--green);
+  background: #e5f2ea;
+  color: var(--green);
+}
+
+.bike-map-type-control button.active span,
+.bike-map-type-control button:hover span {
+  background: var(--green);
+  color: #fff;
+}
+
 .bike-road-category > button {
   border-color: rgba(22, 115, 85, 0.24);
   background: #edf5ef;
@@ -2769,11 +2826,16 @@ tbody tr:last-child td {
 
   .bike-map-service.kakao-version {
     grid-template-columns: 1fr;
-    min-height: 0;
+    height: auto;
+    min-height: calc(100dvh - 64px);
+    overflow: visible;
   }
 
   .bike-map-service.kakao-version .bike-map-left {
+    order: 2;
+    height: auto;
     min-height: 0;
+    max-height: none;
   }
 
   .bike-map-service.kakao-version .bike-road-menu {
@@ -2781,19 +2843,27 @@ tbody tr:last-child td {
   }
 
   .bike-kakao-stage {
-    min-height: 650px;
+    order: 1;
+    height: calc(100dvh - 64px);
+    min-height: 580px;
   }
 
   .bike-kakao-canvas {
-    min-height: 650px;
-    height: 650px;
+    min-height: 0;
+    height: 100%;
   }
 
   .bike-layer-panel {
-    top: 10px;
+    top: 58px;
     right: 10px;
     grid-template-columns: repeat(3, minmax(108px, 1fr));
     width: min(460px, calc(100% - 20px));
+  }
+
+  .bike-map-type-control {
+    top: 10px;
+    left: 10px;
+    max-width: calc(100% - 20px);
   }
 
   .bike-layer-group {
@@ -2882,10 +2952,23 @@ tbody tr:last-child td {
 
   .bike-layer-panel {
     position: absolute;
-    top: 8px;
+    top: 58px;
     right: 8px;
     grid-template-columns: 1fr;
     width: calc(100% - 16px);
+  }
+
+  .bike-map-type-control {
+    top: 8px;
+    left: 8px;
+    right: 8px;
+    width: auto;
+  }
+
+  .bike-map-type-control button {
+    flex: 1 1 0;
+    justify-content: center;
+    padding: 5px 7px;
   }
 
   .bike-layer-group {
@@ -2910,13 +2993,14 @@ tbody tr:last-child td {
     width: calc(100vw - 32px);
   }
 
-  .bike-kakao-stage,
-  .bike-kakao-canvas {
-    min-height: 700px;
+  .bike-kakao-stage {
+    height: calc(100dvh - 64px);
+    min-height: 560px;
   }
 
   .bike-kakao-canvas {
-    height: 700px;
+    min-height: 560px;
+    height: 100%;
   }
 
   .bike-kakao-info {
