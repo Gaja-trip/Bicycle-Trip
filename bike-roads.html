@@ -40,13 +40,15 @@
             <div class="bike-floating-controls" aria-label="지도 컨트롤 영역">
               <div class="bike-layer-panel" id="bikeLayerControls" aria-label="지도 정보 레이어"></div>
               <div class="bike-map-type-control" id="bikeRoadMapTypeControl" aria-label="지도 표시 방식">
-                <button class="active" type="button" data-bike-road-map-type="roadmap" aria-pressed="true">
-                  <span aria-hidden="true">지도</span>
-                  <strong>일반지도</strong>
+                <button class="active" type="button" data-bike-road-map-type="roadmap" aria-label="일반지도" title="일반지도" aria-pressed="true">
+                  <span class="map-type-icon" aria-hidden="true">
+                    <svg viewBox="0 0 24 24"><path d="m4 6 5-2 6 2 5-2v14l-5 2-6-2-5 2V6Z"/><path d="M9 4v14M15 6v14"/></svg>
+                  </span>
                 </button>
-                <button type="button" data-bike-road-map-type="hybrid" aria-pressed="false">
-                  <span aria-hidden="true">항공</span>
-                  <strong>항공사진</strong>
+                <button type="button" data-bike-road-map-type="hybrid" aria-label="항공사진" title="항공사진" aria-pressed="false">
+                  <span class="map-type-icon" aria-hidden="true">
+                    <svg viewBox="0 0 24 24"><path d="M4 15.5 9 5l4 7 2-3 5 6.5V19H4v-3.5Z"/><circle cx="17" cy="6" r="2"/><path d="M4 19h16"/></svg>
+                  </span>
                 </button>
               </div>
             </div>

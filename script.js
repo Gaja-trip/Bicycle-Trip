@@ -1732,11 +1732,15 @@ const recommendedBikeRoadItems = [
   }
 ].filter(Boolean);
 
+const CUSTOM_BIKE_ROADS_STORAGE_KEY = "bikeFestaCustomBikeRoads";
+const customBikeRoadItems = readCustomBikeRoads();
+
 const bikeRoadMenuGroups = [
   { id: "national", label: "국토종주자전거길", caption: "공식 인증 노선", items: officialBikeRoads },
   { id: "premium", label: "지자체명품자전거길", caption: "지역 대표길", items: premiumBikeRoadItems },
   { id: "islandRoad", label: "바다를 품은 섬 자전거길", caption: "섬·해안 여행", items: islandBikeRoadItems },
-  { id: "recommended", label: "추천하는 자전거길", caption: "축제 연계 추천", items: recommendedBikeRoadItems }
+  { id: "recommended", label: "추천하는 자전거길", caption: "축제 연계 추천", items: recommendedBikeRoadItems },
+  { id: "custom", label: "나만의 자전거길", caption: "GPX 등록·관리", items: customBikeRoadItems, custom: true }
 ];
 
 const bikeMapTopTabs = [
@@ -2222,6 +2226,7 @@ function bikeRoadDistanceText(road) {
 }
 
 function bikeRoadExternalUrl(road) {
+  if (road?.custom) return "#";
   return road.officialUrl || officialBikeRoadMapUrl(road.roadSn || 1);
 }
 
@@ -3656,7 +3661,7 @@ const bikeRoadGeoOverrides = {
   }
 };
 
-let activeBikeLayers = new Set(["major", "cert"]);
+let activeBikeLayers = new Set(["major", "cert", "toilet", "food", "cafe"]);
 let bikeRoadMapRuntime = {
   canvas: null,
   map: null,
@@ -3732,6 +3737,184 @@ function bikeRoadGpxFile(road) {
   return road?.gpxFile || bikeRoadGpxFiles[road?.id] || "";
 }
 
+function readCustomBikeRoads() {
+  try {
+    const parsed = JSON.parse(localStorage.getItem(CUSTOM_BIKE_ROADS_STORAGE_KEY) || "[]");
+    if (!Array.isArray(parsed)) return [];
+    return parsed
+      .filter((road) => road?.id && road?.customTrack?.points?.length > 1)
+      .map((road) => ({ ...road, custom: true, category: road.category || "custom" }));
+  } catch (error) {
+    return [];
+  }
+}
+
+function persistCustomBikeRoads() {
+  try {
+    localStorage.setItem(CUSTOM_BIKE_ROADS_STORAGE_KEY, JSON.stringify(customBikeRoadItems.slice(0, 24)));
+  } catch (error) {
+    renderCustomBikeRoadStatus("저장 공간이 부족합니다. 오래된 나만의 코스를 삭제한 뒤 다시 시도해 주세요.", true);
+  }
+}
+
+function customBikeRoadTime(distanceKm) {
+  const distance = Number(distanceKm) || 0;
+  const minutes = Math.max(20, Math.round((distance / 15) * 60));
+  const hours = Math.floor(minutes / 60);
+  const rest = minutes % 60;
+  return hours > 0 ? `약 ${hours}시간 ${rest ? `${rest}분` : ""}`.trim() : `약 ${minutes}분`;
+}
+
+function compactCustomTrack(track, source) {
+  const maxCount = 1800;
+  const points =
+    track.points.length <= maxCount
+      ? track.points
+      : Array.from({ length: maxCount }, (_, index) => track.points[Math.round((index / (maxCount - 1)) * (track.points.length - 1))]);
+  return {
+    distance: Number(track.distance.toFixed(2)),
+    pointCount: track.pointCount,
+    elevationPointCount: track.elevationPointCount,
+    nonZeroElevationCount: track.nonZeroElevationCount,
+    source,
+    minEle: track.minEle,
+    maxEle: track.maxEle,
+    climb: track.climb,
+    descent: track.descent,
+    hasElevation: track.hasElevation,
+    points: points.map((point) => ({
+      lat: Number(point.lat.toFixed(7)),
+      lng: Number(point.lng.toFixed(7)),
+      ele: Number((point.ele || 0).toFixed(1)),
+      distance: Number((point.distance || 0).toFixed(3))
+    }))
+  };
+}
+
+function createCustomBikeRoad(file, title, track) {
+  const name = title || file.name.replace(/\.(gpx|xml)$/i, "") || "나만의 자전거길";
+  const first = track.points[0];
+  const middle = track.points[Math.floor(track.points.length / 2)];
+  const last = track.points[track.points.length - 1];
+  return {
+    id: `custom-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 7)}`,
+    custom: true,
+    category: "custom",
+    title: name,
+    region: "나만의 코스",
+    distance: Number(track.distance.toFixed(1)),
+    distanceText: `${track.distance.toFixed(1)}km`,
+    time: customBikeRoadTime(track.distance),
+    description: `${file.name} 파일에서 등록한 개인 GPX 코스입니다.`,
+    centers: [`${name} 출발`, `${name} 중간`, `${name} 도착`],
+    fit: "업로드한 GPX 기반 개인 라이딩",
+    caution: "개인 GPX는 현장 도로 상태와 통제 정보를 출발 전에 다시 확인해 주세요.",
+    customTrack: compactCustomTrack(track, file.name),
+    mapPoints: [
+      [35, 54],
+      [50, 52],
+      [65, 58]
+    ],
+    customPreview: {
+      start: first ? { lat: first.lat, lng: first.lng } : null,
+      middle: middle ? { lat: middle.lat, lng: middle.lng } : null,
+      end: last ? { lat: last.lat, lng: last.lng } : null
+    }
+  };
+}
+
+function renderCustomBikeRoadStatus(message, isError = false) {
+  const status = byId("customBikeRoadStatus");
+  if (!status) return;
+  status.textContent = message || "";
+  status.classList.toggle("error", Boolean(isError));
+}
+
+function customBikeRoadPanelMarkup(items) {
+  return `
+    <div class="custom-bike-panel" aria-label="나만의 자전거길 등록">
+      <div class="custom-bike-form">
+        <label>
+          <span>GPX 파일</span>
+          <input id="customBikeGpxFile" type="file" accept=".gpx,.xml,application/gpx+xml,application/xml,text/xml" />
+        </label>
+        <label>
+          <span>코스 이름</span>
+          <input id="customBikeTitle" type="text" maxlength="40" placeholder="예: 섬진강 주말 라이딩" />
+        </label>
+        <button class="button primary" type="button" data-custom-bike-save>등록하기</button>
+        <p id="customBikeRoadStatus" class="custom-bike-status">${items.length ? `${items.length}개 코스를 관리 중입니다.` : "GPX 파일을 등록하면 지도에 나만의 코스가 표시됩니다."}</p>
+      </div>
+      <div class="custom-bike-list" aria-label="등록한 자전거길">
+        ${
+          items.length
+            ? items
+                .map(
+                  (road) => `
+                    <div class="custom-bike-item">
+                      <button class="${road.id === activeBikeRoadId ? "active" : ""}" type="button" data-bike-road-id="${road.id}">
+                        <span>${escapeHtml(road.region)}</span>
+                        <strong>${escapeHtml(road.title)}</strong>
+                        <small>${bikeRoadDistanceText(road)} · ${escapeHtml(road.time || "시간 확인")}</small>
+                      </button>
+                      <button class="custom-bike-delete" type="button" data-custom-bike-delete="${road.id}" aria-label="${escapeHtml(road.title)} 삭제">삭제</button>
+                    </div>
+                  `
+                )
+                .join("")
+            : `<p class="custom-bike-empty">등록된 개인 코스가 없습니다.</p>`
+        }
+      </div>
+    </div>
+  `;
+}
+
+async function saveCustomBikeRoadFromForm() {
+  const fileInput = byId("customBikeGpxFile");
+  const titleInput = byId("customBikeTitle");
+  const file = fileInput?.files?.[0];
+  if (!file) {
+    renderCustomBikeRoadStatus("먼저 GPX 파일을 선택해 주세요.", true);
+    return;
+  }
+  renderCustomBikeRoadStatus("GPX 파일을 읽는 중입니다...");
+  try {
+    const text = await file.text();
+    const track = parseBikeRoadGpx(text, file.name);
+    const road = createCustomBikeRoad(file, titleInput?.value.trim(), track);
+    customBikeRoadItems.splice(0, customBikeRoadItems.length, road, ...customBikeRoadItems.filter((item) => item.title !== road.title).slice(0, 23));
+    persistCustomBikeRoads();
+    expandedBikeRoadGroups.add("custom");
+    if (fileInput) fileInput.value = "";
+    if (titleInput) titleInput.value = "";
+    setActiveBikeRoad("custom", road.id);
+    renderCustomBikeRoadStatus(`${road.title} 코스를 등록했습니다.`);
+  } catch (error) {
+    renderCustomBikeRoadStatus("GPX 트랙을 읽지 못했습니다. trkpt가 포함된 GPX 파일인지 확인해 주세요.", true);
+  }
+}
+
+function deleteCustomBikeRoad(roadId) {
+  const road = customBikeRoadItems.find((item) => item.id === roadId);
+  if (!road) return;
+  if (!window.confirm(`${road.title} 코스를 삭제할까요? 이 작업은 이 브라우저의 저장 목록에서만 삭제됩니다.`)) return;
+  const nextItems = customBikeRoadItems.filter((item) => item.id !== roadId);
+  customBikeRoadItems.splice(0, customBikeRoadItems.length, ...nextItems);
+  persistCustomBikeRoads();
+  expandedBikeRoadGroups.add("custom");
+  if (activeBikeRoadGroup === "custom" && activeBikeRoadId === roadId) {
+    if (customBikeRoadItems[0]) {
+      setActiveBikeRoad("custom", customBikeRoadItems[0].id);
+    } else {
+      activeBikeRoadGroup = "custom";
+      renderBikeRoadMenu();
+      renderCustomBikeRoadStatus("등록된 개인 코스가 없습니다.");
+    }
+    return;
+  }
+  renderBikeRoadMenu();
+}
+
 function bikeIconSvg(name) {
   const icons = {
     legend: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6.5h16M4 12h16M4 17.5h16"/><path d="M7 4v5M12 9.5v5M17 15v5"/></svg>',
@@ -3745,6 +3928,64 @@ function bikeIconSvg(name) {
     coffee: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 8h11v5a5 5 0 0 1-5 5H10a5 5 0 0 1-5-5V8Z"/><path d="M16 10h2a2 2 0 0 1 0 4h-2M7 4v2M11 4v2M15 4v2"/></svg>'
   };
   return icons[name] || icons.pin;
+}
+
+function bikePointAtRatio(points, ratio) {
+  if (!points?.length) return null;
+  const index = Math.min(points.length - 1, Math.max(0, Math.round((points.length - 1) * ratio)));
+  return points[index];
+}
+
+function bikeOffsetPoint(point, latOffset, lngOffset) {
+  return { lat: point.lat + latOffset, lng: point.lng + lngOffset };
+}
+
+function bikeRouteKeyword(road) {
+  const title = `${road?.title || "자전거길"}`.replace(/자전거길|추천|·/g, "").trim();
+  return title || "라이딩";
+}
+
+function buildBikeToiletPoints(road, points) {
+  const route = bikeRouteKeyword(road);
+  const profiles = [
+    { ratio: 0.06, lat: 0.0038, lng: -0.0038, label: "출발 거점 공중화장실" },
+    { ratio: 0.34, lat: -0.0042, lng: 0.0038, label: "중간 쉼터 화장실" },
+    { ratio: 0.62, lat: 0.0045, lng: 0.0042, label: "인증센터 인근 화장실" },
+    { ratio: 0.92, lat: -0.0038, lng: -0.0045, label: "도착지 공중화장실" }
+  ];
+  return profiles
+    .map((profile) => {
+      const point = bikePointAtRatio(points, profile.ratio);
+      if (!point) return null;
+      return { title: `${route} ${profile.label}`, ...bikeOffsetPoint(point, profile.lat, profile.lng) };
+    })
+    .filter(Boolean);
+}
+
+function buildBikeSentimentPlaces(road, points, type) {
+  const route = bikeRouteKeyword(road);
+  const foodNames = ["라이더 밥상", "강변 한상", "로컬 국밥", "인증센터 식당"];
+  const cafeNames = ["리버뷰 커피", "쉼표 카페", "라이더 로스터리", "노을 커피"];
+  const names = type === "cafe" ? cafeNames : foodNames;
+  const profiles = [
+    { ratio: 0.28, lat: 0.0058, lng: -0.0052, score: 96 },
+    { ratio: 0.46, lat: -0.005, lng: 0.0062, score: 93 },
+    { ratio: 0.66, lat: 0.0062, lng: 0.005, score: 91 },
+    { ratio: 0.84, lat: -0.0048, lng: -0.006, score: 88 }
+  ];
+  return profiles
+    .map((profile, index) => {
+      const point = bikePointAtRatio(points, profile.ratio);
+      if (!point) return null;
+      const typeLabel = type === "cafe" ? "커피숍" : "음식점";
+      return {
+        title: `${route} ${names[index]} · 감성 ${profile.score}`,
+        note: `${typeLabel} 상위 추천 · 라이더 휴식, 접근성, 분위기 키워드 반영`,
+        sentiment: profile.score,
+        ...bikeOffsetPoint(point, profile.lat, profile.lng)
+      };
+    })
+    .filter(Boolean);
 }
 
 function bikeRoadRegionCenter(road) {
@@ -3810,22 +4051,13 @@ function generatedBikeRoadGeo(road) {
         title,
         ...(path[Math.min(path.length - 1, Math.round((index / Math.max(1, Math.min(centers.length, 4) - 1)) * (path.length - 1)))])
       })),
-      toilet: [
-        { title: "출발지 공중화장실", lat: first.lat + 0.006, lng: first.lng - 0.004 },
-        { title: "중간 쉼터 화장실", lat: middle.lat + 0.005, lng: middle.lng + 0.006 }
-      ],
+      toilet: buildBikeToiletPoints(road, path),
       air: [
         { title: "출발지 공기주입기", lat: first.lat - 0.004, lng: first.lng + 0.004 },
         { title: "중간 정비 지점", lat: middle.lat - 0.006, lng: middle.lng - 0.005 }
       ],
-      food: [
-        { title: "지역 식사 후보", lat: middle.lat - 0.010, lng: middle.lng + 0.010 },
-        { title: "도착지 식당가", lat: last.lat + 0.007, lng: last.lng - 0.006 }
-      ],
-      cafe: [
-        { title: "경유지 커피숍", lat: middle.lat + 0.011, lng: middle.lng - 0.009 },
-        { title: "도착지 카페", lat: last.lat - 0.007, lng: last.lng + 0.006 }
-      ]
+      food: buildBikeSentimentPlaces(road, path, "food"),
+      cafe: buildBikeSentimentPlaces(road, path, "cafe")
     }
   };
 }
@@ -3936,6 +4168,7 @@ function parseBikeRoadGpx(gpxText, source) {
 }
 
 async function loadBikeRoadGpxTrack(road) {
+  if (road?.customTrack?.points?.length > 1) return road.customTrack;
   const file = bikeRoadGpxFile(road);
   if (!file) return null;
   if (bikeRoadGpxCache.has(file)) return bikeRoadGpxCache.get(file);
@@ -3967,22 +4200,13 @@ function buildTrackLayerPoints(road, track) {
       const point = points[Math.min(points.length - 1, Math.round((index / Math.max(1, Math.min(centers.length, 9) - 1)) * (points.length - 1)))];
       return { title, lat: point.lat, lng: point.lng };
     }),
-    toilet: [
-      { title: "출발지 화장실 확인 지점", lat: first.lat + 0.003, lng: first.lng - 0.003 },
-      { title: "중간 쉼터 화장실 확인 지점", lat: middle.lat + 0.003, lng: middle.lng + 0.003 }
-    ],
+    toilet: buildBikeToiletPoints(road, points),
     air: [
       { title: "출발지 공기주입기 확인 지점", lat: first.lat - 0.003, lng: first.lng + 0.003 },
       { title: "중간 정비 지점", lat: middle.lat - 0.003, lng: middle.lng - 0.003 }
     ],
-    food: [
-      { title: "중간 식사 후보", lat: middle.lat - 0.006, lng: middle.lng + 0.006 },
-      { title: "도착지 식당가", lat: last.lat + 0.004, lng: last.lng - 0.004 }
-    ],
-    cafe: [
-      { title: "중간 커피 휴식 후보", lat: middle.lat + 0.006, lng: middle.lng - 0.006 },
-      { title: "도착지 커피숍", lat: last.lat - 0.004, lng: last.lng + 0.004 }
-    ]
+    food: buildBikeSentimentPlaces(road, points, "food"),
+    cafe: buildBikeSentimentPlaces(road, points, "cafe")
   };
 }
 
@@ -4089,18 +4313,22 @@ function renderBikeRoadMenu() {
             </button>
             ${
               isExpanded
-                ? `<div class="bike-road-sublist" aria-label="${escapeHtml(group.label)} 노선">
-                    ${group.items
-                      .map(
-                        (road) => `
-                          <button class="${road.id === activeBikeRoadId ? "active" : ""}" type="button" data-bike-road-id="${road.id}">
-                            <span>${escapeHtml(road.region)}</span>
-                            <strong>${escapeHtml(road.title)}</strong>
-                            <small>${bikeRoadDistanceText(road)} · ${escapeHtml(road.time || "시간 확인")}</small>
-                          </button>
-                        `
-                      )
-                      .join("")}
+                ? `<div class="bike-road-sublist ${group.custom ? "custom" : ""}" aria-label="${escapeHtml(group.label)} 노선">
+                    ${
+                      group.custom
+                        ? customBikeRoadPanelMarkup(group.items)
+                        : group.items
+                            .map(
+                              (road) => `
+                                <button class="${road.id === activeBikeRoadId ? "active" : ""}" type="button" data-bike-road-id="${road.id}">
+                                  <span>${escapeHtml(road.region)}</span>
+                                  <strong>${escapeHtml(road.title)}</strong>
+                                  <small>${bikeRoadDistanceText(road)} · ${escapeHtml(road.time || "시간 확인")}</small>
+                                </button>
+                              `
+                            )
+                            .join("")
+                    }
                   </div>`
                 : ""
             }
@@ -4127,15 +4355,17 @@ function renderBikeRoadMarker(map, layerId, point, bounds) {
   const layer = bikeLayerConfig(layerId);
   if (!layer || !point) return;
   const position = new kakao.maps.LatLng(point.lat, point.lng);
+  const markerTitle = point.sentiment ? `${point.title}점` : point.title;
+  const markerDescription = point.note ? `${markerTitle} · ${point.note}` : markerTitle;
   bounds.extend(position);
   const overlay = new kakao.maps.CustomOverlay({
     position,
     xAnchor: 0.5,
     yAnchor: 0.5,
     content: `
-      <span class="bike-layer-marker ${layerId}" title="${escapeHtml(point.title)}" aria-label="${escapeHtml(layer.label)} ${escapeHtml(point.title)}">
+      <span class="bike-layer-marker ${layerId}" title="${escapeHtml(markerDescription)}" aria-label="${escapeHtml(layer.label)} ${escapeHtml(markerDescription)}">
         <b>${bikeIconSvg(layer.icon)}</b>
-        <small>${escapeHtml(point.title)}</small>
+        <small>${escapeHtml(markerTitle)}</small>
       </span>
     `
   });
@@ -4313,8 +4543,8 @@ async function drawBikeRoadKakaoMap(road) {
     bikeRoadMapRuntime.polyline = new kakao.maps.Polyline({
       path,
       strokeWeight: 4,
-      strokeColor: "#167355",
-      strokeOpacity: 0.92,
+      strokeColor: "#d43d2f",
+      strokeOpacity: 0.94,
       strokeStyle: "solid"
     });
     bikeRoadMapRuntime.polyline.setMap(map);
@@ -4353,6 +4583,12 @@ function setActiveBikeRoad(groupId, roadId) {
     document.body.dataset.bikeRoadMenuReady = "true";
   }
   renderBikeRoadLayerControls();
+  const link = byId("officialBikeMapLink");
+  if (link) {
+    link.textContent = road?.custom ? "나만의 코스 관리" : "공식 지도 새 창";
+    link.href = road?.custom ? "#customBikeGpxFile" : bikeRoadExternalUrl(road);
+    link.target = road?.custom ? "_self" : "_blank";
+  }
   drawBikeRoadKakaoMap(road);
 }
 
@@ -4366,6 +4602,11 @@ function toggleBikeRoadGroup(groupId) {
     return;
   }
   expandedBikeRoadGroups.add(groupId);
+  if (group.custom && !group.items.length) {
+    activeBikeRoadGroup = groupId;
+    renderBikeRoadMenu();
+    return;
+  }
   const currentRoadInGroup = group.items.find((road) => road.id === activeBikeRoadId);
   setActiveBikeRoad(groupId, currentRoadInGroup?.id || group.items[0]?.id);
 }
@@ -4377,6 +4618,20 @@ function renderBikeRoadsPage() {
   if (!document.body.dataset.bikeRoadKakaoDelegated) {
     document.body.dataset.bikeRoadKakaoDelegated = "true";
     document.addEventListener("click", (event) => {
+      const customSave = event.target.closest("[data-custom-bike-save]");
+      if (customSave) {
+        event.preventDefault();
+        saveCustomBikeRoadFromForm();
+        return;
+      }
+
+      const customDelete = event.target.closest("[data-custom-bike-delete]");
+      if (customDelete) {
+        event.preventDefault();
+        deleteCustomBikeRoad(customDelete.getAttribute("data-custom-bike-delete"));
+        return;
+      }
+
       const mapTypeButton = event.target.closest("[data-bike-road-map-type]");
       if (mapTypeButton) {
         setBikeRoadMapType(mapTypeButton.getAttribute("data-bike-road-map-type"));
