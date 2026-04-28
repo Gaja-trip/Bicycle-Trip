@@ -2070,6 +2070,7 @@ const recommendedBikeRoadItems = [
 
 const CUSTOM_BIKE_ROADS_STORAGE_KEY = "bikeFestaCustomBikeRoads";
 const customBikeRoadItems = readCustomBikeRoads();
+const homeHeroVideoSources = ["mp4/Main%20Page.mp4", "mp4/Main%20Page_1.mp4"];
 
 const bikeRoadMenuGroups = [
   { id: "national", label: "국토종주자전거길", caption: "공식 인증 노선", items: officialBikeRoads },
@@ -2411,6 +2412,29 @@ function renderHomePage() {
   const meta = byId("homeScheduleMeta");
   if (meta) meta.textContent = homeScheduleMetaText(events);
   homeSchedule.innerHTML = events.length ? events.map(calendarCard).join("") : `<p class="calendar-meta">선택한 조건에 맞는 행사가 없습니다.</p>`;
+}
+
+function initHomeHeroVideoCycle() {
+  const video = document.querySelector("[data-hero-video]");
+  if (!video || video.dataset.videoCycleReady) return;
+  const source = video.querySelector("source");
+  if (!source) return;
+  let videoIndex = 0;
+  video.dataset.videoCycleReady = "true";
+
+  const playVideo = () => {
+    const playPromise = video.play?.();
+    if (playPromise?.catch) playPromise.catch(() => {});
+  };
+
+  video.addEventListener("ended", () => {
+    videoIndex = (videoIndex + 1) % homeHeroVideoSources.length;
+    source.src = homeHeroVideoSources[videoIndex];
+    video.load();
+    playVideo();
+  });
+
+  playVideo();
 }
 
 function calendarRegions() {
@@ -5116,6 +5140,7 @@ function renderBikeRoadsPage() {
 function init() {
   const sortSelect = byId("sortSelect");
   if (sortSelect) sortSelect.addEventListener("change", renderFestivalPage);
+  initHomeHeroVideoCycle();
   renderHomePage();
   renderFestivalPage();
   renderEventDetail();
