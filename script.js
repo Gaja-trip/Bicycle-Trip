@@ -2129,7 +2129,9 @@ let expandedBikeLayerGroups = new Set();
 const bikeRoadGpxCache = new Map();
 
 let activeFilter = "all";
-let activeHomeScheduleMode = "default";
+let activeHomeScheduleMode = "year";
+let homeMonthFilterActive = false;
+let homeRegionFilterActive = false;
 
 function byId(id) {
   return document.getElementById(id);
@@ -2261,8 +2263,16 @@ function scoreLine(label, value, color) {
   `;
 }
 
+function cardVisualStyle(image, fallback = "linear-gradient(135deg, #167355, #1d6f96)") {
+  const overlay = "linear-gradient(135deg, rgba(16, 35, 28, 0.18), rgba(16, 35, 28, 0.78))";
+  const localFallback = "url('assets/seomjingang-bike-hero.png')";
+  return image
+    ? `background-image:${overlay}, url('${escapeHtml(image)}'), ${localFallback}, ${fallback}`
+    : `background-image:${overlay}, ${localFallback}, ${fallback}`;
+}
+
 function card(route) {
-  const visual = route.image ? `--card-image:url('${route.image}')` : `--card-image:linear-gradient(135deg, ${route.score > 88 ? "#167355" : "#1d6f96"}, #d95f4a)`;
+  const visual = cardVisualStyle(route.image, `linear-gradient(135deg, ${route.score > 88 ? "#167355" : "#1d6f96"}, #d95f4a)`);
   return `
     <a class="route-card" href="${routeDetailUrl(route)}" aria-label="${route.festival} 상세 보기">
       <div class="card-visual" style="${visual}">
@@ -2288,7 +2298,7 @@ function card(route) {
 }
 
 function calendarCard(event) {
-  const visual = event.image ? `--card-image:url('${event.image}')` : "--card-image:linear-gradient(135deg, #167355, #1d6f96)";
+  const visual = cardVisualStyle(event.image);
   const route = event.routeId ? routes.find((item) => item.id === event.routeId) : null;
   const distanceText = route ? `<span class="pill">${route.distance}km 내외</span>` : "";
   return `
@@ -2345,7 +2355,10 @@ function renderHomeScheduleFilters() {
     modeGroup.addEventListener("click", (event) => {
       const button = event.target.closest("[data-home-schedule-mode]");
       if (!button) return;
-      activeHomeScheduleMode = button.getAttribute("data-home-schedule-mode") || "default";
+      activeHomeScheduleMode = button.getAttribute("data-home-schedule-mode") || "year";
+      homeMonthFilterActive = false;
+      homeRegionFilterActive = false;
+      if (regionFilter) regionFilter.value = "all";
       renderHomePage();
     });
   }
@@ -2354,7 +2367,11 @@ function renderHomeScheduleFilters() {
     monthFilter.innerHTML = Array.from({ length: 12 }, (_, index) => `<option value="${index + 1}">${index + 1}월</option>`).join("");
     monthFilter.value = String(currentScheduleMonth());
     monthFilter.dataset.ready = "true";
-    monthFilter.addEventListener("change", renderHomePage);
+    monthFilter.addEventListener("change", () => {
+      homeMonthFilterActive = true;
+      activeHomeScheduleMode = "filtered";
+      renderHomePage();
+    });
   }
 
   if (regionFilter && !regionFilter.dataset.ready) {
@@ -2362,7 +2379,11 @@ function renderHomeScheduleFilters() {
       .map((region) => `<option value="${region === "전체" ? "all" : region}">${region === "전체" ? "전체 지역" : region}</option>`)
       .join("");
     regionFilter.dataset.ready = "true";
-    regionFilter.addEventListener("change", renderHomePage);
+    regionFilter.addEventListener("change", () => {
+      homeRegionFilterActive = regionFilter.value !== "all";
+      activeHomeScheduleMode = homeMonthFilterActive || homeRegionFilterActive ? "filtered" : "year";
+      renderHomePage();
+    });
   }
 
   if (modeGroup) {
@@ -2373,35 +2394,30 @@ function renderHomeScheduleFilters() {
     });
   }
 
-  if (monthControl) monthControl.hidden = activeHomeScheduleMode !== "month";
-  if (regionControl) regionControl.hidden = activeHomeScheduleMode !== "region";
+  if (monthControl) monthControl.hidden = false;
+  if (regionControl) regionControl.hidden = false;
 }
 
 function getHomeScheduleEvents() {
   const events = getScheduleEvents();
-  if (activeHomeScheduleMode === "month") {
-    const month = Number(byId("homeMonthFilter")?.value || currentScheduleMonth());
-    return events.filter((event) => eventMonths(event).includes(month));
-  }
-  if (activeHomeScheduleMode === "region") {
-    const region = byId("homeRegionFilter")?.value || "all";
-    return region === "all" ? events : events.filter((event) => event.region === region);
-  }
-  return events;
+  if (activeHomeScheduleMode === "year") return events;
+  const month = Number(byId("homeMonthFilter")?.value || currentScheduleMonth());
+  const region = byId("homeRegionFilter")?.value || "all";
+  return events.filter((event) => {
+    const matchesMonth = !homeMonthFilterActive || eventMonths(event).includes(month);
+    const matchesRegion = !homeRegionFilterActive || region === "all" || event.region === region;
+    return matchesMonth && matchesRegion;
+  });
 }
 
 function homeScheduleMetaText(events) {
   if (activeHomeScheduleMode === "year") return `2026년 연중 일정 ${events.length}개를 시간순으로 정리했습니다.`;
-  if (activeHomeScheduleMode === "month") {
-    const month = Number(byId("homeMonthFilter")?.value || currentScheduleMonth());
-    return `${month}월에 진행되는 2026 행사 ${events.length}개를 보여줍니다.`;
-  }
-  if (activeHomeScheduleMode === "region") {
-    const region = byId("homeRegionFilter")?.value || "all";
-    const label = region === "all" ? "전체 지역" : region;
-    return `${label} 기준 2026 행사 ${events.length}개를 보여줍니다.`;
-  }
-  return `기본 전체 일정 ${events.length}개를 시간순으로 보여줍니다.`;
+  const month = Number(byId("homeMonthFilter")?.value || currentScheduleMonth());
+  const region = byId("homeRegionFilter")?.value || "all";
+  const labels = [];
+  if (homeMonthFilterActive) labels.push(`${month}월`);
+  if (homeRegionFilterActive) labels.push(region === "all" ? "전체 지역" : region);
+  return `${labels.length ? labels.join(" · ") : "2026년 연중"} 기준 행사 ${events.length}개를 보여줍니다.`;
 }
 
 function renderHomePage() {
