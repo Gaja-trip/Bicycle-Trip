@@ -5083,6 +5083,11 @@ function renderBikeRoadsPage() {
   const canvas = byId("bikeRoadKakaoMap");
   if (!canvas) return;
 
+  if (!document.body.dataset.bikeLayerDefaultCollapsed) {
+    expandedBikeLayerGroups.clear();
+    document.body.dataset.bikeLayerDefaultCollapsed = "true";
+  }
+
   if (!document.body.dataset.bikeRoadKakaoDelegated) {
     document.body.dataset.bikeRoadKakaoDelegated = "true";
     document.addEventListener("click", (event) => {
