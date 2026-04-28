@@ -28,7 +28,11 @@
 
     <main>
       <section class="hero">
-        <div class="hero-media" aria-hidden="true"></div>
+        <div class="hero-media" aria-hidden="true">
+          <video autoplay muted loop playsinline preload="metadata" poster="assets/seomjingang-bike-hero.png">
+            <source src="mp4/Main%20Page.mp4" type="video/mp4" />
+          </video>
+        </div>
         <div class="hero-copy">
           <p class="eyebrow">Ride Together Korea</p>
           <h1>자전거여행 함께 가요</h1>
@@ -62,6 +66,25 @@
           <p class="eyebrow">National Events</p>
           <h2>2026 전국 행사 일정</h2>
           <p>월별·지역별 전체 목록은 전국 행사 일정 페이지에서 더 보기 좋게 필터링할 수 있습니다.</p>
+        </div>
+        <div class="home-schedule-tools" aria-label="2026 행사 일정 보기 옵션">
+          <div class="schedule-view-tabs" id="homeScheduleMode" role="group" aria-label="일정 보기 방식">
+            <button class="active" type="button" data-home-schedule-mode="default">기본</button>
+            <button type="button" data-home-schedule-mode="year">2026 연중</button>
+            <button type="button" data-home-schedule-mode="month">월별</button>
+            <button type="button" data-home-schedule-mode="region">지역별</button>
+          </div>
+          <div class="home-schedule-selects">
+            <label class="sort-control" id="homeMonthControl" hidden>
+              <span>월</span>
+              <select id="homeMonthFilter"></select>
+            </label>
+            <label class="sort-control" id="homeRegionControl" hidden>
+              <span>지역</span>
+              <select id="homeRegionFilter"></select>
+            </label>
+          </div>
+          <p class="calendar-meta" id="homeScheduleMeta">기본 전체 일정을 불러오는 중입니다.</p>
         </div>
         <div class="route-grid simple" id="homeSchedule"></div>
       </section>

@@ -2128,6 +2128,7 @@ let expandedBikeLayerGroups = new Set();
 const bikeRoadGpxCache = new Map();
 
 let activeFilter = "all";
+let activeHomeScheduleMode = "default";
 
 function byId(id) {
   return document.getElementById(id);
@@ -2326,10 +2327,90 @@ function renderFilters() {
   });
 }
 
+function currentScheduleMonth() {
+  const current = new Date();
+  return current.getFullYear() === 2026 ? current.getMonth() + 1 : 1;
+}
+
+function renderHomeScheduleFilters() {
+  const modeGroup = byId("homeScheduleMode");
+  const monthFilter = byId("homeMonthFilter");
+  const regionFilter = byId("homeRegionFilter");
+  const monthControl = byId("homeMonthControl");
+  const regionControl = byId("homeRegionControl");
+
+  if (modeGroup && !modeGroup.dataset.ready) {
+    modeGroup.dataset.ready = "true";
+    modeGroup.addEventListener("click", (event) => {
+      const button = event.target.closest("[data-home-schedule-mode]");
+      if (!button) return;
+      activeHomeScheduleMode = button.getAttribute("data-home-schedule-mode") || "default";
+      renderHomePage();
+    });
+  }
+
+  if (monthFilter && !monthFilter.dataset.ready) {
+    monthFilter.innerHTML = Array.from({ length: 12 }, (_, index) => `<option value="${index + 1}">${index + 1}월</option>`).join("");
+    monthFilter.value = String(currentScheduleMonth());
+    monthFilter.dataset.ready = "true";
+    monthFilter.addEventListener("change", renderHomePage);
+  }
+
+  if (regionFilter && !regionFilter.dataset.ready) {
+    regionFilter.innerHTML = calendarRegions()
+      .map((region) => `<option value="${region === "전체" ? "all" : region}">${region === "전체" ? "전체 지역" : region}</option>`)
+      .join("");
+    regionFilter.dataset.ready = "true";
+    regionFilter.addEventListener("change", renderHomePage);
+  }
+
+  if (modeGroup) {
+    modeGroup.querySelectorAll("[data-home-schedule-mode]").forEach((button) => {
+      const isActive = button.getAttribute("data-home-schedule-mode") === activeHomeScheduleMode;
+      button.classList.toggle("active", isActive);
+      button.setAttribute("aria-pressed", String(isActive));
+    });
+  }
+
+  if (monthControl) monthControl.hidden = activeHomeScheduleMode !== "month";
+  if (regionControl) regionControl.hidden = activeHomeScheduleMode !== "region";
+}
+
+function getHomeScheduleEvents() {
+  const events = getScheduleEvents();
+  if (activeHomeScheduleMode === "month") {
+    const month = Number(byId("homeMonthFilter")?.value || currentScheduleMonth());
+    return events.filter((event) => eventMonths(event).includes(month));
+  }
+  if (activeHomeScheduleMode === "region") {
+    const region = byId("homeRegionFilter")?.value || "all";
+    return region === "all" ? events : events.filter((event) => event.region === region);
+  }
+  return events;
+}
+
+function homeScheduleMetaText(events) {
+  if (activeHomeScheduleMode === "year") return `2026년 연중 일정 ${events.length}개를 시간순으로 정리했습니다.`;
+  if (activeHomeScheduleMode === "month") {
+    const month = Number(byId("homeMonthFilter")?.value || currentScheduleMonth());
+    return `${month}월에 진행되는 2026 행사 ${events.length}개를 보여줍니다.`;
+  }
+  if (activeHomeScheduleMode === "region") {
+    const region = byId("homeRegionFilter")?.value || "all";
+    const label = region === "all" ? "전체 지역" : region;
+    return `${label} 기준 2026 행사 ${events.length}개를 보여줍니다.`;
+  }
+  return `기본 전체 일정 ${events.length}개를 시간순으로 보여줍니다.`;
+}
+
 function renderHomePage() {
   const homeSchedule = byId("homeSchedule");
   if (!homeSchedule) return;
-  homeSchedule.innerHTML = getScheduleEvents().map(calendarCard).join("");
+  renderHomeScheduleFilters();
+  const events = getHomeScheduleEvents();
+  const meta = byId("homeScheduleMeta");
+  if (meta) meta.textContent = homeScheduleMetaText(events);
+  homeSchedule.innerHTML = events.length ? events.map(calendarCard).join("") : `<p class="calendar-meta">선택한 조건에 맞는 행사가 없습니다.</p>`;
 }
 
 function calendarRegions() {
@@ -2610,7 +2691,7 @@ function bikeMapTabContent(road) {
   return {
     title: "지도범례",
     items: [
-      "초록 실선: 선택한 자전거길 개략 선형",
+      "빨간 실선: 선택한 자전거길 개략 선형",
       "주황 점: 인증센터·주요거점",
       "파란 점: 출발·도착 또는 추천 회수 지점"
     ]
@@ -4771,17 +4852,10 @@ function bikeRoadDetailPanelMarkup(road, geo, markerCount) {
 function renderBikeRoadMapInfo(road, geo, markerCount) {
   const panel = byId("bikeMapInfoPanel");
   if (!panel || !road) return;
-  const labels = bikeLayerLabels();
-  const gpxTrack = geo.gpxTrack;
   panel.innerHTML = `
-    <span>Daum/Kakao Map</span>
     <strong>${escapeHtml(road.title)}</strong>
     <p>${escapeHtml(road.region)} · ${bikeRoadDistanceText(road)} · ${escapeHtml(road.time || "시간 확인")}</p>
     <div class="bike-info-chips">
-      <em>${gpxTrack ? "GPX 실선 자전거길" : "초록 실선 자전거길"}</em>
-      <em>${markerCount}개 지점 표시</em>
-      ${gpxTrack ? `<em>${gpxTrack.distance.toFixed(1)}km · ${gpxTrack.pointCount.toLocaleString("ko-KR")}포인트</em>` : ""}
-      <em>${labels.length ? labels.join(", ") : "레이어 미선택"}</em>
       <span class="bike-detail-control">
         <a class="bike-detail-tab" href="#bikeRoadDetailPanel">상세내용</a>
         ${bikeRoadDetailPanelMarkup(road, geo, markerCount)}

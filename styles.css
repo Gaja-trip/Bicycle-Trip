@@ -117,6 +117,21 @@ section {
     url("https://commons.wikimedia.org/wiki/Special:FilePath/Han%20river%20bike%20path%20-%20panoramio.jpg") center / cover;
 }
 
+.hero-media video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.hero-media::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, rgba(9, 20, 16, 0.84), rgba(9, 20, 16, 0.52) 48%, rgba(9, 20, 16, 0.2));
+}
+
 .hero::after {
   content: "";
   position: absolute;
@@ -408,6 +423,59 @@ body[data-page="bike-roads"] {
 
 .festival-calendar-panel {
   padding-bottom: 34px;
+}
+
+.home-schedule-tools {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin: -4px 0 22px;
+  padding: 14px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--surface);
+  box-shadow: 0 10px 24px rgba(16, 35, 28, 0.06);
+}
+
+.schedule-view-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.schedule-view-tabs button {
+  min-height: 40px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #fbfcf8;
+  color: var(--muted);
+  padding: 8px 12px;
+  cursor: pointer;
+  font-weight: 900;
+}
+
+.schedule-view-tabs button.active,
+.schedule-view-tabs button:hover {
+  border-color: var(--green);
+  background: var(--green);
+  color: #fff;
+}
+
+.home-schedule-selects {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+}
+
+.home-schedule-tools .calendar-meta {
+  flex-basis: 100%;
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.9rem;
+  font-weight: 800;
 }
 
 .calendar-controls {
@@ -3039,6 +3107,17 @@ tbody tr:last-child td {
 
   .chip-group {
     justify-content: flex-start;
+  }
+
+  .home-schedule-tools {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .home-schedule-selects,
+  .home-schedule-selects .sort-control,
+  .home-schedule-selects select {
+    width: 100%;
   }
 }
 
